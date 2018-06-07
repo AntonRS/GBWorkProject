@@ -24,9 +24,9 @@ public class ArcherTower : BaseTower {
         if (fireCountDown <= 0f)
         {
             var tempArrow = Instantiate(ammunition, firePoint.position, firePoint.rotation);
-            tempArrow.target = target;
-            tempArrow.speed = bulletSpeed;
-            tempArrow.damage = damage;
+            tempArrow.Target = target;
+            tempArrow.Speed = bulletSpeed;
+            tempArrow.Damage = damage;
             
             fireCountDown = 1f / attackPerSecond;
         }
