@@ -21,6 +21,11 @@ namespace GeekBrains
         protected Transform enemyTransform;
 
         #region GetSet
+        public Transform Destination
+        {
+            get { return destination; }
+            set { destination = value; }
+        }
         public float HP
         {
             get { return hp; }
