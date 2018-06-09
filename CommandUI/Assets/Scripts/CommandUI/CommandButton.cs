@@ -51,7 +51,7 @@ namespace Game.CommandUI
 
 		void Start()
 		{
-			this.LookAtCamera ();
+			this.StartCoroutine (this.LookAtCamera ());
 		}
 
 		/// <summary>
@@ -77,8 +77,13 @@ namespace Game.CommandUI
 		/// </summary>
 		private IEnumerator LookAtCamera()
 		{
-			yield return new WaitForSeconds (1f);
-			this.gameObject.transform.LookAt (Camera.main.transform);
+			yield return new WaitForSeconds (0.5f);
+
+			Vector3 target = Camera.main.transform.position;
+			target.y = this.transform.position.y;
+
+			this.gameObject.transform.LookAt (target);
+
 			this.StartCoroutine (this.LookAtCamera ());
 		}
 

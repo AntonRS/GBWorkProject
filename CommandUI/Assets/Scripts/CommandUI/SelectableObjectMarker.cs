@@ -32,8 +32,6 @@ namespace Game.CommandUI
 		{
 			if (this._marker == null)
 				this.BuildDefaultMarker ();
-
-			this.DrawMarkerOver (null);
 		}
 
 		#endregion
@@ -45,8 +43,11 @@ namespace Game.CommandUI
 		private void BuildDefaultMarker()
 		{
 			this._marker = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+			this._marker.name = "Selection sphere";
+			this._marker.transform.parent = this.transform;
+			this._marker.SetActive (false);
 			this._marker.GetComponent<SphereCollider> ().enabled = false;
-			this._marker.GetComponent<MeshRenderer> ().material = 
+			this._marker.GetComponent<MeshRenderer> ().material =
 				new Material (Shader.Find ("Transparent/Diffuse")) {
 					color = this._color
 				};
@@ -55,16 +56,15 @@ namespace Game.CommandUI
 		/// <summary>
 		/// перемещает и показывает маркер выделения объекта
 		/// </summary>
-		public void DrawMarkerOver(GameObject selected) 
+		public void DrawMarkerOver(GameObject selected)
 		{
-			if (selected == null) { 
-				this._marker.SetActive (false);	
+			if (selected == null) {
+				this._marker.SetActive (false);
 			} else {
 				this._marker.transform.position = selected.transform.position;
 				this._marker.transform.localScale = selected.transform.localScale * this._scale;
-				this._marker.SetActive (true);	
+				this._marker.SetActive (true);
 			}
 		}
 	}
 }
-

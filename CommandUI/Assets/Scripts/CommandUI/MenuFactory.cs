@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Game.CommandUI
 {
@@ -100,7 +101,7 @@ namespace Game.CommandUI
 		{
 			MenuFactoryItem item = SearchMenuItemDefinitionForObject(ofType);
 
-			GameObject instance = GameObject.Instantiate (item.MenuPrefab);
+			GameObject instance = GameObject.Instantiate (item.MenuPrefab, this.transform);
 
 			if (instance == null)
 				throw new NullReferenceException ("Не удалось создать инстанс меню для объекта типа [" + ofType + "]");
@@ -136,9 +137,11 @@ namespace Game.CommandUI
 			this._menu.transform.position = selectedObject.transform.position;
 			this._menu.transform.Translate (new Vector3 (0, this.Height, 0));
 
-			Array.ForEach (this._menu.GetComponentsInChildren<CommandButton> (), (button) => {
-				button.TargetObject = selectedObject;
-			});
+			this._menu.GetComponentsInChildren<CommandButton> ()
+				.ToList ()
+				.ForEach ((button) => {
+					button.TargetObject = selectedObject;	
+				});
 
 			this._menu.SetActive (true);
 		}

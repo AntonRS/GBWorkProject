@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace Game.CommandUI
 {
 	// у менеджера должна быть ссылка на объект-маркер
-	[RequireComponent(typeof(SelectableObjectMarker))] 
+	[RequireComponent(typeof(SelectableObjectMarker))]
 
 	// требуется ссылка на компонент фабрики меню
 	[RequireComponent(typeof(MenuFactory))]
@@ -14,17 +14,17 @@ namespace Game.CommandUI
 	/// Синглтон - фабрика.
 	/// Отображает нужный интерфейс для выделенного в игре объекта SelectedObject
 	/// </summary>
-	public class SelectedObjectManager : Singleton<SelectedObjectManager> 
+	public class SelectedObjectManager : Singleton<SelectedObjectManager>
 	{
 		/// Выбранный в игре объект, либо <c>null</c>
-		/// если пытаемся выделить тот же объект - просто снимем выделение и 
+		/// если пытаемся выделить тот же объект - просто снимем выделение и
 		/// забудем объект, наче выделим новый объект
 		public GameObject SelectedObject
 		{
-			get { 
-				return this._selectedObject; 
+			get {
+				return this._selectedObject;
 			}
-			set { 
+			set {
 				this._selectedObject = (value == this._selectedObject ? null : value);
 				this._selectedObjectType = this._selectedObject ? value.GetComponent<SelectableObject> ().ObjectType : SelectableObjectType.None;
 				this._marker.DrawMarkerOver (this._selectedObject);
@@ -46,11 +46,17 @@ namespace Game.CommandUI
 				throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент RaycastHit2D");
 
 			this._marker = this.GetComponent<SelectableObjectMarker> ();
-			this._menuFactory = this.GetComponent<MenuFactory> ();
 
 			if (this._marker == null)
 				throw new MissingReferenceException (
 					"Не задан компонент объект-маркер SelectableObjectMarker для выделения объекта"
+				);
+
+			this._menuFactory = this.GetComponent<MenuFactory> ();
+
+			if (this._menuFactory == null)
+				throw new MissingReferenceException (
+					"Не задан компонент фабрики меню MenuFactory"
 				);
 		}
 
