@@ -6,7 +6,6 @@ public class TerrainGenerator : MonoBehaviour {
 
 
     //TODO: Подправить алгоритм выбора тайлов в TryPlaceNextTile, ибо в данный момент явная тенденция ставить левые повороты.
-    //TODO: Поправить переделку карты при неполучающейся дороге. Возможно, проблема из-за переопределения массива. Попробовать поменять на List?
 
     public int TowerPlatformsCount;
     public int MinRoadLength;
@@ -26,7 +25,7 @@ public class TerrainGenerator : MonoBehaviour {
     [SerializeField]
     private GameObject[] _roadTilesPrefabs;
     
-    private GameObject[] _roadTiles;
+    private List<GameObject> _roadTiles;
 
     private Vector3 _currentConnectionPointPos;
     private Vector3 _currentTileCenter;
@@ -34,35 +33,56 @@ public class TerrainGenerator : MonoBehaviour {
     private float _distanceSqrMagnitude = 1f;
 
     private int _maxAttemptsToBuildMap = 10;
+    private bool _buildIsSuccessful;
 
     // Use this for initialization
     void Start () {
 
-        GenerateRoad();
-        PlaceTowerPlatforms();
+        _roadTiles = new List<GameObject>();
+                
+        for (int i = 0; i < _maxAttemptsToBuildMap; i++)
+        {
+            if (TryGenerateRoad())
+            {
+                _buildIsSuccessful = true;
+                break;
+            }
+
+            Debug.Log("Не получилось построить карту. Осталось " + (_maxAttemptsToBuildMap - i - 1) + " попыток.");
+                        
+            DestroyRoad();
+        }
+
+        if (_buildIsSuccessful)
+        {
+            Debug.Log("Дорога успешно построена.");
+            PlaceTowerPlatforms();
+        }
+        else
+            Debug.Log("Не получилось построить карту. Попробуйте уменьшить её максимальную длину.");
 
     }
 
-    private void GenerateRoad()
+    private bool TryGenerateRoad()
     {
         _roadLengthCounter = Random.Range(MinRoadLength + 2, MaxRoadLength + 3);// +2 - потому что мы в тот же массив добавляем помимо остальных ещё два тайла - начальный и конечный.
-        _roadTiles = new GameObject[_roadLengthCounter];
-
+        
         _currentTileCenter = transform.position;
 
         //устанавливаем начальный тайл и начальные точки
-        _roadTiles[0] = InstantiateTileAtCurrentCenter(_roadStartPrefab).gameObject;
+        _roadTiles.Add(InstantiateTileAtCurrentCenter(_roadStartPrefab).gameObject);
         _currentConnectionPointPos = FindConnectionPoint(_roadTiles[0].transform).position;
 
         //определяем, с какой стороны ставить следующий тайл, и переносим точку спавна следующего тайла
         _currentTileCenter = FindNextCenterPoint(_currentConnectionPointPos);
-
-        bool roadWasRemade = false;
+        
         //дорога
         for (int i = 1; i < _roadLengthCounter - 1; i++)
         {
 
             RandomizePrefabsArray();
+
+            _roadTiles.Add(null);
 
             for (int j = 0; j < _roadTilesPrefabs.Length; j++)
             {
@@ -73,55 +93,31 @@ public class TerrainGenerator : MonoBehaviour {
             }
 
             if (_roadTiles[i] == null)
-            {
-                roadWasRemade = true;
-                DestroyRoadAndGenerateAnew();
-            }
+                return false;
 
         }
-
-        if (roadWasRemade)
-            return;
 
         //конечный тайл
-        _roadTiles[_roadLengthCounter - 1] = Instantiate(_roadFinishPrefab, transform);
-        _roadTiles[_roadLengthCounter - 1].transform.position = _currentTileCenter;
+        _roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
+        _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
 
-        Transform connectionPoint = FindConnectionPoint(_roadTiles[_roadLengthCounter - 1].transform);
+        Transform connectionPoint = FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform);
         
         while ((connectionPoint.position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
-            _roadTiles[_roadLengthCounter - 1].transform.Rotate(0, 90f, 0);
-       
+            _roadTiles[_roadTiles.Count - 1].transform.Rotate(0, 90f, 0);
+
+        return true;
 
     }
 
-    private void DestroyRoadAndGenerateAnew()
+    private void DestroyRoad()
     {
-        //Debug.Log("количество тайлов - " + _roadTiles.Length);
-        //for (int i = 0; i < _roadTiles.Length; i++)
-        //{
-        //    if (_roadTiles[i] != null)
-        //    {
-        //        Destroy(_roadTiles[i]);
-        //        Debug.Log("уничтожен тайл номер" + i);
-        //    }
-        //}
+        _roadTiles.Clear();
 
         foreach (Transform child in transform)
-        {
             Destroy(child.gameObject);
-        }
-
-        _maxAttemptsToBuildMap--;
-        Debug.Log("Не получилось построить карту. Осталось" + _maxAttemptsToBuildMap + " попыток.");
-        Debug.Log("Метод удаления недостроенной дороги в данный момент работает некорректно, перезапустите игру");
-
-        if (_maxAttemptsToBuildMap < 0)
-            Debug.Log("Не получилось построить карту. Попробуйте уменьшить максимальную длину.");
-        else
-            GenerateRoad();
-
     }
+    
 
     private GameObject TryPlaceNextTile(GameObject prefab, int currentTileNumber)
     {
@@ -163,6 +159,23 @@ public class TerrainGenerator : MonoBehaviour {
 
     }
 
+
+    private bool WillRunIntoOtherTiles(Vector3 nextConnectionPoint, int currentTileNumber)
+    {
+        bool RoadWillBeBlocked = false;
+
+        for (int i = 0; i < currentTileNumber; i++)
+        {
+            if ((FindNextCenterPoint(nextConnectionPoint) - _roadTiles[i].transform.position).sqrMagnitude <= _distanceSqrMagnitude)
+            {
+                RoadWillBeBlocked = true;
+                break;
+            }
+        }
+
+        return RoadWillBeBlocked;
+    }
+
     private Transform InstantiateTileAtCurrentCenter(GameObject prefab)
     {
         Transform tile = Instantiate(prefab, transform).transform;
@@ -195,7 +208,7 @@ public class TerrainGenerator : MonoBehaviour {
         return result;
     }
 
-    //TODO: Проверить и дописать
+    //TODO: Проверить и дописать. Пока не используется
     private void FlipUntilConnected(GameObject tile, Vector3 connectionPoint)
     {
         while ((connectionPoint - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
@@ -211,21 +224,6 @@ public class TerrainGenerator : MonoBehaviour {
         return result;
     }
 
-    private bool WillRunIntoOtherTiles(Vector3 nextConnectionPoint, int currentTileNumber)
-    {
-        bool RoadWillBeBlocked = false;
-
-        for (int i = 0; i < currentTileNumber; i++)
-        {
-            if ((FindNextCenterPoint(nextConnectionPoint) - _roadTiles[i].transform.position).sqrMagnitude <= _distanceSqrMagnitude)
-            {
-                RoadWillBeBlocked = true;
-                break;
-            }
-        }
-
-        return RoadWillBeBlocked;
-    }
     
     private void RandomizePrefabsArray()
     {
