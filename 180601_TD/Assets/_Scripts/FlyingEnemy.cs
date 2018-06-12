@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GeekBrains;
+using Game.Enemy;
 
 public class FlyingEnemy : BaseEnemy
 {

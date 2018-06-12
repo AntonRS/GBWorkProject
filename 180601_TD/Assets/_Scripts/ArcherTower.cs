@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-using GeekBrains;
-using System;
+﻿using UnityEngine;
+using Game.Towers;
+
 
 public class ArcherTower : BaseTower {
 
