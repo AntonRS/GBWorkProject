@@ -17,7 +17,11 @@ public class ArcherTower : BaseTower {
     protected override void Update()
     {
         base.Update();
-        LookAtTarget();
+        if (rotateHead!=null)
+        {
+            LookAtTarget();
+        }
+        
     }
     public override void Fire()
     {

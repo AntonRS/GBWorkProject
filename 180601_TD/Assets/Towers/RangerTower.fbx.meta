@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 271f9417b8ca8e2498785593f5e567cf
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: BASE
+    100002: Cage
+    100004: Cylinder
+    100006: Cylinder_1
+    100008: Cylinder_1_2
+    100010: Cylinder_1_3
+    100012: Cylinder_1_4
+    100014: Cylinder_2
+    100016: Cylinder_2_2
+    100018: Cylinder_2_3
+    100020: Cylinder_2_4
+    100022: Cylinder_2_5
+    100024: Cylinder_3
+    100026: Cylinder_4
+    100028: Gobelen
+    100030: Gobelen_1
+    100032: Gobelen_2
+    100034: Gobelen_3
+    100036: Plane
+    100038: Plane_2
+    100040: Plane_3
+    100042: Ram
+    100044: Ram_2
+    100046: Ram_3
+    100048: //RootNode
+    400000: BASE
+    400002: Cage
+    400004: Cylinder
+    400006: Cylinder_1
+    400008: Cylinder_1_2
+    400010: Cylinder_1_3
+    400012: Cylinder_1_4
+    400014: Cylinder_2
+    400016: Cylinder_2_2
+    400018: Cylinder_2_3
+    400020: Cylinder_2_4
+    400022: Cylinder_2_5
+    400024: Cylinder_3
+    400026: Cylinder_4
+    400028: Gobelen
+    400030: Gobelen_1
+    400032: Gobelen_2
+    400034: Gobelen_3
+    400036: Plane
+    400038: Plane_2
+    400040: Plane_3
+    400042: Ram
+    400044: Ram_2
+    400046: Ram_3
+    400048: //RootNode
+    2100000: BASE
+    2300000: BASE
+    2300002: Cylinder
+    2300004: Cylinder_1
+    2300006: Cylinder_1_2
+    2300008: Cylinder_1_3
+    2300010: Cylinder_1_4
+    2300012: Cylinder_2
+    2300014: Cylinder_2_2
+    2300016: Cylinder_2_3
+    2300018: Cylinder_2_4
+    2300020: Cylinder_2_5
+    2300022: Cylinder_3
+    2300024: Cylinder_4
+    2300026: Plane
+    2300028: Plane_2
+    2300030: Plane_3
+    3300000: BASE
+    3300002: Cylinder
+    3300004: Cylinder_1
+    3300006: Cylinder_1_2
+    3300008: Cylinder_1_3
+    3300010: Cylinder_1_4
+    3300012: Cylinder_2
+    3300014: Cylinder_2_2
+    3300016: Cylinder_2_3
+    3300018: Cylinder_2_4
+    3300020: Cylinder_2_5
+    3300022: Cylinder_3
+    3300024: Cylinder_4
+    3300026: Plane
+    3300028: Plane_2
+    3300030: Plane_3
+    4300000: Cylinder_2
+    4300002: Cylinder_1
+    4300004: Cylinder
+    4300006: Plane
+    4300008: Cylinder_2_2
+    4300010: Cylinder_1_2
+    4300012: Cylinder_2_3
+    4300014: Plane_2
+    4300016: Cylinder_2_4
+    4300018: Cylinder_1_3
+    4300020: Cylinder_3
+    4300022: Plane_3
+    4300024: Cylinder_2_5
+    4300026: Cylinder_1_4
+    4300028: Cylinder_4
+    4300030: BASE
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BASE
+    second: {fileID: 2100000, guid: aa09acf41f6ddce4e968d93284518d68, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
