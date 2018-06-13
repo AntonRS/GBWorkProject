@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Enemy;
+using GeekBrains;
 using System;
 
 [Serializable]
@@ -11,4 +11,6 @@ public class WaveElement
     public int count;
     public float speed;
     public float hp;
+
+    
 }

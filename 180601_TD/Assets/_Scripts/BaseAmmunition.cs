@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Enemy;
-namespace Game.Towers
+namespace GeekBrains
 {
     public abstract class BaseAmmunition : MonoBehaviour
     {

@@ -1,10 +1,12 @@
-﻿using Game.Towers;
-public interface ISetDamage
+﻿
+namespace GeekBrains
 {
-    void ApplyDamage(float damage, AttackType attackType);
+    public interface ISetDamage
+    {
+        void ApplyDamage(float damage, AttackType attackType);
 
 
+    }
 }
-
     
 

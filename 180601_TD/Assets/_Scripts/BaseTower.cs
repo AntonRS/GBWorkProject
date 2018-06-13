@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using Game.Enemy;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
-namespace Game.Towers
+namespace GeekBrains
 {
-    /// <summary>
-    /// Базовый класс для всех башен. Наследуется от MonoBehaviour
-    /// </summary>
     public abstract class BaseTower : MonoBehaviour
     {
-        
+
         [SerializeField] protected int cost;
         [SerializeField] protected int damage;
         [SerializeField] protected float attackRange;

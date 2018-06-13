@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Towers;
+using GeekBrains;
 
 public class Arrow : BaseAmmunition
 {

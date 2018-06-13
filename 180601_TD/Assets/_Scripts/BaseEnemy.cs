@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
-using Game.Towers;
-namespace Game.Enemy
+namespace GeekBrains
 {
     public abstract class BaseEnemy : MonoBehaviour, ISetDamage
     {
