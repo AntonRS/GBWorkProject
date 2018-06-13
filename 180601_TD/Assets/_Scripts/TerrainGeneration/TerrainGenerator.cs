@@ -7,11 +7,21 @@ public class TerrainGenerator : MonoBehaviour {
 
     //TODO: Подправить алгоритм выбора тайлов в TryPlaceNextTile, ибо в данный момент явная тенденция ставить левые повороты.
 
+   [Header("Параметры генерации карты (с ними можно поиграться)")]
+
+    [Tooltip("Количество платформ под башни")]
     public int TowerPlatformsCount;
+
+    [Tooltip("Минимальная длина дороги, в тайлах")]
     public int MinRoadLength;
+
+    [Tooltip("Максимальная длина дороги, в тайлах")]
     public int MaxRoadLength;
 
     private int _roadLengthCounter;
+
+    
+    [Header("Префабы тайлов (лучше не трогать)")]
 
     [SerializeField]
     private GameObject _towerPlatform;
@@ -30,6 +40,10 @@ public class TerrainGenerator : MonoBehaviour {
     private Vector3 _currentConnectionPointPos;
     private Vector3 _currentTileCenter;
 
+
+    //переменная для сравнения местополоджения двух объектов.
+    // если sqrmagnitude вектора между ними меньше этого числа
+    //, считаем, что они расположены в одной и той же точке пространства.
     private float _distanceSqrMagnitude = 1f;
 
     private int _maxAttemptsToBuildMap = 10;
@@ -40,6 +54,7 @@ public class TerrainGenerator : MonoBehaviour {
 
         _roadTiles = new List<GameObject>();
                 
+        //TODO: вынести это в отдельный метод и написать контроллер, который будет его вызывать
         for (int i = 0; i < _maxAttemptsToBuildMap; i++)
         {
             if (TryGenerateRoad())
@@ -92,6 +107,7 @@ public class TerrainGenerator : MonoBehaviour {
                     break;
             }
 
+            //если ни один из тайлов не подошёл, дорогу построить не удалось - выходим, возвращаем фолс
             if (_roadTiles[i] == null)
                 return false;
 
@@ -106,6 +122,7 @@ public class TerrainGenerator : MonoBehaviour {
         while ((connectionPoint.position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
             _roadTiles[_roadTiles.Count - 1].transform.Rotate(0, 90f, 0);
 
+        //дорога готова, возвращаем тру
         return true;
 
     }
@@ -236,6 +253,7 @@ public class TerrainGenerator : MonoBehaviour {
         }
     }
 
+    //TODO: Написать, пока тут пусто
     private void PlaceTowerPlatforms()
     {
 
