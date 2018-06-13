@@ -1,0 +1,213 @@
+fileFormatVersion: 2
+guid: 391a8eef14f7a5a4f92a91afedf28788
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: BASE
+    100002: //RootNode
+    100004: Cylinder
+    100006: Cylinder_1
+    100008: Cylinder_1_2
+    100010: Cylinder_2
+    100012: Cylinder_2_2
+    100014: Cylinder_2_3
+    100016: Door
+    100018: Door_Ring
+    100020: Door_Setup
+    100022: Gobelen_R_0
+    100024: Gobelen_R_1
+    100026: Gobelens
+    100028: Plane
+    100030: Plane_2
+    100032: Ram
+    100034: Ram_2
+    100036: Tube
+    100038: Tube_0
+    100040: Tube_1
+    100042: Tube_2
+    100044: Tube_3
+    100046: Tube_4
+    100048: Tube_5
+    100050: Tube_6
+    100052: Tube_7
+    100054: Tube_8
+    100056: Window_Arc
+    400000: BASE
+    400002: //RootNode
+    400004: Cylinder
+    400006: Cylinder_1
+    400008: Cylinder_1_2
+    400010: Cylinder_2
+    400012: Cylinder_2_2
+    400014: Cylinder_2_3
+    400016: Door
+    400018: Door_Ring
+    400020: Door_Setup
+    400022: Gobelen_R_0
+    400024: Gobelen_R_1
+    400026: Gobelens
+    400028: Plane
+    400030: Plane_2
+    400032: Ram
+    400034: Ram_2
+    400036: Tube
+    400038: Tube_0
+    400040: Tube_1
+    400042: Tube_2
+    400044: Tube_3
+    400046: Tube_4
+    400048: Tube_5
+    400050: Tube_6
+    400052: Tube_7
+    400054: Tube_8
+    400056: Window_Arc
+    2100000: BASE
+    2300000: BASE
+    2300002: Cylinder
+    2300004: Cylinder_1
+    2300006: Cylinder_1_2
+    2300008: Cylinder_2
+    2300010: Cylinder_2_2
+    2300012: Cylinder_2_3
+    2300014: Door
+    2300016: Door_Ring
+    2300018: Plane
+    2300020: Plane_2
+    2300022: Tube
+    2300024: Tube_0
+    2300026: Tube_1
+    2300028: Tube_2
+    2300030: Tube_3
+    2300032: Tube_4
+    2300034: Tube_5
+    2300036: Tube_6
+    2300038: Tube_7
+    2300040: Tube_8
+    3300000: BASE
+    3300002: Cylinder
+    3300004: Cylinder_1
+    3300006: Cylinder_1_2
+    3300008: Cylinder_2
+    3300010: Cylinder_2_2
+    3300012: Cylinder_2_3
+    3300014: Door
+    3300016: Door_Ring
+    3300018: Plane
+    3300020: Plane_2
+    3300022: Tube
+    3300024: Tube_0
+    3300026: Tube_1
+    3300028: Tube_2
+    3300030: Tube_3
+    3300032: Tube_4
+    3300034: Tube_5
+    3300036: Tube_6
+    3300038: Tube_7
+    3300040: Tube_8
+    4300000: Cylinder_2
+    4300002: Cylinder_1
+    4300004: Cylinder
+    4300006: Plane
+    4300008: Cylinder_2_2
+    4300010: Cylinder_1_2
+    4300012: Cylinder_2_3
+    4300014: Plane_2
+    4300016: Door
+    4300018: Tube
+    4300020: Door_Ring
+    4300022: Tube_0
+    4300024: Tube_1
+    4300026: Tube_2
+    4300028: Tube_3
+    4300030: Tube_4
+    4300032: Tube_5
+    4300034: Tube_6
+    4300036: Tube_7
+    4300038: Tube_8
+    4300040: BASE
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BASE
+    second: {fileID: 2100000, guid: 05b03bc06f190de40b3af8d8b5d9bb0f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

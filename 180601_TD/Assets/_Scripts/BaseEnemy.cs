@@ -20,6 +20,7 @@ namespace Game.Enemy
 
         protected NavMeshAgent agent;
         protected Transform enemyTransform;
+        protected Animator animator;
 
         #region GetSet
         public Transform Destination
@@ -96,6 +97,7 @@ namespace Game.Enemy
             
             enemyTransform = GetComponent<Transform>();
             agent = GetComponent<NavMeshAgent>();
+            animator = GetComponentInChildren<Animator>();
             agent.speed = speed;
             Main.Instance.AddEnemy(this);
             if (destination == null)
@@ -107,8 +109,10 @@ namespace Game.Enemy
         }
         protected virtual void Dead()
         {
+            agent.speed = 0;
+            animator.SetTrigger("Dead");
             Main.Instance.DeleteEnemy(this);
-            Destroy(gameObject);
+            Destroy(gameObject,6);
         }
         #endregion
     }
