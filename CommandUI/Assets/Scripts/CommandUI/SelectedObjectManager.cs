@@ -43,7 +43,7 @@ namespace Game.CommandUI
 		void Awake()
 		{
 			if (Camera.main.GetComponent<Physics2DRaycaster>() == null)
-				throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент RaycastHit2D");
+				throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент Physics2DRaycaster");
 
 			this._marker = this.GetComponent<SelectableObjectMarker> ();
 

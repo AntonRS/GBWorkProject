@@ -1,16 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CommandUI/MenuFactory.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CommandUI/SelectedObjectManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/CommandUI/SelectedObjectManager.cs" Line="30" Column="32" />
-      <File FileName="Assets/Scripts/CommandUI/SelectableObject.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/CommandUI/MenuFactory.cs" Line="23" Column="47" />
-      <File FileName="Assets/Scripts/CommandUI/SelectableObjectMarker.cs" Line="58" Column="49" />
-      <File FileName="Assets/Scripts/CommandUI/CommandButton.CommandType.cs" Line="14" Column="25" />
-      <File FileName="Assets/Scripts/CommandUI/SelectableObject.Type.cs" Line="30" Column="7" />
-      <File FileName="Assets/Scripts/CommandUI/MenuFactory.Item.cs" Line="18" Column="30" />
-      <File FileName="Assets/Scripts/CommandUI/CommandButton.cs" Line="18" Column="28" />
-      <File FileName="Assets/Scripts/CommandUI/CommandButton.ActuatorInterface.cs" Line="9" Column="41" />
+      <File FileName="Assets/Scripts/CommandUI/SelectableObjectMarker.cs" Line="60" Column="4" />
+      <File FileName="Assets/Scripts/CommandUI/SelectedObjectManager.cs" Line="16" Column="16" />
+      <File FileName="Assets/Scripts/CommandUI/SelectableObject.cs" Line="6" Column="32" />
+      <File FileName="Assets/Scripts/CommandUI/MenuFactory.cs" Line="66" Column="66" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButton.CommandType.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CommandUI/SelectableObject.Type.cs" Line="6" Column="32" />
+      <File FileName="Assets/Scripts/CommandUI/MenuFactory.Item.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButton.cs" Line="86" Column="4" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButton.ActuatorInterface.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

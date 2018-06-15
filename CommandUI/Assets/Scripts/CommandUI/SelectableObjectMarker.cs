@@ -56,13 +56,13 @@ namespace Game.CommandUI
 		/// <summary>
 		/// перемещает и показывает маркер выделения объекта
 		/// </summary>
-		public void DrawMarkerOver(GameObject selected)
+		public void DrawMarkerOver(GameObject selectedObject)
 		{
-			if (selected == null) {
+			if (selectedObject == null) {
 				this._marker.SetActive (false);
 			} else {
-				this._marker.transform.position = selected.transform.position;
-				this._marker.transform.localScale = selected.transform.localScale * this._scale;
+				this._marker.transform.position = selectedObject.transform.position;
+				this._marker.transform.localScale = selectedObject.transform.localScale * this._scale;
 				this._marker.SetActive (true);
 			}
 		}

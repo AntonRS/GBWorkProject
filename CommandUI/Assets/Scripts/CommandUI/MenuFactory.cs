@@ -63,7 +63,7 @@ namespace Game.CommandUI
 		/// Если находит такое меню - отображает его над новым выделенным объектом и возвращает <c>true</c>
 		/// Иначе возвращает <c>false</c>
 		/// </summary>
-		/// <returns><c>true</c>, если меню найдено, <c>false</c> иначе.</returns>
+		/// <returns><c>true</c>, если меню найдено, <c>false</c> иначе</returns>
 		/// <param name="selectedObject">Выделенный игровой объект</param>
 		/// <param name="ofType">Тип выбранного объекта</param>
 		private bool SearchCachedMenuFor(GameObject selectedObject, SelectableObjectType ofType)

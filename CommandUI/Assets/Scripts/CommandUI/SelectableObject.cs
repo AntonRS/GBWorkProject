@@ -3,7 +3,7 @@
 namespace Game.CommandUI
 {
 	/// <summary>
-	/// Объект должен обладать людым типом Collider для возможности выбора
+	/// Объект должен обладать любым типом Collider для возможности выбора
 	/// </summary>
 	[RequireComponent(typeof(Collider))]
 
