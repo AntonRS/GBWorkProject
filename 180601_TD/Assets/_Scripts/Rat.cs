@@ -13,7 +13,7 @@ public class Rat : BaseEnemy {
         base.Start();
         if (bodyTransform != null)
         {
-            enemyTransform = bodyTransform;
+            EnemyTransform = bodyTransform;
         }
 
     }

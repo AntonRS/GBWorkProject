@@ -1,5 +1,4 @@
-﻿
-namespace GeekBrains
+﻿namespace GeekBrains
 {
     public enum AttackType
     {

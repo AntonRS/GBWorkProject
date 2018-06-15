@@ -3,9 +3,7 @@ namespace GeekBrains
 {
     public interface ISetDamage
     {
-        void ApplyDamage(float damage, AttackType attackType);
-
-
+        void ApplyDamage(DamageInfo damageinfo);
     }
 }
     

@@ -12,7 +12,7 @@ public class FlyingEnemy : BaseEnemy
         base.Start();
         if (bodyTransform != null)
         {
-            enemyTransform = bodyTransform;
+            EnemyTransform = bodyTransform;
         }
 
     }

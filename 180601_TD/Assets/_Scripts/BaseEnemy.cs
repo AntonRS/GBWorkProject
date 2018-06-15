@@ -1,115 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.AI;
+﻿using UnityEngine.AI;
 using UnityEngine;
 namespace GeekBrains
 {
     public abstract class BaseEnemy : MonoBehaviour, ISetDamage
     {
-        [SerializeField] protected Transform destination;
-        [SerializeField] protected float hp;
+        public Transform Destination;
+        public float Hp;
         [Range(1, 90)]
-        [SerializeField]
-        protected float physicalArmor;
+        public float PhysicalArmor;
         [Range(1, 90)]
-        [SerializeField]
-        protected float magicArmor;
-        [SerializeField] protected float speed;
-        [SerializeField] protected bool isFlying;
+        public float MagicArmor;
+        public float Speed;
+        public bool IsFlying;
+        [HideInInspector] public Transform EnemyTransform;
 
-        protected NavMeshAgent agent;
-        protected Transform enemyTransform;
-        protected Animator animator;
-
-        #region GetSet
-        public Transform Destination
-        {
-            get { return destination; }
-            set { destination = value; }
-        }
-        public float HP
-        {
-            get { return hp; }
-            set { hp = value; }
-        }
-
-        public float PhysicalArmor
-        {
-            get { return physicalArmor; }
-            set { physicalArmor = value; }
-        }
-
-        public float MagicArmor
-        {
-            get { return magicArmor; }
-            set { magicArmor = value; }
-        }
-        public float Speed
-        {
-            get { return speed; }
-            set { speed = value; }
-        }
-        public bool IsFlying
-        {
-            get { return isFlying; }
-            set { isFlying = value; }
-        }
-        public Transform EnemyTransform
-        {
-            get { return enemyTransform; }
-            set { enemyTransform = value; }
-        }
-
-        #endregion
+        protected NavMeshAgent _agent;
+        protected Animator _animator;
 
         #region BaseEnemy Functions
-        public void ApplyDamage(float damage, AttackType attackType)
+        public void ApplyDamage(DamageInfo damageInfo)
         {
-
-            if (hp > 0)
+            
+            if (Hp > 0)
             {
-                if (attackType == AttackType.physical)
+                if (damageInfo.AttackType == AttackType.physical)
                 {
-                    hp -= (damage-((damage / 100) * physicalArmor));
+                    Hp -= (damageInfo.Damage - ((damageInfo.Damage / 100) * PhysicalArmor));
                 }
-                if (attackType == AttackType.magic)
+                if (damageInfo.AttackType == AttackType.magic)
                 {
-                    hp -= (damage-((damage / 100) * magicArmor));
+                    Hp -= (damageInfo.Damage - ((damageInfo.Damage / 100) * MagicArmor));
                 }
-                if (attackType == AttackType.pure)
+                if (damageInfo.AttackType == AttackType.pure)
                 {
-                    hp -= damage;
+                    Hp -= damageInfo.Damage;
                 }
 
             }
-            if (hp <= 0)
+            if (Hp <= 0)
             {
-                hp = 0;
+                Hp = 0;
                 Dead();
             }
         }
         #endregion
-
         #region Unity Functions
         protected virtual void Start()
         {
             
-            enemyTransform = GetComponent<Transform>();
-            agent = GetComponent<NavMeshAgent>();
-            animator = GetComponentInChildren<Animator>();
-            agent.speed = speed;
+            EnemyTransform = GetComponent<Transform>();
+            _agent = GetComponent<NavMeshAgent>();
+            _animator = GetComponentInChildren<Animator>();
+            _agent.speed = Speed;
             Main.Instance.AddEnemy(this);
-            if (destination == null)
+            if (Destination == null)
             {
                 Debug.Log("Enemy " + name + " dont have target. Add destination target");
                 return;
             }
-            agent.SetDestination(destination.position);
+            _agent.SetDestination(Destination.position);
         }
         protected virtual void Dead()
         {
-            agent.speed = 0;
-            animator.SetTrigger("Dead");
+            _agent.speed = 0;
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Dead");
+            }
+            
             Main.Instance.DeleteEnemy(this);
             Destroy(gameObject,6);
         }

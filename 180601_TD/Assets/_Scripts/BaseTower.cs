@@ -15,10 +15,12 @@ namespace GeekBrains
         [SerializeField] protected bool isAbleToAttackGround;
         [SerializeField] protected bool isAbleToAttackAir;
         [SerializeField] protected AttackType attackType;
-
         [SerializeField] protected string ammunitionPath;
         protected BaseAmmunition ammunition;
         protected BaseEnemy target;
+        [SerializeField]
+        protected DamageInfo damageInfo;
+
 
         
 
@@ -26,6 +28,7 @@ namespace GeekBrains
         protected virtual void Awake()
         {
             LoadResources();
+            SetDamageInfo();
         }
         protected virtual void Start()
         {
@@ -84,6 +87,16 @@ namespace GeekBrains
         }
         delegate void Action();
         public abstract void Fire();
+
+        protected virtual void SetDamageInfo()
+        {
+            damageInfo.Damage = damage;
+            damageInfo.AttackType = attackType;
+        }
+        protected virtual void UpdateTower()
+        {
+
+        }
         #endregion
         #region Editor Functions
         protected virtual void OnDrawGizmosSelected()

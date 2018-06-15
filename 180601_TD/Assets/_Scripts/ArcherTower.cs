@@ -1,57 +1,66 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 using GeekBrains;
-using System;
 
 public class ArcherTower : BaseTower {
-
-    [SerializeField] private Transform rotateHead;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private float turnSpeed = 5;
-    [SerializeField] private float bulletSpeed;
-
+    /// <summary>
+    /// Transform of object which should look on to an enemy
+    /// </summary>
+    [SerializeField] private Transform _rotateHead;
+    /// <summary>
+    /// Transform where Ammunition appears
+    /// </summary>
+    [SerializeField] private Transform _firePoint;
+    /// <summary>
+    /// _rotateHead rotation speed
+    /// </summary>
+    [SerializeField] private float _turnSpeed = 5;
+    /// <summary>
+    /// Ammuniton speed
+    /// </summary>
+    [SerializeField] private float _ammunitionSpeed;
+    /// <summary>
+    /// Countdown to fire
+    /// </summary>
     private float fireCountDown = 0f;
 
+    protected override void Start()
+    {
+        base.Start();
+        if (_firePoint == null)
+        {
+            _firePoint = transform;
+            Debug.Log("Tower "+name+" dont have fire point. Add firepoint transform in editor");
+        }
+    }
     protected override void Update()
     {
         base.Update();
-        if (rotateHead!=null)
-        {
-            LookAtTarget();
-        }
-        
-    }
+        LookAtTarget();
+    }   
     public override void Fire()
     {
         if (fireCountDown <= 0f)
         {
-            var tempArrow = Instantiate(ammunition, firePoint.position, firePoint.rotation);
+            var tempArrow = Instantiate(ammunition, _firePoint.position, _firePoint.rotation);
             tempArrow.Target = target;
-            tempArrow.Speed = bulletSpeed;
-            tempArrow.Damage = damage;
-            tempArrow.AttackType = attackType;
-
+            tempArrow.Speed = _ammunitionSpeed;
+            tempArrow.DamageInfo = damageInfo;
             fireCountDown = 1f / attackPerSecond;
         }
         fireCountDown -= Time.deltaTime;
     }
-
-    private void LookAtTarget()// Tower Head Fallows the target
+    /// <summary>
+    /// _rotateHead GameObject will look on to an enemy
+    /// </summary>
+    private void LookAtTarget()
     {
-        if (target != null)
+        if (target != null&& _rotateHead != null)
         {
-            var direction = target.EnemyTransform.position - rotateHead.position;
-            Quaternion lookRotation = Quaternion.Lerp(rotateHead.rotation,
+            var direction = target.EnemyTransform.position - _rotateHead.position;
+            Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                       Quaternion.LookRotation(direction),
-                                                      Time.deltaTime * turnSpeed);
-            rotateHead.rotation = lookRotation;
-        }
-       
+                                                      Time.deltaTime * _turnSpeed);
+            _rotateHead.rotation = lookRotation;
+        }       
     }
-
-
-
-
 }

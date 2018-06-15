@@ -1182,7 +1182,7 @@ MonoBehaviour:
   isAbleToAttackAir: 1
   attackType: 1
   ammunitionPath: Prefabs/Arrow
-  rotateHead: {fileID: 4237252021951858}
-  firePoint: {fileID: 4237252021951858}
-  turnSpeed: 5
-  bulletSpeed: 12
+  _rotateHead: {fileID: 0}
+  _firePoint: {fileID: 4237252021951858}
+  _turnSpeed: 5
+  _ammunitionSpeed: 15

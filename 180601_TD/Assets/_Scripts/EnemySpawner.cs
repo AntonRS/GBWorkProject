@@ -26,7 +26,7 @@ public class EnemySpawner : MonoBehaviour {
             {
                 var tempEnemy = Instantiate(enemy.enemy, GetRandomPosition(), transform.rotation);
                 tempEnemy.Speed = enemy.speed + Random.Range(-0.5f, 0.5f);
-                tempEnemy.HP = enemy.hp;
+                tempEnemy.Hp = enemy.hp;
                 tempEnemy.Destination = destination;
             }
 
