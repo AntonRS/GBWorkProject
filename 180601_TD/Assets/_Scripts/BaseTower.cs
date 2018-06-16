@@ -7,22 +7,25 @@ namespace GeekBrains
 {
     public abstract class BaseTower : MonoBehaviour
     {
-
-        [SerializeField] protected int cost;
-        [SerializeField] protected int damage;
-        [SerializeField] protected float attackRange;
-        [SerializeField] protected float attackPerSecond;
-        [SerializeField] protected bool isAbleToAttackGround;
-        [SerializeField] protected bool isAbleToAttackAir;
-        [SerializeField] protected AttackType attackType;
-        [SerializeField] protected string ammunitionPath;
-        protected BaseAmmunition ammunition;
-        protected BaseEnemy target;
-        [SerializeField]
-        protected DamageInfo damageInfo;
-
-
         
+        [SerializeField] protected int _cost;
+        [SerializeField] protected int _updateCost;
+        [SerializeField] protected int _damage;
+        [SerializeField] protected float _attackRange;
+        [SerializeField] protected float _attackPerSecond;
+        [SerializeField] protected bool _isAbleToAttackGround;
+        [SerializeField] protected bool _isAbleToAttackAir;
+        [SerializeField] protected AttackType _attackType;
+        [SerializeField] protected string _ammunitionPath;
+        [SerializeField] protected UpdateInfo[] _updates;
+        protected BaseAmmunition _ammunition;
+        protected BaseEnemy _target;
+        [SerializeField]
+        protected DamageInfo _damageInfo;
+        protected int _lvl = 0;
+
+
+
 
         #region Unity Functions
         protected virtual void Awake()
@@ -36,7 +39,7 @@ namespace GeekBrains
         }
         protected virtual void Update()
         {
-            if (target == null)
+            if (_target == null)
             {
                 return;
             }
@@ -46,12 +49,12 @@ namespace GeekBrains
         #region BaseTower Functions
         protected virtual void LoadResources()
         {
-            if (ammunitionPath == null)
+            if (_ammunitionPath == null)
             {
                 Debug.Log("Tower "+ name + " Cant load resources. Enter resources path");
                 return;
             }
-            ammunition = Resources.Load<BaseAmmunition>(ammunitionPath);
+            _ammunition = Resources.Load<BaseAmmunition>(_ammunitionPath);
         }
         protected virtual void UpdateTarget()
         {
@@ -61,7 +64,7 @@ namespace GeekBrains
 
             foreach (BaseEnemy enemy in Main.Instance.enemies)
             {
-                if ((isAbleToAttackGround && !enemy.IsFlying)||(isAbleToAttackAir && enemy.IsFlying))
+                if ((_isAbleToAttackGround && !enemy.IsFlying)||(_isAbleToAttackAir && enemy.IsFlying))
                 {
                     float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
                     if (distanceToEnemy < shortestDistance)
@@ -72,13 +75,13 @@ namespace GeekBrains
                 }
                 
             }
-            if (nearestEnemy != null && shortestDistance <= attackRange)
+            if (nearestEnemy != null && shortestDistance <= _attackRange)
             {
-                target = nearestEnemy;
+                _target = nearestEnemy;
             }
             else
             {
-                target = null;
+                _target = null;
             }
         }
         private void InvokeRepeating(Action action, float startTime, float repeatTime)
@@ -87,22 +90,20 @@ namespace GeekBrains
         }
         delegate void Action();
         public abstract void Fire();
+        public abstract void UpdateTower();
 
         protected virtual void SetDamageInfo()
         {
-            damageInfo.Damage = damage;
-            damageInfo.AttackType = attackType;
+            _damageInfo.Damage = _damage;
+            _damageInfo.AttackType = _attackType;
         }
-        protected virtual void UpdateTower()
-        {
-
-        }
+       
         #endregion
         #region Editor Functions
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.DrawWireSphere(transform.position, _attackRange);
         }
         #endregion
         

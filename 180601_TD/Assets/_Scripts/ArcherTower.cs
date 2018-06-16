@@ -32,6 +32,7 @@ public class ArcherTower : BaseTower {
             Debug.Log("Tower "+name+" dont have fire point. Add firepoint transform in editor");
         }
     }
+
     protected override void Update()
     {
         base.Update();
@@ -41,22 +42,38 @@ public class ArcherTower : BaseTower {
     {
         if (fireCountDown <= 0f)
         {
-            var tempArrow = Instantiate(ammunition, _firePoint.position, _firePoint.rotation);
-            tempArrow.Target = target;
+            var tempArrow = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
+            tempArrow.Target = _target;
             tempArrow.Speed = _ammunitionSpeed;
-            tempArrow.DamageInfo = damageInfo;
-            fireCountDown = 1f / attackPerSecond;
+            tempArrow.DamageInfo = _damageInfo;
+            fireCountDown = 1f / _attackPerSecond;
         }
         fireCountDown -= Time.deltaTime;
+    }
+    public override void UpdateTower()
+    {
+        _updateCost = _updates[_lvl].newUpdateCost;
+        _damage = _updates[_lvl].newDamage;
+        _attackRange = _updates[_lvl].newAttackRange;
+        _attackPerSecond = _updates[_lvl].newAttackPerSecond;
+        _isAbleToAttackGround = _updates[_lvl].newIsAbleToAttackGround;
+        _isAbleToAttackAir = _updates[_lvl].newIsAbleToAttackAir;
+        _attackType = _updates[_lvl].newAttackType;
+        _ammunitionPath = _updates[_lvl].newAmunitionPath;
+        if (_lvl < _updates.Length)
+        {
+            _lvl += 1;
+        }
+
     }
     /// <summary>
     /// _rotateHead GameObject will look on to an enemy
     /// </summary>
     private void LookAtTarget()
     {
-        if (target != null&& _rotateHead != null)
+        if (_target != null&& _rotateHead != null)
         {
-            var direction = target.EnemyTransform.position - _rotateHead.position;
+            var direction = _target.EnemyTransform.position - _rotateHead.position;
             Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                       Quaternion.LookRotation(direction),
                                                       Time.deltaTime * _turnSpeed);
