@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Game.CommandUI
@@ -11,7 +10,7 @@ namespace Game.CommandUI
 	[RequireComponent(typeof(MenuFactory))]
 
 	/// <summary>
-	/// Синглтон - фабрика.
+	/// Синглтон.
 	/// Отображает нужный интерфейс для выделенного в игре объекта SelectedObject
 	/// </summary>
 	public class SelectedObjectManager : Singleton<SelectedObjectManager>
@@ -38,12 +37,13 @@ namespace Game.CommandUI
 		private GameObject _selectedObject = null;
 		private SelectableObjectType _selectedObjectType = SelectableObjectType.None;
 
+
 		#region Стандартный функционал MonoBehaviour
 
 		void Awake()
 		{
-			if (Camera.main.GetComponent<Physics2DRaycaster>() == null)
-				throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент Physics2DRaycaster");
+			if (Camera.main.GetComponent<PhysicsRaycaster>() == null)
+                throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент PhysicsRaycaster");
 
 			this._marker = this.GetComponent<SelectableObjectMarker> ();
 

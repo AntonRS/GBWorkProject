@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114102910901899718}
   - component: {fileID: 114327617489180332}
   - component: {fileID: 114989773696972730}
+  - component: {fileID: 114191366621514202}
   m_Layer: 0
   m_Name: CommandUI
   m_TagString: Untagged
@@ -53,6 +54,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d245cbd9840c345539846e4d0cbeda6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114191366621514202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1206276342374496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94a2f32cc6d2047b18348395068ae662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovedObject: {fileID: 0}
+  MaxMoveSphereRadius: 50
+  HoverHeight: 3
 --- !u!114 &114327617489180332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -77,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Height: 2
+  GlobalActuatorObject: {fileID: 0}
   MenuDefinitionItems:
   - ObjectType: 0
     MenuPrefab: {fileID: 1528178304174088, guid: a17b73e6130964cf1acf6a6c8df264be,

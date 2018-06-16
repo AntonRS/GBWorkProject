@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 
 namespace Game.CommandUI
@@ -21,9 +22,9 @@ namespace Game.CommandUI
 		private Color _color = new Color(1f, 0.3f, 0.3f, 0.2f);
 
 		/// <summary>
-		/// Дефолтный масштаб сферы относительно выделенного объекта
+		/// Увеличение размера сферы относительно объекта
 		/// </summary>
-		private float _scale = 3f;
+		private float _scale = 2f;
 
 
 		#region Стандартный функционал MonoBehaviour
@@ -34,8 +35,32 @@ namespace Game.CommandUI
 				this.BuildDefaultMarker ();
 		}
 
-		#endregion
+        #endregion
 
+
+        #region Публичные методы компонента
+
+        /// <summary>
+        /// перемещает и показывает маркер выделения объекта
+        /// </summary>
+        public void DrawMarkerOver(GameObject selectedObject)
+        {
+            if (selectedObject == null)
+            {
+                this._marker.SetActive(false);
+            }
+            else
+            {
+                this._marker.transform.position = selectedObject.transform.position;
+                this._marker.transform.localScale = selectedObject.transform.localScale * this._scale;
+                this._marker.SetActive(true);
+            }
+        }
+
+        #endregion
+
+
+        #region Приватные методы компонента
 
 		/// <summary>
 		/// Выполняет построение дефолтного селектора
@@ -53,18 +78,7 @@ namespace Game.CommandUI
 				};
 		}
 
-		/// <summary>
-		/// перемещает и показывает маркер выделения объекта
-		/// </summary>
-		public void DrawMarkerOver(GameObject selectedObject)
-		{
-			if (selectedObject == null) {
-				this._marker.SetActive (false);
-			} else {
-				this._marker.transform.position = selectedObject.transform.position;
-				this._marker.transform.localScale = selectedObject.transform.localScale * this._scale;
-				this._marker.SetActive (true);
-			}
-		}
+        #endregion
+
 	}
 }

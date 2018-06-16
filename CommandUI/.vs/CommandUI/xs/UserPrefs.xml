@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CommandUI/MovableObject.cs">
+    <Files>
+      <File FileName="Assets/Scripts/CommandUI/MovableObject.cs" Line="150" Column="10" />
+      <File FileName="Assets/Scripts/CommandUI/MovedObjectManager.cs" Line="20" Column="14" />
+      <File FileName="Assets/Scripts/CommandUI/SelectedObjectManager.cs" Line="27" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
