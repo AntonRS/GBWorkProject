@@ -577,7 +577,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1655488988832358}
   m_LocalRotation: {x: 0, y: 0.6889873, z: 0, w: 0.7247734}
-  m_LocalPosition: {x: 12.364, y: 0.79441, z: -9.33}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 4034099014103174}
@@ -1174,15 +1174,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bca38d5f3b390e4690440602e7f45eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
-  damage: 15
-  attackRange: 15
-  attackPerSecond: 1.5
-  isAbleToAttackGround: 1
-  isAbleToAttackAir: 1
-  attackType: 1
-  ammunitionPath: Prefabs/Arrow
-  _rotateHead: {fileID: 0}
+  _cost: 0
+  _updateCost: 0
+  _damage: 15
+  _attackRange: 10
+  _attackPerSecond: 2
+  _isAbleToAttackGround: 1
+  _isAbleToAttackAir: 1
+  _attackType: 1
+  _ammunitionPath: Prefabs/Arrow
+  _updates: []
+  _rotateHead: {fileID: 4237252021951858}
   _firePoint: {fileID: 4237252021951858}
   _turnSpeed: 5
   _ammunitionSpeed: 15
