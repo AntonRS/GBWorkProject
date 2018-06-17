@@ -3,6 +3,7 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
+using GeekBrains;
 
 namespace Game.CommandUI
 {
@@ -37,6 +38,15 @@ namespace Game.CommandUI
                 return _commandType;
             }
         }
+
+        /// <summary>
+        /// Мета-дата кнопки, позволяет задать необходимые доп данные кнопки.
+        /// Например, в случае нескольких кннопок апргрейда, высылается одинаковый
+        /// тип комманды Upgrade. Используя мета, можно указать о каком апгрейде
+        /// именно идет речь. Например так: "Upgrade #1 Encrease strength"
+        /// </summary>
+        public string Meta;
+        public BaseTower buildTower;
 
         /// <summary>
         /// Объект, на который даннай кнопка воздействует, передается
