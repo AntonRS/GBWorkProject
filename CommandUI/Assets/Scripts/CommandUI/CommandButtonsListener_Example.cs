@@ -14,7 +14,7 @@ namespace Game
 
         public void ExecuteCommand(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
-            Debug.Log(string.Format("Executing command [{0}] on object [{1}] via button [{2}]", ofType, forObject, viaButton));
+            Debug.Log(string.Format("Executing command [{0}] on object [{1}] via button [{2}] with meta [{3}]", ofType, forObject, viaButton, viaButton.Meta));
         }
 
         #endregion

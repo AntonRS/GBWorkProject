@@ -1,11 +1,14 @@
 ﻿<Properties StartupConfiguration="{A2069E93-9D20-59CC-49E2-DE5541EA5321}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CommandUI/DraggableObject.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CommandUI/CommandButtonsListener_Example.cs">
     <Files>
       <File FileName="Assets/Scripts/CommandUI/SelectedObjectManager.cs" Line="27" Column="1" />
       <File FileName="Assets/Scripts/CommandUI/DraggableObject.cs" Line="110" Column="22" />
       <File FileName="Assets/Scripts/CommandUI/DraggableObject.State.cs" Line="15" Column="16" />
       <File FileName="Assets/Scripts/CommandUI/DraggableObjectManager.cs" Line="40" Column="29" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButton.cs" Line="45" Column="75" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButton.CommandType.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CommandUI/CommandButtonsListener_Example.cs" Line="17" Column="157" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
