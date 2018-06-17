@@ -47,7 +47,7 @@ namespace Game.CommandUI
         public string Meta;
 
         /// <summary>
-        /// Объект, на который даннай кнопка воздействует, передается
+        /// Объект, на который данная кнопка воздействует, передается из
         /// <c>SelectedObjectManager</c> в момент отображения меню
         /// </summary>
         [HideInInspector] public GameObject TargetObject = null;
