@@ -222,8 +222,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TowerPlatformsCount: 10
-  MinRoadLength: 15
-  MaxRoadLength: 35
+  MinRoadLength: 7
+  MaxRoadLength: 12
   _towerPlatform: {fileID: 1724675264677764, guid: a171b0e910dd9cb40b0f24a0cec9dd3a,
     type: 2}
   _roadStartPrefab: {fileID: 1261281990683528, guid: 3e7fbf3508cd494478d231b084f9d755,

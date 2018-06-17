@@ -4,24 +4,21 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour {
 
-
-    //TODO: Подправить алгоритм выбора тайлов в TryPlaceNextTile, ибо в данный момент явная тенденция ставить левые повороты.
-
-   [Header("Параметры генерации карты (с ними можно поиграться)")]
+    [Header("Параметры генерации карты - можно с ними поиграться")]
 
     [Tooltip("Количество платформ под башни")]
     public int TowerPlatformsCount;
 
-    [Tooltip("Минимальная длина дороги, в тайлах")]
+    [Tooltip("Минимальное количество тайлов дороги")]
     public int MinRoadLength;
 
-    [Tooltip("Максимальная длина дороги, в тайлах")]
+    [Tooltip("Максимальное количество тайлов дороги")]
     public int MaxRoadLength;
 
     private int _roadLengthCounter;
 
-    
-    [Header("Префабы тайлов (лучше не трогать)")]
+
+    [Header("Префабы для тайлов - лучше не трогать")]
 
     [SerializeField]
     private GameObject _towerPlatform;
@@ -40,21 +37,30 @@ public class TerrainGenerator : MonoBehaviour {
     private Vector3 _currentConnectionPointPos;
     private Vector3 _currentTileCenter;
 
+    private float _distanceSqrMagnitude = 1f;//число для сравнения местоположения. Если (точкаА - точкаБ).sqrMagnitude < _distanceSqrMagnitude, считаем, что эти точки находятся в одном и том же месте.
 
-    //переменная для сравнения местополоджения двух объектов.
-    // если sqrmagnitude вектора между ними меньше этого числа
-    //, считаем, что они расположены в одной и той же точке пространства.
-    private float _distanceSqrMagnitude = 1f;
-
-    private int _maxAttemptsToBuildMap = 10;
+    private int _maxAttemptsToBuildMap = 10;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл.
     private bool _buildIsSuccessful;
 
     // Use this for initialization
     void Start () {
 
         _roadTiles = new List<GameObject>();
-                
-        //TODO: вынести это в отдельный метод и написать контроллер, который будет его вызывать
+
+        //временно, потом вызов метода перенесу в контроллер
+        //не забыть и эти переменные тоже туда перенести и в этом скрипте сделать приватными или внутриметодными
+        GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);
+
+    }
+
+    /// <summary>
+    /// Генерирует карту рандомной длины в заданных рамках.
+    /// </summary>
+    /// <param name="minRoadTiles">Минимальное количество тайлов дороги, не считая стартового и конечного.</param>
+    /// <param name="maxRoadTiles">Максимальное количество тайлов дороги, не считая стартового и конечного.</param>
+    /// <param name="towerPlatformsCount">Количество платформ под башни.</param>
+    public void GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount)
+    {
         for (int i = 0; i < _maxAttemptsToBuildMap; i++)
         {
             if (TryGenerateRoad())
@@ -64,7 +70,7 @@ public class TerrainGenerator : MonoBehaviour {
             }
 
             Debug.Log("Не получилось построить карту. Осталось " + (_maxAttemptsToBuildMap - i - 1) + " попыток.");
-                        
+
             DestroyRoad();
         }
 
@@ -75,9 +81,13 @@ public class TerrainGenerator : MonoBehaviour {
         }
         else
             Debug.Log("Не получилось построить карту. Попробуйте уменьшить её максимальную длину.");
-
     }
 
+
+    /// <summary>
+    /// Пробует сгенерировать дорогу. Возвращает истину, если построить дорогу удалось, ложь - если нет.
+    /// </summary>
+    /// <returns></returns>
     private bool TryGenerateRoad()
     {
         _roadLengthCounter = Random.Range(MinRoadLength + 2, MaxRoadLength + 3);// +2 - потому что мы в тот же массив добавляем помимо остальных ещё два тайла - начальный и конечный.
@@ -95,10 +105,13 @@ public class TerrainGenerator : MonoBehaviour {
         for (int i = 1; i < _roadLengthCounter - 1; i++)
         {
 
-            RandomizePrefabsArray();
+            //перемешиваем префабы в массиве, чтобы они были под другими индексами.
+            RandomizeGameObjectsArray(ref _roadTilesPrefabs);
 
+            //ставим в качестве тайла нулл-геймобжект
             _roadTiles.Add(null);
 
+            //пытаемся его заменить на нормальный тайл
             for (int j = 0; j < _roadTilesPrefabs.Length; j++)
             {
                 _roadTiles[i] = TryPlaceNextTile(_roadTilesPrefabs[j], i);
@@ -107,9 +120,9 @@ public class TerrainGenerator : MonoBehaviour {
                     break;
             }
 
-            //если ни один из тайлов не подошёл, дорогу построить не удалось - выходим, возвращаем фолс
             if (_roadTiles[i] == null)
                 return false;
+            //если ни один префаб не подошёл, дорогу построить не удалось
 
         }
 
@@ -122,11 +135,13 @@ public class TerrainGenerator : MonoBehaviour {
         while ((connectionPoint.position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
             _roadTiles[_roadTiles.Count - 1].transform.Rotate(0, 90f, 0);
 
-        //дорога готова, возвращаем тру
         return true;
 
     }
 
+    /// <summary>
+    /// Уничтожает дорогу и вычищает список уже установленных тайлов.
+    /// </summary>
     private void DestroyRoad()
     {
         _roadTiles.Clear();
@@ -135,32 +150,39 @@ public class TerrainGenerator : MonoBehaviour {
             Destroy(child.gameObject);
     }
     
-
+    /// <summary>
+    /// Пробует установить и вернуть следующий тайл. Возвращает null, если установка тайла не удалась.
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <param name="currentTileNumber"></param>
+    /// <returns></returns>
     private GameObject TryPlaceNextTile(GameObject prefab, int currentTileNumber)
     {
         Transform tile = InstantiateTileAtCurrentCenter(prefab);
 
         Transform[] connectionPoints = FindConnectionPoints(tile);
+
+        int randomIndex = Random.Range(0, 2);
                 
-        while ((connectionPoints[0].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
+        while ((connectionPoints[randomIndex].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
             tile.Rotate(0, 90f, 0);
 
-        bool willBeBlocked = WillRunIntoOtherTiles(connectionPoints[1].position, currentTileNumber);
+        bool willBeBlocked = WillRunIntoOtherTiles(connectionPoints[1 - randomIndex].position, currentTileNumber);
 
         if (willBeBlocked)
         {
 
-            while ((connectionPoints[1].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
+            while ((connectionPoints[1 - randomIndex].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
                 tile.Rotate(0, 90f, 0);
 
-            willBeBlocked = WillRunIntoOtherTiles(connectionPoints[0].position, currentTileNumber);
+            willBeBlocked = WillRunIntoOtherTiles(connectionPoints[randomIndex].position, currentTileNumber);
 
             if (!willBeBlocked)
-                _currentConnectionPointPos = connectionPoints[0].position;
+                _currentConnectionPointPos = connectionPoints[randomIndex].position;
 
         }
         else
-            _currentConnectionPointPos = connectionPoints[1].position;
+            _currentConnectionPointPos = connectionPoints[1 - randomIndex].position;
 
         //проверили обе точки. Если пересечение осталось, уничтожаем тайл и выходим из метода возвратом нулл.
         if (willBeBlocked)
@@ -176,7 +198,12 @@ public class TerrainGenerator : MonoBehaviour {
 
     }
 
-
+    /// <summary>
+    /// Возвращает истину, если следующий тайл, который будет установлен после текущего, будет пересекаться с уже установленным куском дороги.
+    /// </summary>
+    /// <param name="nextConnectionPoint"></param>
+    /// <param name="currentTileNumber"></param>
+    /// <returns></returns>
     private bool WillRunIntoOtherTiles(Vector3 nextConnectionPoint, int currentTileNumber)
     {
         bool RoadWillBeBlocked = false;
@@ -193,6 +220,11 @@ public class TerrainGenerator : MonoBehaviour {
         return RoadWillBeBlocked;
     }
 
+    /// <summary>
+    /// Инстантиейтит и возвращает тайл с центром в текущей позиции для центра тайла. Также поворачивает тайл в рандомное положение.
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <returns></returns>
     private Transform InstantiateTileAtCurrentCenter(GameObject prefab)
     {
         Transform tile = Instantiate(prefab, transform).transform;
@@ -201,6 +233,11 @@ public class TerrainGenerator : MonoBehaviour {
         return tile;
     }
 
+    /// <summary>
+    /// Возвращает точку соединения дороги у данного тайла. Применяется для тайлов, у которых эта точка одна (начальный и конечный)
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     private Transform FindConnectionPoint(Transform obj)
     {
         foreach (Transform child in obj)
@@ -210,6 +247,11 @@ public class TerrainGenerator : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Возвращает все точки соединения дороги у данного тайла.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     private Transform[] FindConnectionPoints(Transform obj)
     {
         Transform[] result = new Transform[2];
@@ -232,6 +274,11 @@ public class TerrainGenerator : MonoBehaviour {
            tile.transform.Rotate(0, 90f, 0);
     }
 
+    /// <summary>
+    /// Возвращает центр следующего тайла.
+    /// </summary>
+    /// <param name="connectionPoint"></param>
+    /// <returns></returns>
     private Vector3 FindNextCenterPoint(Vector3 connectionPoint)
     {
         Vector3 result = new Vector3();
@@ -240,22 +287,45 @@ public class TerrainGenerator : MonoBehaviour {
         result.y = 0;
         return result;
     }
-
     
-    private void RandomizePrefabsArray()
+    /// <summary>
+    /// Перемешивает содержимое массива гейм-обжектов.
+    /// </summary>
+    /// <param name="array"></param>
+    private void RandomizeGameObjectsArray(ref GameObject[] array)
     {
-        for (int i = 0; i < _roadTilesPrefabs.Length; i++)
+        for (int i = 0; i < array.Length; i++)
         {
             int j = Random.Range(0, i + 1);
-            var temp = _roadTilesPrefabs[j];
-            _roadTilesPrefabs[j] = _roadTilesPrefabs[i];
-            _roadTilesPrefabs[i] = temp;
+            var temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
         }
     }
 
-    //TODO: Написать, пока тут пусто
+
+    /// <summary>
+    /// Ставит платформы под пушки (пока просто рандомно) на спавн-поинты расставленных тайлов дороги.
+    /// </summary>
     private void PlaceTowerPlatforms()
     {
+        
+        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Tile_TowerPlatformSpawnPoint");
+
+        if (TowerPlatformsCount > spawnPoints.Length)
+            TowerPlatformsCount = spawnPoints.Length;
+
+        GameObject[] towerPlatforms = new GameObject[TowerPlatformsCount];
+
+
+        RandomizeGameObjectsArray(ref spawnPoints);
+
+        for (int i = 0; i < TowerPlatformsCount; i++)
+        {
+            towerPlatforms[i] = Instantiate(_towerPlatform, spawnPoints[i].transform);
+            towerPlatforms[i].transform.position = spawnPoints[i].transform.position;
+            towerPlatforms[i].transform.rotation = Quaternion.identity;
+        }
 
     }
 
