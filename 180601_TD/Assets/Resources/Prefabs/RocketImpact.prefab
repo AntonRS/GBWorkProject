@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198781184173443680}
   - component: {fileID: 199067755198956284}
   m_Layer: 0
-  m_Name: ArrowImpact
+  m_Name: RocketImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

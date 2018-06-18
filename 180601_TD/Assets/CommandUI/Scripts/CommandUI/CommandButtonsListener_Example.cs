@@ -14,11 +14,19 @@ namespace Game
 
         public void ExecuteCommand(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
-
-            var newTower = Instantiate(viaButton.buildTower, forObject.transform.position, Quaternion.identity);
-
-
-            Destroy(forObject);
+            if (viaButton.Meta == "BuildRocketTower")
+            {
+                var tower = Main.Instance.RocketTowers[0];
+                var rocketTower = Instantiate(tower, forObject.transform.position, Quaternion.identity);
+                Destroy(forObject);
+            }
+            if (viaButton.Meta == "Upgrade")
+            {
+                
+                forObject.GetComponent<BaseTower>().UpdateTower();
+                Destroy(forObject);
+            }
+            SelectedObjectManager.Instance.SelectedObject = null;
             Debug.Log(string.Format("Executing command [{0}] on object [{1}] via button [{2}]", ofType, forObject, viaButton));
         }
 

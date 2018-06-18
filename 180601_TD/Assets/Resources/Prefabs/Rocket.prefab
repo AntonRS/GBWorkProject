@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23363308958240566}
   - component: {fileID: 114346558582461130}
   m_Layer: 0
-  m_Name: Arrow
+  m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,6 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2b08573e5217c4483b9cddaa50d7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitImpactPath: Prefabs/ArrowImpact
+  _hitImpactPath: Prefabs/Rocketimpact
   Speed: 0
   Target: {fileID: 0}

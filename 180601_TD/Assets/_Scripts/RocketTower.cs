@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using GeekBrains;
+public class RocketTower : BaseTower {
 
-public class ArcherTower : BaseTower {
     /// <summary>
     /// Transform of object which should look on to an enemy
     /// </summary>
@@ -21,6 +23,7 @@ public class ArcherTower : BaseTower {
     /// <summary>
     /// Countdown to fire
     /// </summary>
+    
     private float fireCountDown = 0f;
 
     protected override void Start()
@@ -29,7 +32,7 @@ public class ArcherTower : BaseTower {
         if (_firePoint == null)
         {
             _firePoint = transform;
-            Debug.Log("Tower "+name+" dont have fire point. Add firepoint transform in editor");
+            
         }
     }
 
@@ -37,7 +40,7 @@ public class ArcherTower : BaseTower {
     {
         base.Update();
         LookAtTarget();
-    }   
+    }
     public override void Fire()
     {
         if (fireCountDown <= 0f)
@@ -52,32 +55,25 @@ public class ArcherTower : BaseTower {
     }
     public override void UpdateTower()
     {
-        _updateCost = _updates[_lvl].newUpdateCost;
-        _damage = _updates[_lvl].newDamage;
-        _attackRange = _updates[_lvl].newAttackRange;
-        _attackPerSecond = _updates[_lvl].newAttackPerSecond;
-        _isAbleToAttackGround = _updates[_lvl].newIsAbleToAttackGround;
-        _isAbleToAttackAir = _updates[_lvl].newIsAbleToAttackAir;
-        _attackType = _updates[_lvl].newAttackType;
-        _ammunitionPath = _updates[_lvl].newAmunitionPath;
-        if (_lvl < _updates.Length)
+        if (_lvl < _maxLvl)
         {
             _lvl += 1;
+            var tower = Main.Instance.RocketTowers[_lvl];
+            var newTower = Instantiate(tower, transform.position, Quaternion.identity);
         }
-
     }
     /// <summary>
     /// _rotateHead GameObject will look on to an enemy
     /// </summary>
     private void LookAtTarget()
     {
-        if (_target != null&& _rotateHead != null)
+        if (_target != null && _rotateHead != null)
         {
             var direction = _target.EnemyTransform.position - _rotateHead.position;
             Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                       Quaternion.LookRotation(direction),
                                                       Time.deltaTime * _turnSpeed);
             _rotateHead.rotation = lookRotation;
-        }       
+        }
     }
 }

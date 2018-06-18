@@ -4,6 +4,8 @@ using UnityEngine;
 using GeekBrains;
 
 public class Main : Singleton<Main> {
+    public BaseTower[] RocketTowers;
+    public BaseTower[] LazerTowers;
 
     public List<BaseEnemy> enemies;
 
@@ -25,6 +27,7 @@ public class Main : Singleton<Main> {
         }
     }
     #endregion
+    
 
 
 }

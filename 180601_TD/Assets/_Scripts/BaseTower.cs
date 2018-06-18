@@ -23,6 +23,7 @@ namespace GeekBrains
         [SerializeField]
         protected DamageInfo _damageInfo;
         protected int _lvl = 0;
+        [SerializeField] protected int _maxLvl;
 
 
 
