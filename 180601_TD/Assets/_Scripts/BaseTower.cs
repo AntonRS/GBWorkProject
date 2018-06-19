@@ -17,7 +17,7 @@ namespace GeekBrains
         [SerializeField] protected bool _isAbleToAttackAir;
         [SerializeField] protected AttackType _attackType;
         [SerializeField] protected string _ammunitionPath;
-        [SerializeField] protected UpdateInfo[] _updates;
+        
         protected BaseAmmunition _ammunition;
         protected BaseEnemy _target;
         [SerializeField]

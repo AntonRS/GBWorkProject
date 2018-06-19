@@ -6,6 +6,8 @@ namespace GeekBrains
     public class TowersManager : Singleton<TowersManager>
     {
 
+        public RocketTower[] RocketTowers;
+
         
         
     }

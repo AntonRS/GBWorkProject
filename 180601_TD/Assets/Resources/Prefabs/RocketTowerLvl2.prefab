@@ -459,12 +459,11 @@ MonoBehaviour:
   _updateCost: 0
   _damage: 100
   _attackRange: 30
-  _attackPerSecond: 0.2
+  _attackPerSecond: 5
   _isAbleToAttackGround: 1
   _isAbleToAttackAir: 1
   _attackType: 0
   _ammunitionPath: Prefabs/Rocket
-  _updates: []
   _maxLvl: 2
   _rotateHead: {fileID: 4468971210649400}
   _firePoint: {fileID: 4468971210649400}
