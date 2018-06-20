@@ -9,12 +9,13 @@ public class EnemySpawner : MonoBehaviour {
     
     private void Start()
     {
-        SpawnWave(0);        
+        SpawnWave(0);
     }
     Vector3 GetRandomPosition()
     {
-        Vector3 randomPosition = new Vector3(transform.position.x + Random.Range(-3, 3), transform.position.y , transform.position.z + Random.Range(-3,3));
-
+        Vector3 randomPosition = new Vector3(transform.position.x + Random.Range(-3, 3),
+                                             transform.position.y ,
+                                             transform.position.z + Random.Range(-3,3));
         return randomPosition;
     }
     
@@ -29,7 +30,6 @@ public class EnemySpawner : MonoBehaviour {
                 tempEnemy.Hp = enemy.hp;
                 tempEnemy.Destination = destination;
             }
-
         }
     }
 

@@ -17,13 +17,16 @@ namespace GeekBrains
         [SerializeField] protected bool _isAbleToAttackAir;
         [SerializeField] protected AttackType _attackType;
         [SerializeField] protected string _ammunitionPath;
-        [SerializeField] protected UpdateInfo[] _updates;
+        
         protected BaseAmmunition _ammunition;
         protected BaseEnemy _target;
         [SerializeField]
         protected DamageInfo _damageInfo;
         protected int _lvl = 0;
-
+        [SerializeField] protected int _maxLvl;
+        delegate void Action();
+        public abstract void Fire();
+        public abstract void UpdateTower();
 
 
 
@@ -73,7 +76,6 @@ namespace GeekBrains
                         nearestEnemy = enemy;
                     }
                 }
-                
             }
             if (nearestEnemy != null && shortestDistance <= _attackRange)
             {
@@ -88,9 +90,7 @@ namespace GeekBrains
         {
             InvokeRepeating(action.Method.Name, startTime, repeatTime);
         }
-        delegate void Action();
-        public abstract void Fire();
-        public abstract void UpdateTower();
+        
 
         protected virtual void SetDamageInfo()
         {

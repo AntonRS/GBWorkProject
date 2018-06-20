@@ -5,9 +5,8 @@ using UnityEngine;
 using GeekBrains;
 
 [Serializable]
-public class Wave   {
+public class Wave
+{
     
     public WaveElement[] enemiesTypeAndCount;
-    
-
 }

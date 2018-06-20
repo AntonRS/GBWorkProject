@@ -35,7 +35,6 @@ namespace GeekBrains
                 {
                     Hp -= damageInfo.Damage;
                 }
-
             }
             if (Hp <= 0)
             {

@@ -46,7 +46,7 @@ namespace Game.CommandUI
         /// именно идет речь. Например так: "Upgrade #1 Encrease strength"
         /// </summary>
         public string Meta;
-        public BaseTower buildTower;
+        
 
         /// <summary>
         /// Объект, на который даннай кнопка воздействует, передается
