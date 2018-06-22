@@ -22,7 +22,7 @@ public class TerrainGeneratorController : MonoBehaviour
     void Start()
     {
         _generator = FindObjectOfType<TerrainGenerator>();
-        _generator.Initialize();        
+        _generator.Init();
     }
 
     public void GenerateTerrain()
@@ -33,8 +33,7 @@ public class TerrainGeneratorController : MonoBehaviour
 
     public void DestroyTerrain()
     {
-        if (_generator.transform.childCount > 0)
-            _generator.DestroyRoad();
+            _generator.DestroyTerrain();
     }
 
 }

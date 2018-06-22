@@ -22,7 +22,7 @@ GameObject:
   m_Layer: 0
   m_Name: ConnectionPointA
   m_TagString: Tile_ConnectionPoint
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 33921636759798860}
   - component: {fileID: 114619584053373216}
   - component: {fileID: 64876330268021242}
+  - component: {fileID: 114853485726829102}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -56,7 +57,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (7)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -71,7 +72,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (6)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -86,7 +87,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (5)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -101,7 +102,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -116,7 +117,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (4)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -150,7 +151,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (1)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -180,7 +181,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (2)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -195,7 +196,7 @@ GameObject:
   m_Layer: 0
   m_Name: TowerPlatformSpawnPoint (3)
   m_TagString: Tile_TowerPlatformSpawnPoint
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -210,7 +211,7 @@ GameObject:
   m_Layer: 0
   m_Name: ConnectionPointB
   m_TagString: Tile_ConnectionPoint
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -786,6 +787,21 @@ MonoBehaviour:
   m_selectedFaces: 
   m_SelectedEdges: []
   m_selectedTriangles: 
+--- !u!114 &114853485726829102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1071162473305514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d07ce676d7afda4dabb3b0f7dd5e654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 1
+  m_IgnoreFromBuild: 1
+  m_AffectedAgents: ffffffff
 --- !u!114 &114952636134050656
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -57,7 +57,7 @@ GameObject:
   m_Layer: 0
   m_Name: ConnectionPoint
   m_TagString: Tile_ConnectionPoint
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 33342913489801144}
   - component: {fileID: 114206803769685770}
   - component: {fileID: 64843842540309130}
+  - component: {fileID: 114732752516167720}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -1394,3 +1395,18 @@ MonoBehaviour:
   m_selectedFaces: 
   m_SelectedEdges: []
   m_selectedTriangles: 
+--- !u!114 &114732752516167720
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941039186366844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d07ce676d7afda4dabb3b0f7dd5e654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 1
+  m_AffectedAgents: ffffffff

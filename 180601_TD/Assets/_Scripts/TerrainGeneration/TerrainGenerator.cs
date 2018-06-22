@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Game.TerrainGeneration
 {
@@ -21,24 +22,29 @@ namespace Game.TerrainGeneration
         [SerializeField]
         private GameObject[] _roadTilesPrefabs;
 
-        private List<GameObject> _roadTiles;
+        private List<GameObject> _roadTiles = new List<GameObject>();
 
         private int _roadLengthCounter;
 
         private Vector3 _currentConnectionPointPos;
         private Vector3 _currentTileCenter;
 
-        private float _distanceSqrMagnitude = 1f;//число для сравнения местоположения. Если (точкаА - точкаБ).sqrMagnitude < _distanceSqrMagnitude, считаем, что эти точки находятся в одном и том же месте.
+        private const float DistanceSqrMagnitude = 1f;//число для сравнения местоположения. Если (точкаА - точкаБ).sqrMagnitude < _distanceSqrMagnitude, считаем, что эти точки находятся в одном и том же месте.
+        private const int MaxAttemptsToBuildMap = 10;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл.
+        private const float TileFlipDegrees = 90f;//на сколько градусов поворачиваем тайл
+        private const int TileMaxFlipTimes = 3;//сколько раз максимум поворачиваем тайл
+        private const float NavMeshBuildDelay = 0.1f;//пауза перед генерацией навмеша, чтобы тайлы успели удалиться перед собственно генерацией
 
-        private int _maxAttemptsToBuildMap = 10;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл.
-        private bool _buildIsSuccessful;
+        private const string TileConnectionPointObjTag = "Tile_ConnectionPoint";
+        private const string TileTowerPlatformSpawnPointObjTag = "Tile_TowerPlatformSpawnPoint";
 
-        /// <summary>
-        /// Инициализация модели генерации карты.
-        /// </summary>
-        public void Initialize()
+
+
+        private NavMeshSurface _navMeshSurface;
+
+        public void Init()
         {
-            _roadTiles = new List<GameObject>();
+            _navMeshSurface = GetComponent<NavMeshSurface>();
         }
 
         /// <summary>
@@ -48,39 +54,47 @@ namespace Game.TerrainGeneration
         /// <param name="maxRoadTiles">Максимальное количество тайлов дороги, не считая стартового и конечного.</param>
         /// <param name="towerPlatformsCount">Количество платформ под башни.</param>
         public void GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount)
-        {            
+        {
 
-            for (int i = 0; i < _maxAttemptsToBuildMap; i++)
+            for (int i = 0; i < MaxAttemptsToBuildMap; i++)
             {
-                if (TryGenerateRoad(minRoadTiles, maxRoadTiles))
+                if (!TryGenerateRoad(minRoadTiles, maxRoadTiles))
                 {
-                    _buildIsSuccessful = true;
-                    break;
+                    Debug.Log("Не получилось построить карту. Осталось " + (MaxAttemptsToBuildMap - i - 1) + " попыток.");
+                    DestroyRoad();
                 }
+                else
+                {
+                    Debug.Log("Дорога успешно построена.");
+                    PlaceTowerPlatforms(towerPlatformsCount);
+                    GenerateNavMesh();
 
-                Debug.Log("Не получилось построить карту. Осталось " + (_maxAttemptsToBuildMap - i - 1) + " попыток.");
-
-                DestroyRoad();
+                    return;
+                }
             }
 
-            if (_buildIsSuccessful)
-            {
-                Debug.Log("Дорога успешно построена.");
-                PlaceTowerPlatforms(towerPlatformsCount);
-            }
-            else
-                Debug.Log("Не получилось построить карту. Попробуйте уменьшить её максимальную длину.");
+            Debug.Log("Не получилось построить карту. Попробуйте уменьшить её максимальную длину.");
+
+        }
+
+        /// <summary>
+        /// Уничтожает созданную карту и прилагающиеся к ней объекты и компоненты (например, навмеш)
+        /// </summary>
+        public void DestroyTerrain()
+        {
+            DestroyRoad();
+            GenerateNavMesh();
         }
 
         /// <summary>
         /// Уничтожает дорогу и вычищает список уже установленных тайлов.
         /// </summary>
-        public void DestroyRoad()
+        private void DestroyRoad()
         {
             _roadTiles.Clear();
 
             foreach (Transform child in transform)
-                Destroy(child.gameObject);
+                Destroy(child.gameObject);                        
         }
 
         /// <summary>
@@ -89,8 +103,6 @@ namespace Game.TerrainGeneration
         /// <returns></returns>
         private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles)
         {
-            _roadLengthCounter = Random.Range(minRoadTiles + 2, maxRoadTiles + 3);// +2 - потому что мы в тот же массив добавляем помимо остальных ещё два тайла - начальный и конечный.
-
             _currentTileCenter = transform.position;
 
             //устанавливаем начальный тайл и начальные точки
@@ -101,7 +113,21 @@ namespace Game.TerrainGeneration
             _currentTileCenter = FindNextCenterPoint(_currentConnectionPointPos);
 
             //дорога
-            for (int i = 1; i < _roadLengthCounter - 1; i++)
+            if (!TryPlaceRoadTiles(Random.Range(minRoadTiles, maxRoadTiles + 1)))
+                return false;
+
+            //конечный тайл
+            _roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
+            _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
+            FlipUntilConnected(_roadTiles[_roadTiles.Count - 1].transform, FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform));
+
+            return true;
+
+        }
+
+        private bool TryPlaceRoadTiles(int roadLength)
+        {
+            for (int i = 1; i < roadLength + 1; i++)// 1 и +1 потому что первый элемент списка уже есть
             {
 
                 //перемешиваем префабы в массиве, чтобы они были под другими индексами.
@@ -125,17 +151,7 @@ namespace Game.TerrainGeneration
 
             }
 
-            //конечный тайл
-            _roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
-            _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
-
-            Transform connectionPoint = FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform);
-
-            while ((connectionPoint.position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
-                _roadTiles[_roadTiles.Count - 1].transform.Rotate(0, 90f, 0);
-
             return true;
-
         }
 
 
@@ -153,22 +169,18 @@ namespace Game.TerrainGeneration
 
             int randomIndex = Random.Range(0, 2);
 
-            while ((connectionPoints[randomIndex].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
-                tile.Rotate(0, 90f, 0);
+            FlipUntilConnected(tile, connectionPoints[randomIndex]);
 
             bool willBeBlocked = WillRunIntoOtherTiles(connectionPoints[1 - randomIndex].position, currentTileNumber);
 
             if (willBeBlocked)
             {
-
-                while ((connectionPoints[1 - randomIndex].position - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
-                    tile.Rotate(0, 90f, 0);
+                FlipUntilConnected(tile, connectionPoints[1 - randomIndex]);
 
                 willBeBlocked = WillRunIntoOtherTiles(connectionPoints[randomIndex].position, currentTileNumber);
 
                 if (!willBeBlocked)
                     _currentConnectionPointPos = connectionPoints[randomIndex].position;
-
             }
             else
                 _currentConnectionPointPos = connectionPoints[1 - randomIndex].position;
@@ -179,7 +191,6 @@ namespace Game.TerrainGeneration
                 Destroy(tile.gameObject);
                 return null;
             }
-
 
             _currentTileCenter = FindNextCenterPoint(_currentConnectionPointPos);
 
@@ -199,7 +210,7 @@ namespace Game.TerrainGeneration
 
             for (int i = 0; i < currentTileNumber; i++)
             {
-                if ((FindNextCenterPoint(nextConnectionPoint) - _roadTiles[i].transform.position).sqrMagnitude <= _distanceSqrMagnitude)
+                if ((FindNextCenterPoint(nextConnectionPoint) - _roadTiles[i].transform.position).sqrMagnitude <= DistanceSqrMagnitude)
                 {
                     RoadWillBeBlocked = true;
                     break;
@@ -218,7 +229,7 @@ namespace Game.TerrainGeneration
         {
             Transform tile = Instantiate(prefab, transform).transform;
             tile.position = _currentTileCenter;
-            tile.eulerAngles = new Vector3(0, Random.Range(0, 4) * 90f, 0);
+            tile.eulerAngles = new Vector3(0, Random.Range(0, TileMaxFlipTimes + 1) * TileFlipDegrees, 0);
             return tile;
         }
 
@@ -230,7 +241,7 @@ namespace Game.TerrainGeneration
         private Transform FindConnectionPoint(Transform obj)
         {
             foreach (Transform child in obj)
-                if (child.tag == "Tile_ConnectionPoint")
+                if (child.tag == TileConnectionPointObjTag)//TODO вынести в константу "Tile_ConnectionPoint"
                     return child.transform;
 
             return null;
@@ -247,20 +258,26 @@ namespace Game.TerrainGeneration
             int i = 0;
 
             foreach (Transform child in obj)
-                if (child.tag == "Tile_ConnectionPoint")
-                {
-                    result[i] = child.transform;
-                    i++;
-                }
+                if (child.tag == TileConnectionPointObjTag)
+                    result[i++] = child.transform;
 
             return result;
         }
 
-        //TODO: Проверить и дописать. Пока не используется
-        private void FlipUntilConnected(GameObject tile, Vector3 connectionPoint)
+        /// <summary>
+        /// Поворачивает тайл, пока точки соединения не совпадут. У connectionPoint передаётся Transform, а не Vector3, потому что передача Vector3 напрямую приводит к глюкам.
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <param name="connectionPoint"></param>
+        private void FlipUntilConnected(Transform tile, Transform connectionPoint)
         {
-            while ((connectionPoint - _currentConnectionPointPos).sqrMagnitude > _distanceSqrMagnitude)
-                tile.transform.Rotate(0, 90f, 0);
+            for (int i = 0; i <= TileMaxFlipTimes; i++)
+            {
+                if ((connectionPoint.position - _currentConnectionPointPos).sqrMagnitude <= DistanceSqrMagnitude)
+                    break;
+
+                tile.Rotate(0, TileFlipDegrees, 0);
+            }
         }
 
         /// <summary>
@@ -270,11 +287,12 @@ namespace Game.TerrainGeneration
         /// <returns></returns>
         private Vector3 FindNextCenterPoint(Vector3 connectionPoint)
         {
-            Vector3 result = new Vector3();
-            result.x = _currentTileCenter.x + (connectionPoint.x - _currentTileCenter.x) * 2;
-            result.z = _currentTileCenter.z + (connectionPoint.z - _currentTileCenter.z) * 2;
-            result.y = 0;
-            return result;
+            return new Vector3()
+            {
+                x = _currentTileCenter.x + (connectionPoint.x - _currentTileCenter.x) * 2,
+                z = _currentTileCenter.z + (connectionPoint.z - _currentTileCenter.z) * 2,
+                y = 0
+            };
         }
 
         /// <summary>
@@ -299,7 +317,7 @@ namespace Game.TerrainGeneration
         private void PlaceTowerPlatforms(int towerPlatformsCount)
         {
 
-            GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Tile_TowerPlatformSpawnPoint");
+            GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag(TileTowerPlatformSpawnPointObjTag);
 
             if (towerPlatformsCount > spawnPoints.Length)
                 towerPlatformsCount = spawnPoints.Length;
@@ -317,7 +335,25 @@ namespace Game.TerrainGeneration
             }
 
         }
+        
+        private void GenerateNavMesh()
+        {
+            //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
+            //, тайлы не успеют удалится до того как навмеш построится
+            //, поэтому делаю отложенный вызов
 
+            Invoke(TempGenNavMesh, NavMeshBuildDelay);
+        }
+
+        private void TempGenNavMesh()
+        {
+            _navMeshSurface.BuildNavMesh();
+        }
+
+        private void Invoke(System.Action method, float time)
+        {
+            Invoke(method.Method.Name, time);
+        }
     }
 
 }
