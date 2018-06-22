@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114709146469269288}
   - component: {fileID: 64733853495011186}
   - component: {fileID: 114912700380066134}
+  - component: {fileID: 114371002949980710}
   m_Layer: 0
   m_Name: Tower Platform
   m_TagString: Untagged
@@ -100,6 +101,18 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!114 &114371002949980710
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1724675264677764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0003befc4e7448b96c6d5ffeb2d917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 6
 --- !u!114 &114709146469269288
 MonoBehaviour:
   m_ObjectHideFlags: 1
