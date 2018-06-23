@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using GeekBrains;
+using Game.Towers;
 using Game.CommandUI;
 
 namespace Game
@@ -11,12 +11,13 @@ namespace Game
     public class CommandButtonsListener_Example : MonoBehaviour, ICommandButtonActuator
     {
         #region Пример имплиментации интерфейса ICommandButtonActuator
-
+        // пока здесь все криво, логика будет вынесена в конкретные классы и мeтоды, здесь будет лишь обращение типа build()
         public void ExecuteCommand(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (viaButton.Meta == "BuildRocketTower")
             {
-                var tower = Main.Instance.RocketTowers[0];
+                
+                var tower = TowersManager.Instance.RocketTowers[0];
                 var rocketTower = Instantiate(tower, forObject.transform.position, Quaternion.identity);
                 Destroy(forObject);
             }

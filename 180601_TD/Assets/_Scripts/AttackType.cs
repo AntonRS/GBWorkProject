@@ -1,4 +1,4 @@
-﻿namespace GeekBrains
+﻿namespace Game.Towers
 {
     public enum AttackType
     {

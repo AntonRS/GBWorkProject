@@ -331,6 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 387467141}
   - component: {fileID: 387467140}
+  - component: {fileID: 387467142}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -349,10 +350,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb857bee74c98b4b8ab849eb0206ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RocketTowers:
-  - {fileID: 114382355218465798, guid: c11824423a9df2a4f98ffa51273c0758, type: 2}
-  - {fileID: 114382355218465798, guid: 82475cdea4631f846820a27d6f0d862b, type: 2}
-  LazerTowers: []
   enemies: []
 --- !u!4 &387467141
 Transform:
@@ -367,6 +364,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &387467142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 387467139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a467bbf9402e74f8e091a5562520a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RocketTowers:
+  - {fileID: 114382355218465798, guid: c11824423a9df2a4f98ffa51273c0758, type: 2}
+  - {fileID: 114382355218465798, guid: 82475cdea4631f846820a27d6f0d862b, type: 2}
 --- !u!1001 &425676660
 Prefab:
   m_ObjectHideFlags: 0

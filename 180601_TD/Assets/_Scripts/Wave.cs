@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using GeekBrains;
-
-[Serializable]
-public class Wave
+﻿using System;
+namespace Game.Enemy
 {
-    
-    public WaveElement[] enemiesTypeAndCount;
+    [Serializable]
+    public class Wave
+    {
+        public WaveElement[] enemiesTypeAndCount;
+    }
 }
+

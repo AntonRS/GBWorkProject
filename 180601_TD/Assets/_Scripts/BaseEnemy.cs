@@ -1,6 +1,7 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
-namespace GeekBrains
+using Game.Towers;
+namespace Game.Enemy
 {
     public abstract class BaseEnemy : MonoBehaviour, ISetDamage
     {
@@ -35,6 +36,7 @@ namespace GeekBrains
                 {
                     Hp -= damageInfo.Damage;
                 }
+
             }
             if (Hp <= 0)
             {

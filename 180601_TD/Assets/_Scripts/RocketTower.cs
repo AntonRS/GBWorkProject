@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GeekBrains;
+﻿using UnityEngine;
+using Game.Towers;
 public class RocketTower : BaseTower {
 
     /// <summary>
@@ -58,7 +56,7 @@ public class RocketTower : BaseTower {
         if (_lvl < _maxLvl)
         {
             _lvl += 1;
-            var tower = Main.Instance.RocketTowers[_lvl];
+            var tower = TowersManager.Instance.RocketTowers[_lvl];
             var newTower = Instantiate(tower, transform.position, Quaternion.identity);
         }
     }

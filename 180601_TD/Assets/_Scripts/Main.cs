@@ -1,33 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GeekBrains;
-
-public class Main : Singleton<Main> {
-    public BaseTower[] RocketTowers;
-    public BaseTower[] LazerTowers;
-
-    public List<BaseEnemy> enemies;
-
-    #region Enemies List
-    
-
-    public void AddEnemy(BaseEnemy enemy)
+﻿using System.Collections.Generic;
+using Game.Enemy;
+namespace Game
+{
+    public class Main : Singleton<Main>
     {
-        if (!enemies.Contains(enemy) && enemy != null)
-        {
-            enemies.Add(enemy);
-        }
-    }
-    public void DeleteEnemy(BaseEnemy enemy)
-    {
-        if (enemies.Contains(enemy) && enemy != null)
-        {
-            enemies.Remove(enemy);
-        }
-    }
-    #endregion
-    
+
+        public List<BaseEnemy> enemies;
+
+        #region Enemies List
 
 
+        public void AddEnemy(BaseEnemy enemy)
+        {
+            if (!enemies.Contains(enemy) && enemy != null)
+            {
+                enemies.Add(enemy);
+            }
+        }
+        public void DeleteEnemy(BaseEnemy enemy)
+        {
+            if (enemies.Contains(enemy) && enemy != null)
+            {
+                enemies.Remove(enemy);
+            }
+        }
+        #endregion
+
+
+
+    }
 }
+
+

@@ -1,5 +1,5 @@
 ﻿
-namespace GeekBrains
+namespace Game.Towers
 {
     public interface ISetDamage
     {

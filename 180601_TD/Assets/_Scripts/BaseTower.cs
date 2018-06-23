@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-
-namespace GeekBrains
+﻿using UnityEngine;
+using Game.Enemy;
+namespace Game.Towers
 {
     public abstract class BaseTower : MonoBehaviour
     {
@@ -24,9 +21,7 @@ namespace GeekBrains
         protected DamageInfo _damageInfo;
         protected int _lvl = 0;
         [SerializeField] protected int _maxLvl;
-        delegate void Action();
-        public abstract void Fire();
-        public abstract void UpdateTower();
+
 
 
 
@@ -76,6 +71,7 @@ namespace GeekBrains
                         nearestEnemy = enemy;
                     }
                 }
+                
             }
             if (nearestEnemy != null && shortestDistance <= _attackRange)
             {
@@ -90,7 +86,9 @@ namespace GeekBrains
         {
             InvokeRepeating(action.Method.Name, startTime, repeatTime);
         }
-        
+        delegate void Action();
+        public abstract void Fire();
+        public abstract void UpdateTower();
 
         protected virtual void SetDamageInfo()
         {

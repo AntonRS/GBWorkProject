@@ -1,17 +1,20 @@
-﻿using GeekBrains;
+﻿
 using UnityEngine;
-
-public class Arrow : BaseAmmunition
+namespace Game.Towers
 {
-    protected override void HitTarget()
+    public class Arrow : BaseAmmunition
     {
-        base.HitTarget();
-        if (_hitImpactPath == null || hitImpact == null)
+        protected override void HitTarget()
         {
-            Debug.Log("Ammunition " + name + " cant find impact GameObject");
-            return;
+            base.HitTarget();
+            if (_hitImpactPath == null || hitImpact == null)
+            {
+                Debug.Log("Ammunition " + name + " cant find impact GameObject");
+                return;
+            }
+            var tempImpact = Instantiate(hitImpact, transform.position, transform.rotation);
+            Destroy(tempImpact, 2f);
         }
-        var tempImpact = Instantiate(hitImpact, transform.position, transform.rotation);
-        Destroy(tempImpact, 2f);
     }
 }
+
