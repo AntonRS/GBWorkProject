@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4292016374831460}
   - component: {fileID: 33267616193103550}
   - component: {fileID: 23363308958240566}
-  - component: {fileID: 114346558582461130}
+  - component: {fileID: 114683335898042348}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1716069988500382}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114346558582461130
+--- !u!114 &114683335898042348
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -92,9 +92,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1716069988500382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f2b08573e5217c4483b9cddaa50d7f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fdc734c0d2edc843841ba98e2c8c1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitImpactPath: Prefabs/Rocketimpact
+  _hitImpactPath: Prefabs/RocketImpact
   Speed: 0
   Target: {fileID: 0}

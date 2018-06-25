@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4342696707533474}
-  - component: {fileID: 114383654334262434}
+  - component: {fileID: 114494813414403028}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -126,7 +126,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114383654334262434
+--- !u!114 &114494813414403028
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -134,15 +134,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1409764910082346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960f925c14e1b3c41a46e6f1cd9c7675, type: 3}
+  m_Script: {fileID: 11500000, guid: e91c9f9664a9c8a4197043825e09a134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
   - enemiesTypeAndCount:
-    - enemy: {fileID: 0}
-      count: 5
+    - enemy: {fileID: 114036788628254338, guid: 66362f95eecbcf14bbac5c3433bfc2fa,
+        type: 2}
+      count: 2
       speed: 4
-      hp: 200
-  - enemiesTypeAndCount: []
-  - enemiesTypeAndCount: []
+      hp: 500
+    waveTime: 10
+  - enemiesTypeAndCount:
+    - enemy: {fileID: 114036788628254338, guid: 66362f95eecbcf14bbac5c3433bfc2fa,
+        type: 2}
+      count: 3
+      speed: 3
+      hp: 1000
+    waveTime: 20
   destination: {fileID: 0}

@@ -73,9 +73,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4180134575954072}
-  - component: {fileID: 114382355218465798}
   - component: {fileID: 136464955813344740}
   - component: {fileID: 114529015380482168}
+  - component: {fileID: 114787048093484894}
   m_Layer: 0
   m_Name: RocketTowerLvl1
   m_TagString: Untagged
@@ -164,7 +164,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1360187605960380}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.904991, y: -0.5, z: 11.228981}
+  m_LocalPosition: {x: -1.0246542, y: -1.8843654, z: 3.779314}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4038833733152540}
@@ -278,7 +278,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7eefd86e069e5de4ea41fba970c925c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -444,32 +444,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114382355218465798
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360187605960380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f736279d702bd49b1bb7e329bafbfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cost: 0
-  _updateCost: 0
-  _damage: 100
-  _attackRange: 30
-  _attackPerSecond: 0.2
-  _isAbleToAttackGround: 1
-  _isAbleToAttackAir: 1
-  _attackType: 0
-  _ammunitionPath: Prefabs/Rocket
-  _updates: []
-  _maxLvl: 2
-  _rotateHead: {fileID: 4468971210649400}
-  _firePoint: {fileID: 4468971210649400}
-  _turnSpeed: 5
-  _ammunitionSpeed: 10
 --- !u!114 &114529015380482168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -482,6 +456,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectType: 2
+--- !u!114 &114787048093484894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1360187605960380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89a8f6735dd53084ba0f7990be67fafe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cost: 0
+  _updateCost: 0
+  _damage: 10
+  _attackRange: 10
+  _attackPerSecond: 1
+  _isAbleToAttackGround: 1
+  _isAbleToAttackAir: 1
+  _attackType: 0
+  _ammunitionPath: Prefabs/Rocket
+  _maxLvl: 2
+  _rotateHead: {fileID: 4468971210649400}
+  _firePoint: {fileID: 4102312268372758}
+  _turnSpeed: 5
+  _ammunitionSpeed: 10
 --- !u!136 &136464955813344740
 CapsuleCollider:
   m_ObjectHideFlags: 1
