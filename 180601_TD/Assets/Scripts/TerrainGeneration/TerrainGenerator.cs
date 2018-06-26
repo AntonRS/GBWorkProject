@@ -7,7 +7,7 @@ using Game.Enemy;
 namespace Game.TerrainGeneration
 {
 
-    public class TerrainGenerator : MonoBehaviour
+    public class TerrainGenerator : Singleton<TerrainGenerator>
     {
         
         [Header("Префабы для тайлов")]
@@ -71,7 +71,7 @@ namespace Game.TerrainGeneration
                     Debug.Log("Дорога успешно построена.");
                     PlaceTowerPlatforms(towerPlatformsCount);
                     GenerateNavMesh();
-                    GameManager.Instance.isCountingDown = true;
+                    
                     return;
                 }
             }
@@ -87,6 +87,7 @@ namespace Game.TerrainGeneration
         {
             DestroyRoad();
             GenerateNavMesh();
+            
         }
 
         /// <summary>
@@ -360,6 +361,7 @@ namespace Game.TerrainGeneration
             Invoke(method.Method.Name, time);
         }
         delegate void Action();
+        
     }
 
 }

@@ -5,10 +5,10 @@ namespace Game.Enemy
 {
     public class EnemiesController : Singleton<EnemiesController>
     {
-        public List<BaseEnemy> enemies;
-        public Transform destination;
-        public List<EnemySpawner> spawners;
-        
+        [HideInInspector] public List<BaseEnemy> enemies;
+        [HideInInspector] public Transform destination;
+        [HideInInspector] public List<EnemySpawner> spawners;
+        public Wave[] waves;
 
         public void SpawnSimultaneously(int waveIndex)
         {
@@ -17,13 +17,7 @@ namespace Game.Enemy
                 spawner.SpawnWave(waveIndex);
             }
         }
-        public void SetDetinationInSpawners()
-        {
-            foreach (EnemySpawner spawner in spawners)
-            {
-                spawner.destination = this.destination;
-            }
-        }
+        
         public void AddEnemy(BaseEnemy enemy)
         {
             if (!enemies.Contains(enemy) && enemy != null)
@@ -38,6 +32,24 @@ namespace Game.Enemy
                 enemies.Remove(enemy);
             }
         }
+        public void ClearEnemyList()
+        {
+            
+            foreach (BaseEnemy enemy in enemies)
+            {
+                
+                Destroy(enemy.gameObject);
+            }
+            enemies.Clear();
+        }
+        public void ClearSpawnerList()
+        {
+            
+            
+                spawners.Clear();
+            
+        }
+
     }
 }
 

@@ -4,14 +4,14 @@ namespace Game.Enemy
     public class EnemySpawner : MonoBehaviour
     {
 
-        public Wave[] waves;
-        public Transform destination;
+        private Wave[] waves;
+        private Transform destination;
         
         private void Start()
         {
 
             EnemiesController.Instance.spawners.Add(this);
-            
+            waves = EnemiesController.Instance.waves;
             destination = EnemiesController.Instance.destination;
         }
         Vector3 GetRandomPosition()

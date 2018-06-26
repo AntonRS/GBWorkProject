@@ -5,7 +5,7 @@ namespace Game.Enemy
     public class Wave
     {
         public WaveElement[] enemiesTypeAndCount;
-        public float waveTime;
+        public float countdownToSpawn;
     }
 }
 

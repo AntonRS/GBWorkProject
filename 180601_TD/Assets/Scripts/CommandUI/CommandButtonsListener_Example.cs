@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Game.Towers;
 using Game.CommandUI;
+using Game.TerrainGeneration;
 
 namespace Game
 {
@@ -19,7 +20,9 @@ namespace Game
                 
                 var tower = TowersManager.Instance.RocketTowers[0];
                 var rocketTower = Instantiate(tower, forObject.transform.position, Quaternion.identity);
+                rocketTower.transform.SetParent(TerrainGenerator.Instance.transform);
                 Destroy(forObject);
+               
             }
             if (viaButton.Meta == "Upgrade")
             {
