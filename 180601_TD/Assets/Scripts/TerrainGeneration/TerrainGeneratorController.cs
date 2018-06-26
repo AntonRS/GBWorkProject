@@ -36,4 +36,14 @@ public class TerrainGeneratorController : MonoBehaviour
             _generator.DestroyTerrain();
     }
 
+    private void SetBoundsUsingCameraFOV()
+    {
+        Camera camera = FindObjectOfType<Camera>();
+    }
+
+    private void SetBoundsUsingPoints()
+    {
+
+    }
+
 }

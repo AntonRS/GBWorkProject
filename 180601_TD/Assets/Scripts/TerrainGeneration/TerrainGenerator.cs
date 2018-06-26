@@ -8,6 +8,10 @@ namespace Game.TerrainGeneration
 
     public class TerrainGenerator : MonoBehaviour
     {
+        public GameObject TopRight;
+        public GameObject BottomLeft;
+
+
         [Header("Префабы для тайлов")]
 
         [SerializeField]
@@ -38,7 +42,8 @@ namespace Game.TerrainGeneration
         private const string TileConnectionPointObjTag = "Tile_ConnectionPoint";
         private const string TileTowerPlatformSpawnPointObjTag = "Tile_TowerPlatformSpawnPoint";
 
-
+        
+        private float _bordersOffset; // отступ от границ. может, и не пригодится
 
         private NavMeshSurface _navMeshSurface;
 
@@ -53,12 +58,12 @@ namespace Game.TerrainGeneration
         /// <param name="minRoadTiles">Минимальное количество тайлов дороги, не считая стартового и конечного.</param>
         /// <param name="maxRoadTiles">Максимальное количество тайлов дороги, не считая стартового и конечного.</param>
         /// <param name="towerPlatformsCount">Количество платформ под башни.</param>
-        public void GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount)
+        public void GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount, Vector3 bordersTopRightCorner, Vector3 bordersBottomLeftCorner)
         {
 
             for (int i = 0; i < MaxAttemptsToBuildMap; i++)
             {
-                if (!TryGenerateRoad(minRoadTiles, maxRoadTiles))
+                if (!TryGenerateRoad(minRoadTiles, maxRoadTiles, bordersTopRightCorner, bordersBottomLeftCorner))
                 {
                     Debug.Log("Не получилось построить карту. Осталось " + (MaxAttemptsToBuildMap - i - 1) + " попыток.");
                     DestroyRoad();
@@ -86,6 +91,11 @@ namespace Game.TerrainGeneration
             GenerateNavMesh();
         }
 
+        private void DefineBorders(Vector3 bordersTopRightCorner, Vector3 bordersBottomLeftCorner)
+        {
+
+        }
+
         /// <summary>
         /// Уничтожает дорогу и вычищает список уже установленных тайлов.
         /// </summary>
@@ -101,7 +111,7 @@ namespace Game.TerrainGeneration
         /// Пробует сгенерировать дорогу. Возвращает истину, если построить дорогу удалось, ложь - если нет.
         /// </summary>
         /// <returns></returns>
-        private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles)
+        private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles, Vector3 bordersTopRightCorner, Vector3 bordersBottomLeftCorner)
         {
             _currentTileCenter = transform.position;
 
@@ -113,7 +123,7 @@ namespace Game.TerrainGeneration
             _currentTileCenter = FindNextCenterPoint(_currentConnectionPointPos);
 
             //дорога
-            if (!TryPlaceRoadTiles(Random.Range(minRoadTiles, maxRoadTiles + 1)))
+            if (!TryPlaceRoadTiles(Random.Range(minRoadTiles, maxRoadTiles + 1), bordersTopRightCorner, bordersBottomLeftCorner))
                 return false;
 
             //конечный тайл
@@ -125,7 +135,7 @@ namespace Game.TerrainGeneration
 
         }
 
-        private bool TryPlaceRoadTiles(int roadLength)
+        private bool TryPlaceRoadTiles(int roadLength, Vector3 bordersTopRightCorner, Vector3 bordersBottomLeftCorner)
         {
             for (int i = 1; i < roadLength + 1; i++)// 1 и +1 потому что первый элемент списка уже есть
             {
