@@ -22,7 +22,6 @@ public class TerrainGeneratorController : MonoBehaviour
     void Start()
     {
         _generator = FindObjectOfType<TerrainGenerator>();
-        _generator.Init();
     }
 
     public void GenerateTerrain()
