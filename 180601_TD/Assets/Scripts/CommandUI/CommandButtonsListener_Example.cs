@@ -17,11 +17,8 @@ namespace Game
         {
             if (viaButton.Meta == "BuildRocketTower")
             {
-                
-                var tower = TowersManager.Instance.RocketTowers[0];
-                var rocketTower = Instantiate(tower, forObject.transform.position, Quaternion.identity);
-                rocketTower.transform.SetParent(TerrainGenerator.Instance.transform);
-                Destroy(forObject);
+
+                GameManager.Instance.GetTowersManager.BuildRocketTower(forObject.transform);
                
             }
             if (viaButton.Meta == "Upgrade")

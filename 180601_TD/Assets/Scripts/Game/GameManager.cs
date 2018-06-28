@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Game.Enemy;
+using Game.Towers;
 using Game.TerrainGeneration;
 namespace Game
 {
@@ -11,7 +12,8 @@ namespace Game
         public GameObject mainMenuPannel;
         public GameObject gameBar;
 
-
+        public int enemiesCountInWave;
+        public int hpModPercent;
 
         [Header("Textfields")]
         public Text countdownText;
@@ -31,7 +33,16 @@ namespace Game
         [HideInInspector]
         public int currentMoney;
 
-        
+        public TowersManager GetTowersManager { get; private set; }
+        public EnemiesController GetEnemiesController { get; private set; }
+        public TerrainGenerator GetTerrainGenerator { get; private set; }
+
+        private void Start()
+        {
+            GetTowersManager = FindObjectOfType<TowersManager>();
+            GetEnemiesController = FindObjectOfType<EnemiesController>();
+            GetTerrainGenerator = FindObjectOfType<TerrainGenerator>();
+        }
 
         private void FixedUpdate()
         {
@@ -41,7 +52,11 @@ namespace Game
                 _countdown -= Time.fixedDeltaTime;
                 if (_countdown <= 0 )
                 {
-                    EnemiesController.Instance.SpawnSimultaneously(_waveIndex);
+                    foreach (var spawner in EnemiesController.Instance.spawners)
+                    {
+                        spawner.SpawnRandomWave(_waveIndex, enemiesCountInWave, hpModPercent);
+                    }
+                    
                     if (_waveIndex < EnemiesController.Instance.waves.Length-1)
                     {
                         _waveIndex += 1;

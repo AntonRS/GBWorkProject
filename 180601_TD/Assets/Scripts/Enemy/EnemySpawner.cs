@@ -37,7 +37,20 @@ namespace Game.Enemy
             }
             
         }
-
+        public void SpawnRandomWave(int waveIndex, int enemiesCount, int modPercent)
+        {
+            for (int i = 0; i < enemiesCount; i++)
+            {
+                var newEnemy = Instantiate(GetRandomEnemy(), GetRandomPosition(), Quaternion.identity);
+                newEnemy.Hp += (newEnemy.Hp/100)*(modPercent*waveIndex);
+                newEnemy.Destination = destination;
+            }
+        }
+        public BaseEnemy GetRandomEnemy()
+        {
+            int rnd = Random.Range(0, EnemiesController.Instance.enemiesTypes.Length-1);
+            return EnemiesController.Instance.enemiesTypes[rnd];
+        }
 
     }
 }

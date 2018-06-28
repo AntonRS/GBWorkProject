@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Game.Towers;
+using Game;
 public class RocketTower : BaseTower {
 
     /// <summary>
@@ -27,10 +28,10 @@ public class RocketTower : BaseTower {
     protected override void Start()
     {
         base.Start();
+        _maxLvl = GameManager.Instance.GetTowersManager.RocketTowers.Length-1;
         if (_firePoint == null)
         {
-            _firePoint = transform;
-            
+            _firePoint = transform; 
         }
     }
 
@@ -56,8 +57,9 @@ public class RocketTower : BaseTower {
         if (_lvl < _maxLvl)
         {
             _lvl += 1;
-            var tower = TowersManager.Instance.RocketTowers[_lvl];
+            var tower = GameManager.Instance.GetTowersManager.RocketTowers[_lvl];
             var newTower = Instantiate(tower, transform.position, Quaternion.identity);
+            newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
         }
     }
     /// <summary>

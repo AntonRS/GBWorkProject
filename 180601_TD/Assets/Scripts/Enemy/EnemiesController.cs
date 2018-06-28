@@ -8,6 +8,7 @@ namespace Game.Enemy
         [HideInInspector] public List<BaseEnemy> enemies;
         [HideInInspector] public Transform destination;
         [HideInInspector] public List<EnemySpawner> spawners;
+        public BaseEnemy[] enemiesTypes;
         public Wave[] waves;
 
         public void SpawnSimultaneously(int waveIndex)

@@ -20,7 +20,7 @@ namespace Game.Towers
         [SerializeField]
         protected DamageInfo _damageInfo;
         protected int _lvl = 0;
-        [SerializeField] protected int _maxLvl;
+        protected int _maxLvl;
 
 
 

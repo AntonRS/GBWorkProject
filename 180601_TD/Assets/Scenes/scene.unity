@@ -288,6 +288,11 @@ MonoBehaviour:
   enemies: []
   destination: {fileID: 0}
   spawners: []
+  enemiesTypes:
+  - {fileID: 114934562520521342, guid: 47b07c6f8fbf2534c92c46eb49c8bc1f, type: 2}
+  - {fileID: 114918450017006208, guid: df4da53add5d4d341bef05d1590ccf21, type: 2}
+  - {fileID: 114199604694783310, guid: 2999cec52e944c64a99ee2c851c65a75, type: 2}
+  - {fileID: 114500873949207154, guid: b4b5afe06a232044a9976cb83aa7fa21, type: 2}
   waves:
   - enemiesTypeAndCount:
     - enemy: {fileID: 114036788628254338, guid: 66362f95eecbcf14bbac5c3433bfc2fa,
@@ -470,6 +475,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuPannel: {fileID: 1320703319}
   gameBar: {fileID: 858927718}
+  enemiesCountInWave: 10
+  hpModPercent: 10
   countdownText: {fileID: 980500892}
   livesText: {fileID: 459414375}
   moneytext: {fileID: 1614252632}
@@ -984,6 +991,34 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 980500890}
+--- !u!1 &1050979433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1050979434}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050979434
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1050979433}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 911.6098, y: -2347.264, z: -114.27028}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1251134006
 GameObject:
   m_ObjectHideFlags: 0
