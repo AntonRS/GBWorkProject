@@ -8,11 +8,11 @@ using UnityEngine;
 namespace Game.CommandUI
 {
     /// <summary>
-    /// Класс реализцет фабрику меню для выделенного объекта
+    /// Класс реализует фабрику меню для выделенного объекта
     /// Отображает меню над объектом на заданной высоте с учетом типа 
     /// выделенного объекта
     /// </summary>
-    public class MenuFactory : MonoBehaviour
+    public class MenuFactory : Singleton<MenuFactory>
     {
         /// <summary>
         /// Высота, на которой отображается меню над выбранным объектом 
@@ -37,13 +37,6 @@ namespace Game.CommandUI
         private GameObject _menu = null;
 
         /// <summary>
-        /// Ссылка на комопонент ICommandButtonActuator объекта GlobalActuator
-        /// Задается в момент создания этой фабрики. Если GlobalActuator не задан,
-        /// командные кнопки будут использовать свой алгоритм обращения (см. документацию к кнопке)
-        /// </summary>
-        private ICommandButtonActuator _globalActuator = null;
-
-        /// <summary>
         /// Пул меню, которые уже отображались для повторного использования
         /// </summary>
         private Dictionary<int, GameObject> _pool = new Dictionary<int, GameObject>();
@@ -51,26 +44,30 @@ namespace Game.CommandUI
 
         #region Стандартный функционал MonoBehaviour
 
-        void Awake()
+        private void OnEnable()
         {
-            if (this.GlobalActuatorObject)
-                this._globalActuator = this.GlobalActuatorObject.GetComponent<ICommandButtonActuator>();
+            SelectedObjectManager.Instance.OnSelectedObjectChanged += this.OnSelectableObjectChanged;
         }
 
         #endregion
 
 
-        #region Публичные методы компонента
+        #region Приватные методы компонента
 
         /// <summary>
         /// Выполняет отображение меню для заданного выделенного объекта или прячет все 
         /// меню, если выделенный объект отсутствует
         /// </summary>
         /// <param name="selectedObject">Выделенный игровой объект</param>
-        /// <param name="ofType">Тип выбранного объекта</param>
-        public void ShowMenuFor(GameObject selectedObject, SelectableObjectType ofType)
+        private void OnSelectableObjectChanged(GameObject selectedObject)
         {
+            SelectableObjectType ofType = SelectableObjectType.None;
+
+            if (selectedObject)
+                ofType = selectedObject.GetComponent<SelectableObject>().ObjectType;
+                
             this.HideMenu();
+
             if (selectedObject != null && ofType != SelectableObjectType.None)
                 if (!this.SearchCachedMenuFor(selectedObject, ofType))
                     this.BuldAndDisplayMenuFor(selectedObject, ofType);
@@ -86,11 +83,6 @@ namespace Game.CommandUI
 
             this._menu = null;
         }
-
-        #endregion
-
-
-        #region Приватные методы компонента
 
         /// <summary>
         /// Выполняет поиск меню для объекта в пуле уже созданных меню
@@ -175,7 +167,7 @@ namespace Game.CommandUI
                 .ToList()
                 .ForEach((button) =>
                 {
-                    button.Actuator = this._globalActuator;
+                    button.Actuator = selectedObject.GetComponent<ICommandButtonActuator>();
                     button.TargetObject = selectedObject;
                 });
 

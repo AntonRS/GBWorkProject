@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,20 +17,35 @@ namespace Game.CommandUI
     /// Принуждает кнопку, на которую назначена, всегда смотреть лицом в текущую игровую камеру
     /// Выполняет генерацию события указанного типа при нажатии
     /// </summary>
-    public class CommandButton : MonoBehaviour, IPointerClickHandler
+    public class CommandButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         /// <summary>
         /// Ссылка на объект, реализующий интерфейс ICommandButtonActuator для этой кнопки
-        /// По умолчанию, присваивается к значению _glbalActuator объекта MenuFactory
-        /// Если не задан (==null), при нажатии данной кнопки будут оповещены
-        /// ВСЕ объекты, содержащие компонент <c>ICommandButtonActuator</c>
         /// на игровой сцене
         /// </summary>
-        [HideInInspector] public ICommandButtonActuator Actuator = null;
+        private ICommandButtonActuator _actuator = null;
+
+        [HideInInspector] public ICommandButtonActuator Actuator 
+        {
+            get 
+            {
+                return this._actuator;
+            }
+            set 
+            {
+                this._actuator = value;
+
+                if (this._actuator != null)
+                    this._sprite.enabled =
+                        this._actuator.TestCommandButtonShouldShow(this._commandType, this);
+            }
+        }
 
         /// <summary>
-        /// Тип команды, генерируемая при нажатии данной кнопки
+        /// Тип команды, выполняемой данной кнопкой
         /// </summary>
+        [SerializeField] private CommandType _commandType = CommandType.None;
+
         public CommandType Command
         {
             get
@@ -53,16 +69,55 @@ namespace Game.CommandUI
         [HideInInspector] public GameObject TargetObject = null;
 
         /// <summary>
-        /// Тип команды, выполняемой данной кнопкой
+        /// Ссылка на компонент-картинку кнопки
         /// </summary>
-        [SerializeField] private CommandType _commandType = CommandType.None;
+        private SpriteRenderer _sprite = null;
 
 
         #region Стандартный функционал MonoBehaviour
 
-        void Start()
+        void Awake()
         {
             this.StartCoroutine(this.LookAtCamera());
+            this._sprite = this.GetComponent<SpriteRenderer>();
+        }
+
+        #endregion
+
+
+        #region Имплиментация интерфейса IPointerEnterHandler
+
+        /// <summary>
+        /// Вызывает метод <c>PreviewCommandBegan</c> на заданном <c>Actuator</c>
+        /// </summary>
+        /// <param name="eventData">Event data.</param>
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (this.TargetObject != null && this.Actuator != null)
+                this.Actuator.PreviewCommandBegan(
+                    this.Command,
+                    this.TargetObject,
+                    this
+                );
+        }
+
+        #endregion
+
+
+        #region Имплиментация интерфейса IPointerExitHandler
+
+        /// <summary>
+        /// Вызывает метод <c>PreviewCommandEnd</c> на заданном <c>Actuator</c>
+        /// </summary>
+        /// <param name="eventData">Event data.</param>
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (this.TargetObject != null && this.Actuator != null)
+                this.Actuator.PreviewCommandEnd(
+                    this.Command,
+                    this.TargetObject,
+                    this
+                );
         }
 
         #endregion
@@ -76,14 +131,14 @@ namespace Game.CommandUI
         /// </summary>
         public void OnPointerClick(PointerEventData pointerEventData)
         {
-            if (this.TargetObject != null)
-                if (this.Actuator == null)
-                    GameObject.FindObjectsOfType<GameObject>()
-                                .OfType<ICommandButtonActuator>()
-                                .ToList()
-                                .ForEach(this.ExecuteCommandOn);
-                else
-                    this.ExecuteCommandOn(this.Actuator);
+            if (this.TargetObject != null && this.Actuator != null)
+                this.Actuator.ExecuteCommand(
+                    this.Command,
+                    this.TargetObject,
+                    this
+                );
+
+            SelectedObjectManager.Instance.SelectedObject = null;
         }
 
         #endregion
@@ -104,20 +159,6 @@ namespace Game.CommandUI
             this.gameObject.transform.LookAt(target);
 
             this.StartCoroutine(this.LookAtCamera());
-        }
-
-        /// <summary>
-        /// Вызывает исполняемый метод <c>Execute</c> с данными данной кнопки
-        /// на переданном в функцию объекте <c>ICommandButtonActuator</c>
-        /// </summary>
-        /// <param name="actuator">Обеъкт, куда передаем информацию о событии</param>
-        private void ExecuteCommandOn(ICommandButtonActuator actuator)
-        {
-            actuator.ExecuteCommand(
-                this.Command,
-                this.TargetObject,
-                this
-            );
         }
 
         #endregion

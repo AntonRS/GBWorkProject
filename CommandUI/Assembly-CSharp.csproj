@@ -62,7 +62,6 @@
     <Compile Include="Assets\Scripts\CommandUI\CommandButton.ActuatorInterface.cs" />
     <Compile Include="Assets\Scripts\CommandUI\CommandButton.CommandType.cs" />
     <Compile Include="Assets\Scripts\CommandUI\CommandButton.cs" />
-    <Compile Include="Assets\Scripts\CommandUI\CommandButtonsListener_Example.cs" />
     <Compile Include="Assets\Scripts\CommandUI\CommandUISingleton.cs" />
     <Compile Include="Assets\Scripts\CommandUI\DraggableObject.cs" />
     <Compile Include="Assets\Scripts\CommandUI\DraggableObject.State.cs" />
@@ -72,15 +71,18 @@
     <Compile Include="Assets\Scripts\CommandUI\SelectableObject.cs" />
     <Compile Include="Assets\Scripts\CommandUI\SelectableObject.Type.cs" />
     <Compile Include="Assets\Scripts\CommandUI\SelectableObjectMarker.cs" />
+    <Compile Include="Assets\Scripts\CommandUI\SelectableObjectRangeMarker.AssigneeInterface.cs" />
+    <Compile Include="Assets\Scripts\CommandUI\SelectableObjectRangeMarker.cs" />
     <Compile Include="Assets\Scripts\CommandUI\SelectedObjectManager.cs" />
+    <Compile Include="Assets\Scripts\CommandUI\TowerUpgrade_Example.cs" />
     <None Include="Assets\Sprites\CommandUI\credits.txt" />
     <None Include="Assets\Fonts\CommandUI\ken_fonts\license.txt" />
     <None Include="Assets\Fonts\CommandUI\credits.txt" />
-    <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>/Volumes/Data/Work/GBProject/CommandUI/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>/Volumes/Data/Work/GBProject/CommandUI/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.StandardEvents">
+      <HintPath>/Volumes/Data/Work/GBProject/CommandUI/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Volumes/Data/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
