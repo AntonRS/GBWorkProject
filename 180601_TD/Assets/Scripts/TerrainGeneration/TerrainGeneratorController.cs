@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.TerrainGeneration;
 
+/// <summary>
+/// Контроллер генератора карты. В принципе, можно работать и напрямую с TerrainGenerator
+/// </summary>
 public class TerrainGeneratorController : MonoBehaviour
 {
 
@@ -18,6 +21,8 @@ public class TerrainGeneratorController : MonoBehaviour
 
     private TerrainGenerator _generator;
 
+    public GameObject Generator { get { return _generator.gameObject; } }
+
     // Use this for initialization
     void Start()
     {
@@ -32,8 +37,10 @@ public class TerrainGeneratorController : MonoBehaviour
 
     public void DestroyTerrain()
     {
-            _generator.DestroyTerrain();
+        _generator.DestroyTerrain();        
     }
+
+    
     
 
 }
