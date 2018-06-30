@@ -20,8 +20,10 @@ public class TerrainGeneratorController : MonoBehaviour
 
 
     private TerrainGenerator _generator;
+    private List<GameObject> _roadTiles = new List<GameObject>();
 
     public GameObject Generator { get { return _generator.gameObject; } }
+    public List<GameObject> RoadTiles { get { return _roadTiles; } }
 
     // Use this for initialization
     void Start()
@@ -32,12 +34,13 @@ public class TerrainGeneratorController : MonoBehaviour
     public void GenerateTerrain()
     {
         if (_generator.transform.childCount == 0)
-            _generator.GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);        
+            _roadTiles = _generator.GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);        
     }
 
     public void DestroyTerrain()
     {
-        _generator.DestroyTerrain();        
+        _generator.DestroyTerrain();
+        _roadTiles.Clear();
     }
 
     
