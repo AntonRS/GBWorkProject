@@ -151,7 +151,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937256663897396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.47, y: 0, z: 0}
+  m_LocalPosition: {x: -0.02, y: 0, z: 1.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468971210649400}
@@ -164,7 +164,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1360187605960380}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0246542, y: -1.8843654, z: 3.779314}
+  m_LocalPosition: {x: 11.398603, y: 13.506172, z: 13.0735035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4038833733152540}
@@ -476,7 +476,6 @@ MonoBehaviour:
   _isAbleToAttackAir: 1
   _attackType: 0
   _ammunitionPath: Prefabs/Rocket
-  _maxLvl: 2
   _rotateHead: {fileID: 4468971210649400}
   _firePoint: {fileID: 4102312268372758}
   _turnSpeed: 5

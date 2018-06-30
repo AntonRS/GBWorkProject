@@ -9,29 +9,27 @@ namespace Game
 {
     public class GameManager : Singleton<GameManager>
     {
+        [Header("UI pannels")]
         public GameObject mainMenuPannel;
         public GameObject gameBar;
-
-        public int enemiesCountInWave;
-        public int hpModPercent;
-
         [Header("Textfields")]
         public Text countdownText;
         public Text livesText;
         public Text moneytext;
-
-        [Header("Players parameters")]
+        [Header("Game params")]
+        public int minEnemiesCountInWave;
+        public int maxEnemiesCountInWave;
+        public int hpModPercent;
+        public float timeBetweenWaves;
+        [Header("Players parars")]
         public int startLives;
         public int startMoney;
 
         private float _countdown;
         private int _waveIndex = 0;
-        [HideInInspector]
-        public bool isCountingDown = false;
-        [HideInInspector]
-        public int currentLives;
-        [HideInInspector]
-        public int currentMoney;
+        private bool _isCountingDown = false;
+        private int _currentLives;
+        private int _currentMoney;
 
         public TowersManager GetTowersManager { get; private set; }
         public EnemiesController GetEnemiesController { get; private set; }
@@ -42,11 +40,12 @@ namespace Game
             GetTowersManager = FindObjectOfType<TowersManager>();
             GetEnemiesController = FindObjectOfType<EnemiesController>();
             GetTerrainGenerator = FindObjectOfType<TerrainGenerator>();
+            
         }
 
         private void FixedUpdate()
         {
-            if (isCountingDown)
+            if (_isCountingDown)
             {
                 countdownText.text = ((int)_countdown).ToString();
                 _countdown -= Time.fixedDeltaTime;
@@ -54,18 +53,10 @@ namespace Game
                 {
                     foreach (var spawner in EnemiesController.Instance.spawners)
                     {
-                        spawner.SpawnRandomWave(_waveIndex, enemiesCountInWave, hpModPercent);
-                    }
-                    
-                    if (_waveIndex < EnemiesController.Instance.waves.Length-1)
-                    {
+                        spawner.SpawnRandomWave(_waveIndex, minEnemiesCountInWave, maxEnemiesCountInWave, hpModPercent);
                         _waveIndex += 1;
-                        _countdown = EnemiesController.Instance.waves[_waveIndex].countdownToSpawn;
-                    }
-                    else
-                    {
-                        isCountingDown = false;
-                        return;
+                        _countdown = timeBetweenWaves;
+
                     }
                 }
             }
@@ -86,22 +77,22 @@ namespace Game
             _waveIndex = 0;
             EnemiesController.Instance.ClearEnemyList();
             EnemiesController.Instance.ClearSpawnerList();
-            currentMoney = startMoney;
-            currentLives = startLives;
-            isCountingDown = false;
+            _currentMoney = startMoney;
+            _currentLives = startLives;
+            _isCountingDown = false;
             gameBar.SetActive(false);
             mainMenuPannel.SetActive(true);
         }
         public void StartGame()
         {
             TerrainGeneratorController.Instance.GenerateTerrain();
-            currentMoney = startMoney;
-            currentLives = startLives;
-            _countdown = EnemiesController.Instance.waves[_waveIndex].countdownToSpawn;
+            _currentMoney = startMoney;
+            _currentLives = startLives;
+            _countdown = timeBetweenWaves;
             countdownText.text += ((int)_countdown).ToString();
-            livesText.text = currentLives.ToString();
-            moneytext.text = currentMoney.ToString();
-            isCountingDown = true;
+            livesText.text = _currentLives.ToString();
+            moneytext.text = _currentMoney.ToString();
+            _isCountingDown = true;
             mainMenuPannel.SetActive(false);
             gameBar.SetActive(true);
 

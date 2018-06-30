@@ -37,9 +37,10 @@ namespace Game.Enemy
             }
             
         }
-        public void SpawnRandomWave(int waveIndex, int enemiesCount, int modPercent)
+        public void SpawnRandomWave(int waveIndex, int minenEmiesCount, int maxEnemiesCount, int modPercent)
         {
-            for (int i = 0; i < enemiesCount; i++)
+            var rndEnemiesCount = Random.Range(minenEmiesCount, maxEnemiesCount);
+            for (int i = 0; i < rndEnemiesCount; i++)
             {
                 var newEnemy = Instantiate(GetRandomEnemy(), GetRandomPosition(), Quaternion.identity);
                 newEnemy.Hp += (newEnemy.Hp/100)*(modPercent*waveIndex);

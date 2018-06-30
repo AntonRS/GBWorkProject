@@ -475,16 +475,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuPannel: {fileID: 1320703319}
   gameBar: {fileID: 858927718}
-  enemiesCountInWave: 10
-  hpModPercent: 10
   countdownText: {fileID: 980500892}
   livesText: {fileID: 459414375}
   moneytext: {fileID: 1614252632}
+  minEnemiesCountInWave: 5
+  maxEnemiesCountInWave: 15
+  hpModPercent: 10
+  timeBetweenWaves: 15
   startLives: 0
   startMoney: 0
-  isCountingDown: 0
-  currentLives: 0
-  currentMoney: 0
 --- !u!4 &644010249
 Transform:
   m_ObjectHideFlags: 0
@@ -527,9 +526,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ed016bdb94294478feaafda3979131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RocketTowers:
+  rocketTowers:
   - {fileID: 114787048093484894, guid: c11824423a9df2a4f98ffa51273c0758, type: 2}
   - {fileID: 114382355218465798, guid: 82475cdea4631f846820a27d6f0d862b, type: 2}
+  lazerTowers:
+  - {fileID: 114049985476668086, guid: bd2b4d1ed0a963742beae07b3fbb533e, type: 2}
+  - {fileID: 114380326657208540, guid: 61bc3991bec99a840b2c482d8bdfcc05, type: 2}
+  gunTowers:
+  - {fileID: 114982682245074684, guid: 258c05f17f379fb42ba70c9242a7e160, type: 2}
+  - {fileID: 114658831868301326, guid: 0febeb6a7a413e94d99a3fcde1b2ecf7, type: 2}
 --- !u!4 &658069030
 Transform:
   m_ObjectHideFlags: 0

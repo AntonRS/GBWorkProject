@@ -17,9 +17,15 @@ namespace Game
         {
             if (viaButton.Meta == "BuildRocketTower")
             {
-
                 GameManager.Instance.GetTowersManager.BuildRocketTower(forObject.transform);
-               
+            }
+            if (viaButton.Meta == "BuildLazerTower")
+            {
+                GameManager.Instance.GetTowersManager.BuildLazerTower(forObject.transform);
+            }
+            if (viaButton.Meta == "BuildGunTower")
+            {
+                GameManager.Instance.GetTowersManager.BuildGunTower(forObject.transform);
             }
             if (viaButton.Meta == "Upgrade")
             {
