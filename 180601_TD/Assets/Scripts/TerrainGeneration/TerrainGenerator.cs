@@ -6,21 +6,23 @@ using UnityEngine.AI;
 namespace Game.TerrainGeneration
 {
 
-    public class TerrainGenerator : MonoBehaviour
+    public class TerrainGenerator
     {
 
-        [Header("Префабы для тайлов")]
+        private GameObject _terrainParent;
 
-        [SerializeField]
+        public GameObject TerrainParent
+        {
+            get
+            {
+                return _terrainParent;
+            }
+        }
+
         private GameObject _towerPlatform;
-
-        [SerializeField]
         private GameObject _roadStartPrefab;
-
-        [SerializeField]
         private GameObject _roadFinishPrefab;
-
-        [SerializeField]
+                
         private GameObject[] _roadTilesPrefabs;
 
         private List<GameObject> _roadTiles = new List<GameObject>();
@@ -44,9 +46,21 @@ namespace Game.TerrainGeneration
 
         private NavMeshSurface _navMeshSurface;
 
-        public void Start()
+        public TerrainGenerator(GameObject terrainParent)
         {
-            _navMeshSurface = GetComponent<NavMeshSurface>();
+            _terrainParent = terrainParent;
+
+            _navMeshSurface = _terrainParent.GetComponent<NavMeshSurface>();
+            if (_navMeshSurface == null)
+                _navMeshSurface = terrainParent.AddComponent<NavMeshSurface>();            
+        }
+
+        public void LoadTilePrefabs (TerrainTilesetData tileset)
+        {
+            _towerPlatform = tileset.TowerPlatform;
+            _roadStartPrefab = tileset.RoadStartPrefab;
+            _roadFinishPrefab = tileset.RoadFinishPrefab;
+            _roadTilesPrefabs = tileset.RoadTilesPrefabs;
         }
 
         /// <summary>
@@ -69,7 +83,7 @@ namespace Game.TerrainGeneration
             }
 
             PlaceTowerPlatforms(towerPlatformsCount);
-            GenerateNavMesh();
+            //GenerateNavMesh();
             return _roadTiles;
 
         }
@@ -80,7 +94,7 @@ namespace Game.TerrainGeneration
         public void DestroyTerrain()
         {
             DestroyRoad();
-            GenerateNavMesh();
+            //GenerateNavMesh();
         }
 
         /// <summary>
@@ -90,8 +104,8 @@ namespace Game.TerrainGeneration
         {
             _roadTiles.Clear();
 
-            foreach (Transform child in transform)
-                Destroy(child.gameObject);                        
+            foreach (Transform child in _terrainParent.transform)
+                Object.Destroy(child.gameObject);                        
         }
 
         /// <summary>
@@ -100,7 +114,7 @@ namespace Game.TerrainGeneration
         /// <returns></returns>
         private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles, int attemptIndex)
         {
-            _currentTileCenter = transform.position;
+            _currentTileCenter = _terrainParent.transform.position;
 
             //устанавливаем начальный тайл и начальные точки
             _roadTiles.Add(InstantiateTileAtCurrentCenter(_roadStartPrefab).gameObject);
@@ -118,7 +132,7 @@ namespace Game.TerrainGeneration
 
 
             //конечный тайл
-            _roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
+            _roadTiles.Add(Object.Instantiate(_roadFinishPrefab, _terrainParent.transform));
             _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
             FlipUntilConnected(_roadTiles[_roadTiles.Count - 1].transform, FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform));
 
@@ -189,7 +203,7 @@ namespace Game.TerrainGeneration
             //проверили обе точки. Если пересечение осталось, уничтожаем тайл и выходим из метода возвратом нулл.
             if (willBeBlocked)
             {
-                Destroy(tile.gameObject);
+                Object.Destroy(tile.gameObject);
                 return null;
             }
 
@@ -228,7 +242,7 @@ namespace Game.TerrainGeneration
         /// <returns></returns>
         private Transform InstantiateTileAtCurrentCenter(GameObject prefab)
         {
-            Transform tile = Instantiate(prefab, transform).transform;
+            Transform tile = Object.Instantiate(prefab, _terrainParent.transform).transform;
             tile.position = _currentTileCenter;
             tile.eulerAngles = new Vector3(0, Random.Range(0, TileMaxFlipTimes + 1) * TileFlipDegrees, 0);
             return tile;
@@ -330,31 +344,36 @@ namespace Game.TerrainGeneration
 
             for (int i = 0; i < towerPlatformsCount; i++)
             {
-                towerPlatforms[i] = Instantiate(_towerPlatform, spawnPoints[i].transform);
+                towerPlatforms[i] = Object.Instantiate(_towerPlatform, spawnPoints[i].transform);
                 towerPlatforms[i].transform.position = spawnPoints[i].transform.position;
                 towerPlatforms[i].transform.rotation = Quaternion.identity;
             }
 
         }
-        
-        private void GenerateNavMesh()
-        {
-            //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
-            //, тайлы не успеют удалится до того как навмеш построится
-            //, поэтому делаю отложенный вызов
 
-            Invoke(TempGenNavMesh, NavMeshBuildDelay);
-        }
-
-        private void TempGenNavMesh()
+        public void GenerateNavMesh()
         {
             _navMeshSurface.BuildNavMesh();
         }
 
-        private void Invoke(System.Action method, float time)
-        {
-            Invoke(method.Method.Name, time);
-        }
+        //private void GenerateNavMesh()
+        //{
+        //    //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
+        //    //, тайлы не успеют удалится до того как навмеш построится
+        //    //, поэтому делаю отложенный вызов
+
+        //    Invoke(TempGenNavMesh, NavMeshBuildDelay);
+        //}
+
+        //private void TempGenNavMesh()
+        //{
+        //    _navMeshSurface.BuildNavMesh();
+        //}
+
+        //private void Invoke(System.Action method, float time)
+        //{
+        //    Invoke(method.Method.Name, time);
+        //}
     }
 
 }
