@@ -51,7 +51,7 @@ namespace Game
                 _countdown -= Time.fixedDeltaTime;
                 if (_countdown <= 0 )
                 {
-                    foreach (var spawner in EnemiesController.Instance.spawners)
+                    foreach (var spawner in GetEnemiesController.spawners)
                     {
                         spawner.SpawnRandomWave(_waveIndex, minEnemiesCountInWave, maxEnemiesCountInWave, hpModPercent);
                         _waveIndex += 1;
@@ -75,8 +75,8 @@ namespace Game
         {
             TerrainGeneratorController.Instance.DestroyTerrain();
             _waveIndex = 0;
-            EnemiesController.Instance.ClearEnemyList();
-            EnemiesController.Instance.ClearSpawnerList();
+            GetEnemiesController.ClearEnemyList();
+            GetEnemiesController.ClearSpawnerList();
             _currentMoney = startMoney;
             _currentLives = startLives;
             _isCountingDown = false;

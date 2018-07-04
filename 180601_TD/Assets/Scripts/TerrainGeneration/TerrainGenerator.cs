@@ -126,7 +126,7 @@ namespace Game.TerrainGeneration
             //_roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
             _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
             FlipUntilConnected(_roadTiles[_roadTiles.Count - 1].transform, FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform));
-            EnemiesController.Instance.destination = finish.transform;
+            GameManager.Instance.GetEnemiesController.destination = finish.transform;
             return true;
 
         }

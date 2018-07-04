@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Game.Enemy
 {
-    public class EnemiesController : Singleton<EnemiesController>
+    public class EnemiesController :MonoBehaviour
     {
         [HideInInspector] public List<BaseEnemy> enemies;
         [HideInInspector] public Transform destination;

@@ -53,7 +53,7 @@ namespace Game.Enemy
             _agent = GetComponent<NavMeshAgent>();
             _animator = GetComponentInChildren<Animator>();
             _agent.speed = Speed;
-            EnemiesController.Instance.AddEnemy(this);
+            GameManager.Instance.GetEnemiesController.AddEnemy(this);
             if (Destination == null)
             {
                 
@@ -69,8 +69,8 @@ namespace Game.Enemy
             {
                 _animator.SetTrigger("Dead");
             }
-            
-            EnemiesController.Instance.DeleteEnemy(this);
+
+            GameManager.Instance.GetEnemiesController.DeleteEnemy(this);
             Destroy(gameObject,6);
         }
         #endregion

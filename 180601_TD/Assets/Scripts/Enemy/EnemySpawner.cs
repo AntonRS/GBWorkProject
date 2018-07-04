@@ -10,9 +10,9 @@ namespace Game.Enemy
         private void Start()
         {
 
-            EnemiesController.Instance.spawners.Add(this);
-            waves = EnemiesController.Instance.waves;
-            destination = EnemiesController.Instance.destination;
+            GameManager.Instance.GetEnemiesController.spawners.Add(this);
+            waves = GameManager.Instance.GetEnemiesController.waves;
+            destination = GameManager.Instance.GetEnemiesController.destination;
         }
         Vector3 GetRandomPosition()
         {
@@ -49,8 +49,8 @@ namespace Game.Enemy
         }
         public BaseEnemy GetRandomEnemy()
         {
-            int rnd = Random.Range(0, EnemiesController.Instance.enemiesTypes.Length-1);
-            return EnemiesController.Instance.enemiesTypes[rnd];
+            int rnd = Random.Range(0, GameManager.Instance.GetEnemiesController. enemiesTypes.Length-1);
+            return GameManager.Instance.GetEnemiesController.enemiesTypes[rnd];
         }
 
     }

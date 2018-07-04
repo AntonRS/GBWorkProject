@@ -33,6 +33,8 @@ namespace Game.Towers
         }
         protected virtual void Start()
         {
+            _damageInfo.AttackType = _attackType;
+            _damageInfo.Damage = _damage;
             InvokeRepeating(UpdateTarget, 0f, 0.5f);
         }
         protected virtual void Update()
@@ -60,7 +62,7 @@ namespace Game.Towers
             float shortestDistance = Mathf.Infinity;
             BaseEnemy nearestEnemy = null;
 
-            foreach (BaseEnemy enemy in EnemiesController.Instance.enemies)
+            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
                 if ((_isAbleToAttackGround && !enemy.IsFlying)||(_isAbleToAttackAir && enemy.IsFlying))
                 {

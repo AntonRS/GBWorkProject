@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Game.Enemy;
 namespace Game.Towers
 {
     public class LazerTower : BaseTower
@@ -20,36 +21,45 @@ namespace Game.Towers
         /// Ammuniton speed
         /// </summary>
         [SerializeField] private float _ammunitionSpeed;
-        /// <summary>
-        /// Countdown to fire
-        /// </summary>
-
+        
+        private float _lazerStartFire;
+        private float _lazerFinishFire = 0.10f;
+        private BaseEnemy[] nearEnemies;
         private float fireCountDown = 0f;
-
+        private RaycastHit _hit;
+        private LineRenderer _lazer;
         protected override void Start()
         {
             base.Start();
+            
+
+
+            _lazer = GetComponent<LineRenderer>();
+            _lazer.enabled = false;
             _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
-            if (_firePoint == null)
-            {
-                _firePoint = transform;
-            }
+            
         }
 
         protected override void Update()
         {
             base.Update();
             LookAtTarget();
+            
         }
         public override void Fire()
         {
-            if (fireCountDown <= 0f)
+            if (fireCountDown <= 0f )
             {
-                var tempArrow = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
-                tempArrow.Target = _target;
-                tempArrow.Speed = _ammunitionSpeed;
-                tempArrow.DamageInfo = _damageInfo;
+                _lazer.enabled = true;
+                _lazerStartFire = Time.time;
+                _lazer.SetPosition(0, _firePoint.position);
+                _lazer.SetPosition(1, _target.transform.position);
                 fireCountDown = 1f / _attackPerSecond;
+                _target.ApplyDamage(_damageInfo);
+            }
+            if (Time.time>= _lazerStartFire+_lazerFinishFire)
+            {
+                _lazer.enabled = false;
             }
             fireCountDown -= Time.deltaTime;
         }
@@ -68,6 +78,7 @@ namespace Game.Towers
         /// </summary>
         private void LookAtTarget()
         {
+            
             if (_target != null && _rotateHead != null)
             {
                 var direction = _target.EnemyTransform.position - _rotateHead.position;
@@ -77,6 +88,7 @@ namespace Game.Towers
                 _rotateHead.rotation = lookRotation;
             }
         }
+        
     }
 }
 
