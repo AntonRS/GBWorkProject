@@ -18,6 +18,8 @@ MonoBehaviour:
   RoadFinishPrefab: {fileID: 1531592252789348, guid: e41d02efb1b3e134b9f392e00fe03549,
     type: 2}
   RoadTilesPrefabs:
-  - {fileID: 1616710921742694, guid: 9cef678532197af4dbb809943a450718, type: 2}
   - {fileID: 1616751357725660, guid: d360b596c75e5784f9db5fa0754dc950, type: 2}
+  - {fileID: 1616710921742694, guid: 9cef678532197af4dbb809943a450718, type: 2}
+  - {fileID: 1472733084390656, guid: 87ccda16478ee7645891809a9031a21e, type: 2}
   - {fileID: 1347764692647270, guid: 4189b63106a47f64a950fdaed8ec281a, type: 2}
+  - {fileID: 1128556697262780, guid: 9084966f6ba8ee8429013d00406b397a, type: 2}
