@@ -36,31 +36,46 @@ namespace Game.TerrainGeneration
         private const int MaxAttemptsToBuildMap = 25;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл. Если оказывается так, что и на последний раз карту построить не удаётся, просто финальный тайл ставится на месте того, который вызывал проблемы в последний раз. Таким образом в крайне редких случаях карта может не соответствовать параметрам (быть значительно короче).
         private const float TileFlipDegrees = 90f;//на сколько градусов поворачиваем тайл
         private const int TileMaxFlipTimes = 3;//сколько раз максимум поворачиваем тайл
-        private const float NavMeshBuildDelay = 0.1f;//пауза перед генерацией навмеша, чтобы тайлы успели удалиться перед собственно генерацией
+        
 
         private const string TileConnectionPointObjTag = "Tile_ConnectionPoint";
         private const string TileTowerPlatformSpawnPointObjTag = "Tile_TowerPlatformSpawnPoint";
 
         
         private float _bordersOffset; // отступ от границ. может, и не пригодится
+        
 
-        private NavMeshSurface _navMeshSurface;
-
+        /// <summary>
+        /// Создаёт объект класса TerrainGenerator для генерации дороги. Принимает находящийся на сцене GameObject, в детях которого будет строится дорога.
+        /// </summary>
+        /// <param name="terrainParent"></param>
         public TerrainGenerator(GameObject terrainParent)
         {
-            _terrainParent = terrainParent;
-
-            _navMeshSurface = _terrainParent.GetComponent<NavMeshSurface>();
-            if (_navMeshSurface == null)
-                _navMeshSurface = terrainParent.AddComponent<NavMeshSurface>();            
+            _terrainParent = terrainParent;         
         }
 
+        /// <summary>
+        /// Загружает тайлсет с элементами, из которых будет генерироваться дорога.
+        /// </summary>
+        /// <param name="tileset"></param>
         public void LoadTilePrefabs (TerrainTilesetData tileset)
         {
             _towerPlatform = tileset.TowerPlatform;
             _roadStartPrefab = tileset.RoadStartPrefab;
             _roadFinishPrefab = tileset.RoadFinishPrefab;
             _roadTilesPrefabs = tileset.RoadTilesPrefabs;
+        }
+
+        /// <summary>
+        /// Загружает префабы, из которых будет генерироваться дорога.
+        /// </summary>
+        /// <param name="tileset"></param>
+        public void LoadTilePrefabs (GameObject towerPlatform, GameObject roadStartPrefab, GameObject roadFinishPrefab, GameObject[] roadTilesPrefabs)
+        {
+            _towerPlatform = towerPlatform;
+            _roadStartPrefab = roadStartPrefab;
+            _roadFinishPrefab = roadFinishPrefab;
+            _roadTilesPrefabs = roadTilesPrefabs;
         }
 
         /// <summary>
@@ -83,18 +98,17 @@ namespace Game.TerrainGeneration
             }
 
             PlaceTowerPlatforms(towerPlatformsCount);
-            //GenerateNavMesh();
             return _roadTiles;
 
         }
 
+        //возможно, в данной реализации метод избыточен, ибо только вызывает DestroyRoad() и больше ничего не делает
         /// <summary>
-        /// Уничтожает созданную карту и прилагающиеся к ней объекты и компоненты (например, навмеш)
+        /// Уничтожает созданную карту и прилагающиеся к ней объекты и компоненты.
         /// </summary>
         public void DestroyTerrain()
         {
             DestroyRoad();
-            //GenerateNavMesh();
         }
 
         /// <summary>
@@ -350,30 +364,6 @@ namespace Game.TerrainGeneration
             }
 
         }
-
-        public void GenerateNavMesh()
-        {
-            _navMeshSurface.BuildNavMesh();
-        }
-
-        //private void GenerateNavMesh()
-        //{
-        //    //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
-        //    //, тайлы не успеют удалится до того как навмеш построится
-        //    //, поэтому делаю отложенный вызов
-
-        //    Invoke(TempGenNavMesh, NavMeshBuildDelay);
-        //}
-
-        //private void TempGenNavMesh()
-        //{
-        //    _navMeshSurface.BuildNavMesh();
-        //}
-
-        //private void Invoke(System.Action method, float time)
-        //{
-        //    Invoke(method.Method.Name, time);
-        //}
     }
 
 }

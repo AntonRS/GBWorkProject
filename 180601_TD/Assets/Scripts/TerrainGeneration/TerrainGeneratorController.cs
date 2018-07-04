@@ -26,6 +26,7 @@ public class TerrainGeneratorController : MonoBehaviour
 
     private TerrainGenerator _generator;
     private List<GameObject> _roadTiles = new List<GameObject>();
+    private TerrainNavMeshBuilder _navMesh;
 
     public GameObject Generator { get { return _generatorTerrainParent; } }
     public List<GameObject> RoadTiles { get { return _roadTiles; } }
@@ -38,6 +39,8 @@ public class TerrainGeneratorController : MonoBehaviour
     {
         _generator =  new TerrainGenerator(_generatorTerrainParent);
         _generator.LoadTilePrefabs(_tileset);
+
+        _navMesh = new TerrainNavMeshBuilder(_generatorTerrainParent);
     }
 
     public void GenerateTerrain()
@@ -59,8 +62,8 @@ public class TerrainGeneratorController : MonoBehaviour
 
     private void GenerateNavMesh()
     {
-        //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
-        //, тайлы не успеют удалится до того как навмеш построится
+        //если ранее в процессе генерации дороги какие-то её тайлы удалялись с помощью Destroy
+        //, они могут не успеть исчезнуть до того как навмеш построится
         //, поэтому делаю отложенный вызов
 
         Invoke(TempGenNavMesh, NavMeshBuildDelay);
@@ -68,7 +71,7 @@ public class TerrainGeneratorController : MonoBehaviour
 
     private void TempGenNavMesh()
     {
-        _generator.GenerateNavMesh();
+        _navMesh.BuildNavMesh();
     }
 
     private void Invoke(System.Action method, float time)

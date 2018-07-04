@@ -1,0 +1,159 @@
+fileFormatVersion: 2
+guid: 6a981a7883238bd448b2890cae99b13e
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Bridge
+    100002: Bridge Exension
+    100004: Ground A
+    100006: Ground B
+    100008: Ground C
+    100010: In Corner
+    100012: Out Corner
+    100014: Platform A
+    100016: Platform B
+    100018: Platform C
+    100020: Ramp
+    100022: //RootNode
+    100024: Wall A
+    100026: Wall B
+    100028: Wall C
+    400000: Bridge
+    400002: Bridge Exension
+    400004: Ground A
+    400006: Ground B
+    400008: Ground C
+    400010: In Corner
+    400012: Out Corner
+    400014: Platform A
+    400016: Platform B
+    400018: Platform C
+    400020: Ramp
+    400022: //RootNode
+    400024: Wall A
+    400026: Wall B
+    400028: Wall C
+    2100000: structural_material
+    2300000: Bridge
+    2300002: Bridge Exension
+    2300004: Ground A
+    2300006: Ground B
+    2300008: Ground C
+    2300010: In Corner
+    2300012: Out Corner
+    2300014: Platform A
+    2300016: Platform B
+    2300018: Platform C
+    2300020: Ramp
+    2300022: Wall A
+    2300024: Wall B
+    2300026: Wall C
+    3300000: Bridge
+    3300002: Bridge Exension
+    3300004: Ground A
+    3300006: Ground B
+    3300008: Ground C
+    3300010: In Corner
+    3300012: Out Corner
+    3300014: Platform A
+    3300016: Platform B
+    3300018: Platform C
+    3300020: Ramp
+    3300022: Wall A
+    3300024: Wall B
+    3300026: Wall C
+    4300000: Bridge Exension
+    4300002: Ramp
+    4300004: Wall C
+    4300006: Wall B
+    4300008: Ground A
+    4300010: Ground C
+    4300012: Ground B
+    4300014: Platform A
+    4300016: Platform C
+    4300018: Platform B
+    4300020: Bridge
+    4300022: In Corner
+    4300024: Out Corner
+    4300026: Wall A
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
