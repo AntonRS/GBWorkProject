@@ -33,29 +33,28 @@ namespace Game.CommandUI
 		{
 			if (this._marker == null)
 				this.BuildDefaultMarker ();
-        }
-
-        private void OnEnable()
-        {
-            SelectedObjectManager.Instance.OnSelectedObjectChanged += this.OnSelectableObjectChanged;
-        }
+		}
 
         #endregion
 
 
-        #region Реализация слушателя (listners) для CommandUI
+        #region Публичные методы компонента
 
         /// <summary>
-        /// Вызывается в момент, когда на сцене меняется выбранный объект
-        /// Либо отображает, либо прячет маркер выбора объекта
+        /// перемещает и показывает маркер выделения объекта
         /// </summary>
-        /// <param name="obj">Объект, для которого отображаем маркер, либо null</param>
-        private void OnSelectableObjectChanged(GameObject obj)
+        public void DrawMarkerOver(GameObject selectedObject)
         {
-            if (obj)
-                this.ShowMarker(obj);
+            if (selectedObject == null)
+            {
+                this._marker.SetActive(false);
+            }
             else
-                this.HideMarker();
+            {
+                this._marker.transform.position = selectedObject.transform.position;
+                this._marker.transform.localScale = selectedObject.transform.localScale * this._scale;
+                this._marker.SetActive(true);
+            }
         }
 
         #endregion
@@ -77,26 +76,7 @@ namespace Game.CommandUI
 				new Material (Shader.Find ("Transparent/Diffuse")) {
 					color = this._color
 				};
-        }
-
-        /// <summary>
-        /// Отображает объект-маркер выбранного объекта 
-        /// </summary>
-        /// <param name="forObject">Объект, для которого отображаем маркер</param>
-        private void ShowMarker(GameObject forObject)
-        {
-            this._marker.transform.position = forObject.transform.position;
-            this._marker.transform.localScale = forObject.transform.localScale * this._scale;
-            this._marker.SetActive(true);
-        }
-
-        /// <summary>
-        /// Прячет маркер
-        /// </summary>
-        private void HideMarker()
-        {
-            this._marker.SetActive(false);
-        }
+		}
 
         #endregion
 

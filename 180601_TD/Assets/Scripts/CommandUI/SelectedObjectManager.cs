@@ -1,11 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Game.CommandUI
 {
-    // запускаем данный менеджер первым
-    [DefaultExecutionOrder(-1)]
+	// у менеджера должна быть ссылка на объект-маркер
+	[RequireComponent(typeof(SelectableObjectMarker))]
+
+	// требуется ссылка на компонент фабрики меню
+	[RequireComponent(typeof(MenuFactory))]
 
 	/// <summary>
 	/// Синглтон.
@@ -13,15 +15,9 @@ namespace Game.CommandUI
 	/// </summary>
 	public class SelectedObjectManager : Singleton<SelectedObjectManager>
 	{
-        void HandleAction(Delegate obj)
-        {
-        }
-
-
-        /// Выбранный в игре объект, либо <c>null</c>
+		/// Выбранный в игре объект, либо <c>null</c>
 		/// если пытаемся выделить тот же объект - просто снимем выделение и
-		/// забудем объект, наче выделим новый объект. При изменении выбранного 
-        /// объекта, оповещаются все подписчики события <c>OnSelectedObjectChanged</c>
+		/// забудем объект, наче выделим новый объект
 		public GameObject SelectedObject
 		{
 			get {
@@ -30,42 +26,38 @@ namespace Game.CommandUI
 			set {
 				this._selectedObject = (value == this._selectedObject ? null : value);
 				this._selectedObjectType = this._selectedObject ? value.GetComponent<SelectableObject> ().ObjectType : SelectableObjectType.None;
-
-                if (this.OnSelectedObjectChanged != null)
-                    this.OnSelectedObjectChanged.Invoke(this._selectedObject);
+				this._marker.DrawMarkerOver (this._selectedObject);
+				this._menuFactory.ShowMenuFor (this._selectedObject, this._selectedObjectType);
 			}
 		}
 
-
-        #region Делегация
-
-        /// <summary>
-        /// Делегат метода оповещения об изменении выбранного на сцене объекта
-        /// </summary>
-        public delegate void SelectedObjectChanged(GameObject obj);
-
-        /// <summary>
-        /// Событие об изменении выбранного объекта на сцене для подписки
-        /// </summary>
-        public event SelectedObjectChanged OnSelectedObjectChanged;
-
-        #endregion
-
-
-        #region Некоторые приватные поля класса для внутреннего управления
+		private SelectableObjectMarker _marker = null;
+		private MenuFactory _menuFactory = null;
 
 		private GameObject _selectedObject = null;
 		private SelectableObjectType _selectedObjectType = SelectableObjectType.None;
 
-        #endregion
 
+		#region Стандартный функционал MonoBehaviour
 
-        #region Стандартный функционал MonoBehaviour
-
-        void Awake()
+		void Awake()
 		{
 			if (Camera.main.GetComponent<PhysicsRaycaster>() == null)
                 throw new MissingReferenceException ("Игровая камера должна содержать в себе компонент PhysicsRaycaster");
+
+			this._marker = this.GetComponent<SelectableObjectMarker> ();
+
+			if (this._marker == null)
+				throw new MissingReferenceException (
+					"Не задан компонент объект-маркер SelectableObjectMarker для выделения объекта"
+				);
+
+			this._menuFactory = this.GetComponent<MenuFactory> ();
+
+			if (this._menuFactory == null)
+				throw new MissingReferenceException (
+					"Не задан компонент фабрики меню MenuFactory"
+				);
 		}
 
 		#endregion
