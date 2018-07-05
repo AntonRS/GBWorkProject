@@ -480,6 +480,8 @@ MonoBehaviour:
   _firePoint: {fileID: 4102312268372758}
   _turnSpeed: 5
   _ammunitionSpeed: 10
+  _ammunition: {fileID: 114920493167587026, guid: 0ef70664f63f5ff41b4963b9038d5325,
+    type: 2}
 --- !u!136 &136464955813344740
 CapsuleCollider:
   m_ObjectHideFlags: 1

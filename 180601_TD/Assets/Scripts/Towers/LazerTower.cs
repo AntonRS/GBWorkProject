@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
@@ -24,18 +25,14 @@ namespace Game.Towers
         
         private float _lazerStartFire;
         private float _lazerFinishFire = 0.10f;
-        private BaseEnemy[] nearEnemies;
+        
         private float fireCountDown = 0f;
         private RaycastHit _hit;
-        private LineRenderer _lazer;
+        private new Lazer _ammunition;
+        private int targetMultiplier =1;
         protected override void Start()
         {
             base.Start();
-            
-
-
-            _lazer = GetComponent<LineRenderer>();
-            _lazer.enabled = false;
             _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
             
         }
@@ -46,20 +43,31 @@ namespace Game.Towers
             LookAtTarget();
             
         }
+        private List <BaseEnemy> GetEnemiesInDistance()
+        {
+            List<BaseEnemy> nearEnemies = new List<BaseEnemy>();
+            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
+            {
+                if (Vector3.Distance(enemy.transform.position,transform.position)<=_attackRange)
+                {
+                    nearEnemies.Add(enemy);
+                }
+            }
+            
+            return nearEnemies;
+        }
         public override void Fire()
         {
             if (fireCountDown <= 0f )
             {
-                _lazer.enabled = true;
-                _lazerStartFire = Time.time;
-                _lazer.SetPosition(0, _firePoint.position);
-                _lazer.SetPosition(1, _target.transform.position);
+                var newLazer = Instantiate(_ammunition);
+                newLazer.SetPoints(_firePoint.position, targetMultiplier, GetEnemiesInDistance());
                 fireCountDown = 1f / _attackPerSecond;
                 _target.ApplyDamage(_damageInfo);
             }
             if (Time.time>= _lazerStartFire+_lazerFinishFire)
             {
-                _lazer.enabled = false;
+                
             }
             fireCountDown -= Time.deltaTime;
         }

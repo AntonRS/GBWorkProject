@@ -23,12 +23,13 @@ namespace Game.Towers
         /// <summary>
         /// Countdown to fire
         /// </summary>
-
+        [SerializeField] new Missle _ammunition;
         private float fireCountDown = 0f;
 
         protected override void Start()
         {
             base.Start();
+
             _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
             if (_firePoint == null)
             {
@@ -45,10 +46,10 @@ namespace Game.Towers
         {
             if (fireCountDown <= 0f)
             {
-                var tempArrow = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
-                tempArrow.Target = _target;
-                tempArrow.Speed = _ammunitionSpeed;
-                tempArrow.DamageInfo = _damageInfo;
+                var _tempMissle = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
+                _tempMissle.Target = _target;
+                _tempMissle.Speed = _ammunitionSpeed;
+                _tempMissle.DamageInfo = _damageInfo;
                 fireCountDown = 1f / _attackPerSecond;
             }
             fireCountDown -= Time.deltaTime;
