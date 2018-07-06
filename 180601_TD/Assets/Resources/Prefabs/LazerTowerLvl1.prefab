@@ -464,7 +464,6 @@ MonoBehaviour:
   _isAbleToAttackGround: 1
   _isAbleToAttackAir: 1
   _attackType: 0
-  _ammunitionPath: Prefabs/Rocket
   _rotateHead: {fileID: 4468971210649400}
   _firePoint: {fileID: 4102312268372758}
   _turnSpeed: 50
@@ -491,7 +490,7 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_MotionVectors: 0
+  m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
@@ -518,6 +517,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 2

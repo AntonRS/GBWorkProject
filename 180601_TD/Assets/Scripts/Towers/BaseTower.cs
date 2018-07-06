@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
@@ -13,10 +14,9 @@ namespace Game.Towers
         [SerializeField] protected bool _isAbleToAttackGround;
         [SerializeField] protected bool _isAbleToAttackAir;
         [SerializeField] protected AttackType _attackType;
-        [SerializeField] protected string _ammunitionPath;
-        
-        protected BaseAmmunition _ammunition;
+
         protected BaseEnemy _target;
+        
         [SerializeField]
         protected DamageInfo _damageInfo;
         protected int _lvl = 0;
@@ -28,35 +28,24 @@ namespace Game.Towers
         #region Unity Functions
         protected virtual void Awake()
         {
-            LoadResources();
+            
             SetDamageInfo();
         }
         protected virtual void Start()
         {
             _damageInfo.AttackType = _attackType;
             _damageInfo.Damage = _damage;
-            InvokeRepeating(UpdateTarget, 0f, 0.5f);
+            //InvokeRepeating(FindNearestTarget, 0f, 0.5f);
         }
         protected virtual void Update()
         {
-            if (_target == null)
-            {
-                return;
-            }
-            Fire();
+            
+            //Fire();
         }
         #endregion
         #region BaseTower Functions
-        protected virtual void LoadResources()
-        {
-            if (_ammunitionPath == null)
-            {
-                Debug.Log("Tower "+ name + " Cant load resources. Enter resources path");
-                return;
-            }
-            _ammunition = Resources.Load<BaseAmmunition>(_ammunitionPath);
-        }
-        protected virtual void UpdateTarget()
+        
+        protected virtual void FindNearestTarget()
         {
 
             float shortestDistance = Mathf.Infinity;
@@ -75,6 +64,7 @@ namespace Game.Towers
                 }
                 
             }
+            
             if (nearestEnemy != null && shortestDistance <= _attackRange)
             {
                 _target = nearestEnemy;

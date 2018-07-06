@@ -43,15 +43,15 @@ namespace Game.Towers
         }
         public override void Fire()
         {
-            if (fireCountDown <= 0f)
-            {
-                var tempArrow = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
-                tempArrow.Target = _target;
-                //tempArrow.Speed = _ammunitionSpeed;
-                //tempArrow.DamageInfo = _damageInfo;
-                fireCountDown = 1f / _attackPerSecond;
-            }
-            fireCountDown -= Time.deltaTime;
+            //if (fireCountDown <= 0f)
+            //{
+            //    var tempArrow = Instantiate(_ammunition, _firePoint.position, _firePoint.rotation);
+            //    tempArrow.Target = _target;
+            //    //tempArrow.Speed = _ammunitionSpeed;
+            //    //tempArrow.DamageInfo = _damageInfo;
+            //    fireCountDown = 1f / _attackPerSecond;
+            //}
+            //fireCountDown -= Time.deltaTime;
         }
         public override void UpdateTower()
         {

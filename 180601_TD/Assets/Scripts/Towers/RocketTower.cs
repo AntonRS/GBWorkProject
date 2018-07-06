@@ -23,7 +23,7 @@ namespace Game.Towers
         /// <summary>
         /// Countdown to fire
         /// </summary>
-        [SerializeField] new Missle _ammunition;
+        [SerializeField] Missle _ammunition;
         private float fireCountDown = 0f;
 
         protected override void Start()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
+    [RequireComponent(typeof(LineRenderer))]
     public class LazerTower : BaseTower
     {
 
@@ -22,54 +23,50 @@ namespace Game.Towers
         /// Ammuniton speed
         /// </summary>
         [SerializeField] private float _ammunitionSpeed;
-        
-        private float _lazerStartFire;
-        private float _lazerFinishFire = 0.10f;
-        
-        private float fireCountDown = 0f;
         private RaycastHit _hit;
-        private new Lazer _ammunition;
-        private int targetMultiplier =1;
+        private LineRenderer _lazer;
+        private int targetMultiplier = 1;
+        
+        
+        float searchingTime = 0;
+
+        private List<BaseEnemy> targets;
         protected override void Start()
         {
             base.Start();
+            _lazer = GetComponent<LineRenderer>();
+            _lazer.enabled = false;
+            targets = new List<BaseEnemy>();
             _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
-            
+
         }
 
         protected override void Update()
         {
             base.Update();
+            FillTargetsList(5);
             LookAtTarget();
-            
+            Fire();
         }
-        private List <BaseEnemy> GetEnemiesInDistance()
-        {
-            List<BaseEnemy> nearEnemies = new List<BaseEnemy>();
-            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
-            {
-                if (Vector3.Distance(enemy.transform.position,transform.position)<=_attackRange)
-                {
-                    nearEnemies.Add(enemy);
-                }
-            }
-            
-            return nearEnemies;
-        }
+        
         public override void Fire()
         {
-            if (fireCountDown <= 0f )
+            
+            if (targets.Count > 0)
             {
-                var newLazer = Instantiate(_ammunition);
-                newLazer.SetPoints(_firePoint.position, targetMultiplier, GetEnemiesInDistance());
-                fireCountDown = 1f / _attackPerSecond;
-                _target.ApplyDamage(_damageInfo);
+                _lazer.enabled = true;
+                _lazer.positionCount = targets.Count + 1;
+                _lazer.SetPosition(0, _firePoint.position);
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    _lazer.SetPosition(i + 1, targets[i].transform.position);
+                }
             }
-            if (Time.time>= _lazerStartFire+_lazerFinishFire)
+            else
             {
-                
+                _lazer.enabled = false;
+
             }
-            fireCountDown -= Time.deltaTime;
         }
         public override void UpdateTower()
         {
@@ -86,10 +83,9 @@ namespace Game.Towers
         /// </summary>
         private void LookAtTarget()
         {
-            
-            if (_target != null && _rotateHead != null)
+            if (_rotateHead != null&&targets.Count>0)
             {
-                var direction = _target.EnemyTransform.position - _rotateHead.position;
+                var direction = targets[0].transform.position - _rotateHead.position;
                 Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                           Quaternion.LookRotation(direction),
                                                           Time.deltaTime * _turnSpeed);
@@ -97,6 +93,54 @@ namespace Game.Towers
             }
         }
         
+        private void FillTargetsList(int enemiesCount)
+        {
+            targets.Clear();
+            BaseEnemy nearestEnemy = FindNearestEnemyinRange(transform.position, _attackRange);
+            if (nearestEnemy != null)
+            {
+                targets.Add(nearestEnemy);
+                for (int i = 0; i < enemiesCount; i++)
+                {
+                    BaseEnemy nextEnemy = FindNearestEnemyinRange(targets[i].transform.position, 10);
+                    if (nextEnemy != null)
+                    {
+                        targets.Add(nextEnemy);
+                    }
+                    else return;
+                }
+            }
+        }
+
+        private BaseEnemy FindNearestEnemyinRange(Vector3 startpoint, float range)
+        {
+            float shortestDistance = Mathf.Infinity;
+            BaseEnemy nearestEnemy = null;
+            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
+            {
+                if (((_isAbleToAttackGround && !enemy.IsFlying) || (_isAbleToAttackAir && enemy.IsFlying)) && !targets.Contains(enemy))
+                {
+                    float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
+                    if (distanceToEnemy < shortestDistance)
+                    {
+                        shortestDistance = distanceToEnemy;
+                        nearestEnemy = enemy;
+                    }
+                }
+            }
+            if (nearestEnemy != null && shortestDistance <= range)
+            {
+                return nearestEnemy;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+
     }
 }
+
 
