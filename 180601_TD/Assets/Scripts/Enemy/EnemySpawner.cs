@@ -13,6 +13,7 @@ namespace Game.Enemy
             GameManager.Instance.GetEnemiesController.spawners.Add(this);
             waves = GameManager.Instance.GetEnemiesController.waves;
             destination = GameManager.Instance.GetEnemiesController.destination;
+            
         }
         Vector3 GetRandomPosition()
         {

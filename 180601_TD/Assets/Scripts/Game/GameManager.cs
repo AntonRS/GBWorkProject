@@ -27,7 +27,7 @@ namespace Game
 
         private float _countdown;
         private int _waveIndex = 0;
-        private bool _isCountingDown = false;
+        private bool _isCountingDown = true;/// ДЛЯ ТЕСТА
         private int _currentLives;
         private int _currentMoney;
 
@@ -35,20 +35,20 @@ namespace Game
         public EnemiesController GetEnemiesController { get; private set; }
         public TerrainGenerator GetTerrainGenerator { get; private set; }
 
-        private void Start()
+        private void Awake()
         {
             GetTowersManager = FindObjectOfType<TowersManager>();
             GetEnemiesController = FindObjectOfType<EnemiesController>();
             GetTerrainGenerator = FindObjectOfType<TerrainGenerator>();
-            
         }
+        
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (_isCountingDown)
             {
                 countdownText.text = ((int)_countdown).ToString();
-                _countdown -= Time.fixedDeltaTime;
+                _countdown -= Time.deltaTime;
                 if (_countdown <= 0 )
                 {
                     foreach (var spawner in GetEnemiesController.spawners)

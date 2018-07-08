@@ -3,104 +3,52 @@ using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
+    /// <summary>
+    /// Класс, отвечающий за работу башни, стреляющей лазером.
+    /// Требует наличие компонента LineRenderer.
+    /// Наследуется от BaseTower.
+    /// </summary>
     [RequireComponent(typeof(LineRenderer))]
+    
     public class LazerTower : BaseTower
     {
-
         /// <summary>
-        /// Transform of object which should look on to an enemy
+        /// Список целей, которые башня может атаковать "цепным" лазером.
+        /// Колличество целей зависит от параметра _maxTargetsCount.
+        /// Первый элемент списка - ближний к башне враг, находящийся в радиусе атаки.
+        /// Каждый следующий элемент находится на заданном радиусе от предыдущего.
+        /// Элементы не повторяются.
         /// </summary>
-        [SerializeField] private Transform _rotateHead;
-        /// <summary>
-        /// Transform where Ammunition appears
-        /// </summary>
-        [SerializeField] private Transform _firePoint;
-        /// <summary>
-        /// _rotateHead rotation speed
-        /// </summary>
-        [SerializeField] private float _turnSpeed = 5;
-        /// <summary>
-        /// Ammuniton speed
-        /// </summary>
-        [SerializeField] private float _ammunitionSpeed;
-        private RaycastHit _hit;
-        private LineRenderer _lazer;
-        private int targetMultiplier = 1;
-        
-        
-        float searchingTime = 0;
-
         private List<BaseEnemy> targets;
-        protected override void Start()
-        {
-            base.Start();
-            _lazer = GetComponent<LineRenderer>();
-            _lazer.enabled = false;
-            targets = new List<BaseEnemy>();
-            _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
+        /// <summary>
+        /// Компонент LineRenderer, отвечающий за визуальное отображене лазера
+        /// </summary>
+        private LineRenderer _lazer;
+        private int _maxTargetsCount;
 
-        }
 
+        #region Unity Functions
         protected override void Update()
         {
             base.Update();
-            FillTargetsList(5);
-            LookAtTarget();
-            Fire();
         }
-        
-        public override void Fire()
-        {
-            
-            if (targets.Count > 0)
-            {
-                _lazer.enabled = true;
-                _lazer.positionCount = targets.Count + 1;
-                _lazer.SetPosition(0, _firePoint.position);
-                for (int i = 0; i < targets.Count; i++)
-                {
-                    _lazer.SetPosition(i + 1, targets[i].transform.position);
-                }
-            }
-            else
-            {
-                _lazer.enabled = false;
 
-            }
-        }
-        public override void UpdateTower()
-        {
-            if (_lvl < _maxLvl)
-            {
-                _lvl += 1;
-                var tower = GameManager.Instance.GetTowersManager.lazerTowers[_lvl];
-                var newTower = Instantiate(tower, transform.position, Quaternion.identity);
-                newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
-            }
-        }
+
+        #endregion
+        #region LazerTower Functions
+
         /// <summary>
-        /// _rotateHead GameObject will look on to an enemy
+        /// Заполняет список целей targets. Длинна списка зависит от параметра _maxTargetsCount
         /// </summary>
-        private void LookAtTarget()
-        {
-            if (_rotateHead != null&&targets.Count>0)
-            {
-                var direction = targets[0].transform.position - _rotateHead.position;
-                Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
-                                                          Quaternion.LookRotation(direction),
-                                                          Time.deltaTime * _turnSpeed);
-                _rotateHead.rotation = lookRotation;
-            }
-        }
-        
-        private void FillTargetsList(int enemiesCount)
+        protected override void UpdateTarget()
         {
             targets.Clear();
             BaseEnemy nearestEnemy = FindNearestEnemyinRange(transform.position, _attackRange);
             if (nearestEnemy != null)
             {
                 targets.Add(nearestEnemy);
-                for (int i = 0; i < enemiesCount; i++)
+
+                for (int i = 0; i < _maxTargetsCount; i++)
                 {
                     BaseEnemy nextEnemy = FindNearestEnemyinRange(targets[i].transform.position, 10);
                     if (nextEnemy != null)
@@ -111,14 +59,21 @@ namespace Game.Towers
                 }
             }
         }
-
+        /// <summary>
+        /// Возвращает ближайший обьект типа BaseEnemy в заданном радиусе, не содердайщийся в списке targets.
+        /// </summary>
+        /// <param name="startpoint">начальная точка отсчета</param>
+        /// <param name="range">радиус</param>
+        /// <returns></returns>
         private BaseEnemy FindNearestEnemyinRange(Vector3 startpoint, float range)
         {
             float shortestDistance = Mathf.Infinity;
             BaseEnemy nearestEnemy = null;
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
-                if (((_isAbleToAttackGround && !enemy.IsFlying) || (_isAbleToAttackAir && enemy.IsFlying)) && !targets.Contains(enemy))
+                if (((_isAbleToAttackGround && !enemy.IsFlying) ||
+                    (_isAbleToAttackAir && enemy.IsFlying)) &&
+                    !targets.Contains(enemy))
                 {
                     float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
                     if (distanceToEnemy < shortestDistance)
@@ -137,6 +92,71 @@ namespace Game.Towers
                 return null;
             }
         }
+        private void SetDamage(DamageInfo damageInfo)
+        {
+            damageInfo.Damage *= Time.deltaTime;
+            foreach (BaseEnemy enemy in targets)
+            {
+                enemy.ApplyDamage(damageInfo);
+                damageInfo.Damage -= (damageInfo.Damage * 10) / 100;
+            }
+        }
+        #endregion
+        #region BaseTower Overrides
+        protected override void Fire()
+        {
+            if (targets.Count > 0)
+            {
+                SetDamage(_damageInfo);
+                _lazer.enabled = true;
+                _lazer.positionCount = targets.Count + 1;
+                _lazer.SetPosition(0, _firePoint.position);
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    _lazer.SetPosition(i + 1, targets[i].transform.position);
+                }
+            }
+            else
+            {
+                _lazer.enabled = false;
+                return;
+            }
+        }
+        public override void UpgradeTower()
+        {
+            if (_lvl < _maxLvl)
+            {
+                _lvl += 1;
+                var tower = GameManager.Instance.GetTowersManager.lazerTowers[_lvl];
+                var newTower = Instantiate(tower, transform.position, Quaternion.identity);
+                newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+            }
+        }
+
+        protected override void LookAtTarget()
+        {
+            if (_rotateHead != null && targets.Count > 0)
+            {
+                var direction = targets[0].transform.position - _rotateHead.position;
+                Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
+                                                          Quaternion.LookRotation(direction),
+                                                          Time.deltaTime * _turnSpeed);
+                _rotateHead.rotation = lookRotation;
+            }
+        }
+
+        protected override void SetAwakeParams()
+        {
+            base.SetAwakeParams();
+            _maxTargetsCount = _lvl;
+            _lazer = GetComponent<LineRenderer>();
+            _lazer.enabled = false;
+            targets = new List<BaseEnemy>();
+            
+        }
+        #endregion
+
+
 
 
 

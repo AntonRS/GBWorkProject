@@ -1,65 +1,122 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Game.Enemy;
 namespace Game.Towers
 {
-    public class Missle : BaseAmmunition
+    /// <summary>
+    /// Содержит логику и параметры самонаводящейся ракеты.
+    /// </summary>
+    public class Missle : MonoBehaviour
     {
-        [SerializeField] private string _hitImpactPath;
-        public float Speed;
-        public DamageInfo DamageInfo;
+        /// <summary>
+        /// Скорость ракеты.
+        /// </summary>
+        [HideInInspector] public float Speed;
+        /// <summary>
+        /// Информация об уроне.
+        /// </summary>
+        [HideInInspector] public DamageInfo DamageInfo;
+        /// <summary>
+        /// Цель типа BaseEnemy.
+        /// </summary>
+        [HideInInspector] public BaseEnemy Target;
+        /// <summary>
+        /// Префаб эффекта взрыва.
+        /// </summary>
+        [SerializeField] private GameObject _hitImpact;
+
         
-        protected GameObject hitImpact;
+        /// <summary>
+        /// Transform, на который выходит ракета для выхода на цель.
+        /// </summary>
+        [HideInInspector] public Transform attackPosition;
+        
+        private bool _onAttackPosition = false;
+        /// <summary>
+        /// скорость движения до _AttackPosition;
+        /// </summary>
+        private float _moveToAttackPosSpeed = 3;
+        private float _explosionRadius = 5;
+        private float _explosionFore = 1000;
+        [SerializeField] private Transform _explosionTransform;
 
-        private void Awake()
-        {
-            LoadResources();
-
-        }
         protected virtual void Update()
         {
-            if (Target == null)
+            if (Target)
+            {
+                MoveToAttackPosition();
+                MoveToEnemyAndHit();
+            }
+            else
             {
                 Destroy(gameObject);
                 return;
-            }
-            MoveToTarget();
+            }            
         }
-        private void LoadResources()
-        {
-            if (_hitImpactPath == null)
-            {
-                Debug.Log("Ammunition " + name + " Cant load resources. Enter resources path");
-                return;
-            }
-            hitImpact = Resources.Load<GameObject>(_hitImpactPath);
-        }
-        private void MoveToTarget()
-        {
-            Vector3 dir = Target.EnemyTransform.position - transform.position;
-            float distanceThisFrame = Speed * Time.deltaTime;
 
-            if (dir.magnitude <= distanceThisFrame)
-            {
-                HitTarget();
-                return;
-            }
-            transform.Translate(dir.normalized * distanceThisFrame, Space.World);
-        }
-        private  void HitTarget()
+        /// <summary>
+        /// Перемещает ракету на позицию для атаки со скоростью _moveToAttackPosSpeed;
+        /// Придостижении позиции изменяет _onAttackPosition на true;
+        /// </summary>
+        private void MoveToAttackPosition()
         {
-
-            SetDamage(Target);
+            if (!_onAttackPosition)
+            {
+                Vector3 dir = attackPosition.position - transform.position;
+                float distanceThisFrame = _moveToAttackPosSpeed * Time.deltaTime;
+                if (dir.magnitude <= distanceThisFrame)
+                {
+                    _onAttackPosition = true;
+                    return;
+                }
+                transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+            }    
+        }
+        /// <summary>
+        /// Перемещает ракету к цели.
+        /// При достижении цели вызывает метод HitTarget.
+        /// </summary>
+        private void MoveToEnemyAndHit()
+        {
+            if (_onAttackPosition)
+            {
+                Vector3 dir = Target.transform.position - transform.position;
+                float distanceThisFrame = Speed * Time.deltaTime;
+                if (dir.magnitude <= distanceThisFrame)
+                {
+                    HitTarget();
+                    return;
+                }
+                transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+            }
+        }
+        /// <summary>
+        /// Наносит урон, вызывает эффект попадания, уничтожает эффект попадания, уничтожает ракету.
+        /// </summary>
+        private void HitTarget()
+        {
+            Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
+            foreach (Collider nearbyObject in colliders)
+            {
+                Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                BaseEnemy enemy = nearbyObject.GetComponent<BaseEnemy>();
+                if (rb!=null)
+                {
+                    ///rb.AddExplosionForce(_explosionFore, transform.position, _explosionRadius,1);
+                    SetDamage(enemy);
+                    
+                }
+            }
             Destroy(gameObject);
-            if (_hitImpactPath == null || hitImpact == null)
+            if (_hitImpact == null)
             {
-                Debug.Log("Ammunition " + name + " cant find impact GameObject");
-                return;
+                var tempImpact = Instantiate(_hitImpact, transform.position, transform.rotation);
+                Destroy(tempImpact, 2f);
             }
-            var tempImpact = Instantiate(hitImpact, transform.position, transform.rotation);
-            Destroy(tempImpact, 2f);
         }
+        /// <summary>
+        /// Передает параметры урона обьекту, реалезующему интерфейс ISetDamage
+        /// </summary>
+        /// <param name="obj"></param>
         private  void SetDamage(ISetDamage obj)
         {
             if (obj != null)

@@ -6,7 +6,8 @@ namespace Game.Enemy
     public class EnemiesController :MonoBehaviour
     {
         [HideInInspector] public List<BaseEnemy> enemies;
-        [HideInInspector] public Transform destination;
+        ///[HideInInspector] Убран для теста
+        public Transform destination;
         [HideInInspector] public List<EnemySpawner> spawners;
         public BaseEnemy[] enemiesTypes;
         public Wave[] waves;

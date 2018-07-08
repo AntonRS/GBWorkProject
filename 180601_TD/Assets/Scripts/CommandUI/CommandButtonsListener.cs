@@ -30,7 +30,7 @@ namespace Game
             if (viaButton.Meta == "Upgrade")
             {
                 
-                forObject.GetComponent<BaseTower>().UpdateTower();
+                forObject.GetComponent<BaseTower>().UpgradeTower();
                 Destroy(forObject);
             }
             SelectedObjectManager.Instance.SelectedObject = null;

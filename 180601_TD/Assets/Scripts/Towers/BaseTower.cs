@@ -1,59 +1,88 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
     public abstract class BaseTower : MonoBehaviour
     {
-        
+        /// <summary>
+        /// Текущий уровень башни.
+        /// </summary>
+        [SerializeField] protected int _lvl;
+        protected int _maxLvl;
+        /// <summary>
+        /// Стоимость строительства/апдейта башни.
+        /// </summary>
         [SerializeField] protected int _cost;
-        [SerializeField] protected int _updateCost;
+        /// <summary>
+        /// Урон. Зависит от типа _attackType.
+        /// </summary>
         [SerializeField] protected int _damage;
+        /// <summary>
+        /// Радиус атаки.
+        /// </summary>
         [SerializeField] protected float _attackRange;
-        [SerializeField] protected float _attackPerSecond;
         [SerializeField] protected bool _isAbleToAttackGround;
         [SerializeField] protected bool _isAbleToAttackAir;
+        /// <summary>
+        /// Тип урона.
+        /// </summary>
         [SerializeField] protected AttackType _attackType;
+        /// <summary>
+        /// Transform части башни, которая вращается во время отслеживания цели.
+        /// </summary>
+        [SerializeField] protected Transform _rotateHead;
+        /// <summary>
+        /// Скорость поворота элемента _rotateHead
+        /// </summary>
+        [SerializeField] protected float _turnSpeed;
+        /// <summary>
+        /// Transform, где появляется снаряд во время стрельбы.
+        /// </summary>
+        [SerializeField] protected Transform _firePoint;
 
-        protected BaseEnemy _target;
-        
-        [SerializeField]
+        /// <summary>
+        /// Цель типа BaseEnemy.
+        /// </summary>
+        [SerializeField] protected BaseEnemy _target;
+
+
+        /// <summary>
+        /// Информация об уроне.
+        /// </summary>
         protected DamageInfo _damageInfo;
-        protected int _lvl = 0;
-        protected int _maxLvl;
 
+        /// <summary>
+        /// Переодичность обновления списка целей.
+        /// </summary>
+        private const float searchingTime = 0.5f;
 
 
 
         #region Unity Functions
         protected virtual void Awake()
-        {
-            
-            SetDamageInfo();
+        { 
+            SetAwakeParams();
         }
         protected virtual void Start()
         {
-            _damageInfo.AttackType = _attackType;
-            _damageInfo.Damage = _damage;
-            //InvokeRepeating(FindNearestTarget, 0f, 0.5f);
+            InvokeRepeating(UpdateTarget, 0, 0.5f);
         }
         protected virtual void Update()
         {
-            
-            //Fire();
+            LookAtTarget();
+            Fire();
         }
         #endregion
         #region BaseTower Functions
-        
-        protected virtual void FindNearestTarget()
-        {
 
+        protected virtual void UpdateTarget()
+        {
             float shortestDistance = Mathf.Infinity;
             BaseEnemy nearestEnemy = null;
 
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
-                if ((_isAbleToAttackGround && !enemy.IsFlying)||(_isAbleToAttackAir && enemy.IsFlying))
+                if (((_isAbleToAttackGround && !enemy.IsFlying) || (_isAbleToAttackAir && enemy.IsFlying))&& enemy != null)
                 {
                     float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
                     if (distanceToEnemy < shortestDistance)
@@ -62,9 +91,8 @@ namespace Game.Towers
                         nearestEnemy = enemy;
                     }
                 }
-                
             }
-            
+
             if (nearestEnemy != null && shortestDistance <= _attackRange)
             {
                 _target = nearestEnemy;
@@ -74,22 +102,35 @@ namespace Game.Towers
                 _target = null;
             }
         }
-        private void InvokeRepeating(Action action, float startTime, float repeatTime)
+
+        /// <summary>
+        /// Обертка для метода InvokeRepeating.
+        /// </summary>
+        /// <param name="action">Метод</param>
+        /// <param name="startTime">время первого запуска</param>
+        /// <param name="repeatTime">переодичность</param>
+        protected virtual void InvokeRepeating(System.Action action, float startTime, float repeatTime)
         {
             InvokeRepeating(action.Method.Name, startTime, repeatTime);
         }
-        delegate void Action();
-        public abstract void Fire();
-        public abstract void UpdateTower();
-
-        protected virtual void SetDamageInfo()
+        
+        protected abstract void Fire();
+        protected abstract void LookAtTarget();
+        public abstract void UpgradeTower();
+        /// <summary>
+        /// Инициализация начальных параметров башни.
+        /// </summary>
+        protected virtual void SetAwakeParams()
         {
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
+            //_maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
         }
-       
         #endregion
         #region Editor Functions
+        /// <summary>
+        /// Отображает радиус атаки во время работы в редакторе.
+        /// </summary>
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
