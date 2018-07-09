@@ -488,16 +488,15 @@ MonoBehaviour:
   _cost: 0
   _damage: 70
   _attackRange: 40
-  _isAbleToAttackGround: 1
+  _canAttack: 0000000001000000
   _isAbleToAttackAir: 1
   _attackType: 2
   _rotateHead: {fileID: 4627618907786880}
   _turnSpeed: 5
   _firePoint: {fileID: 4604256673073790}
-  _target: {fileID: 0}
   _missle: {fileID: 114920493167587026, guid: 0ef70664f63f5ff41b4963b9038d5325, type: 2}
   _missleSpeed: 40
-  _attackPerSecond: 0.5
+  _attackPerSecond: 0.25
   _attackPosition: {fileID: 4874908145426936}
 --- !u!114 &114778319270618870
 MonoBehaviour:

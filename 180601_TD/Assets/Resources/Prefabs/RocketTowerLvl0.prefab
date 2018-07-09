@@ -500,16 +500,15 @@ MonoBehaviour:
   _cost: 0
   _damage: 30
   _attackRange: 20
-  _isAbleToAttackGround: 1
+  _canAttack: 0100000000000000
   _isAbleToAttackAir: 1
   _attackType: 2
   _rotateHead: {fileID: 4529360362061142}
   _turnSpeed: 5
   _firePoint: {fileID: 4364214934089096}
-  _target: {fileID: 0}
   _missle: {fileID: 114920493167587026, guid: 0ef70664f63f5ff41b4963b9038d5325, type: 2}
   _missleSpeed: 40
-  _attackPerSecond: 0.5
+  _attackPerSecond: 0.25
   _attackPosition: {fileID: 4707151409300340}
 --- !u!136 &136787851779722006
 CapsuleCollider:

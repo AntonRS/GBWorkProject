@@ -460,13 +460,12 @@ MonoBehaviour:
   _cost: 0
   _damage: 20
   _attackRange: 15
-  _isAbleToAttackGround: 1
+  _canAttack: 01000000
   _isAbleToAttackAir: 1
   _attackType: 0
   _rotateHead: {fileID: 4081252691832540}
   _turnSpeed: 50
   _firePoint: {fileID: 4418126464275772}
-  _target: {fileID: 0}
 --- !u!114 &114566925780641226
 MonoBehaviour:
   m_ObjectHideFlags: 1

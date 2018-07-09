@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using Game.Enemy;
 namespace Game.Towers
 {
+    /// <summary>
+    /// Содержит логику и параметры абстрактной башни.
+    /// </summary>
     public abstract class BaseTower : MonoBehaviour
     {
         /// <summary>
         /// Текущий уровень башни.
         /// </summary>
         [SerializeField] protected int _lvl;
+        /// <summary>
+        /// Максимальный уровень прокачки башни.
+        /// </summary>
         protected int _maxLvl;
         /// <summary>
         /// Стоимость строительства/апдейта башни.
@@ -21,7 +28,7 @@ namespace Game.Towers
         /// Радиус атаки.
         /// </summary>
         [SerializeField] protected float _attackRange;
-        [SerializeField] protected bool _isAbleToAttackGround;
+        [SerializeField] protected List <EnemyType> _canAttack;
         [SerializeField] protected bool _isAbleToAttackAir;
         /// <summary>
         /// Тип урона.
@@ -43,7 +50,7 @@ namespace Game.Towers
         /// <summary>
         /// Цель типа BaseEnemy.
         /// </summary>
-        [SerializeField] protected BaseEnemy _target;
+        [HideInInspector] protected BaseEnemy _target;
 
 
         /// <summary>
@@ -82,15 +89,17 @@ namespace Game.Towers
 
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
-                if (((_isAbleToAttackGround && !enemy.IsFlying) || (_isAbleToAttackAir && enemy.IsFlying))&& enemy != null)
+                if (enemy != null && _canAttack.Contains(enemy.EnemyType))
                 {
-                    float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-                    if (distanceToEnemy < shortestDistance)
                     {
-                        shortestDistance = distanceToEnemy;
-                        nearestEnemy = enemy;
+                        float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+                        if (distanceToEnemy < shortestDistance)
+                        {
+                            shortestDistance = distanceToEnemy;
+                            nearestEnemy = enemy;
+                        }
                     }
-                }
+                }                
             }
 
             if (nearestEnemy != null && shortestDistance <= _attackRange)
@@ -109,11 +118,11 @@ namespace Game.Towers
         /// <param name="action">Метод</param>
         /// <param name="startTime">время первого запуска</param>
         /// <param name="repeatTime">переодичность</param>
-        protected virtual void InvokeRepeating(System.Action action, float startTime, float repeatTime)
+        protected virtual void InvokeRepeating(Action action, float startTime, float repeatTime)
         {
             InvokeRepeating(action.Method.Name, startTime, repeatTime);
         }
-        
+        protected delegate void Action();
         protected abstract void Fire();
         protected abstract void LookAtTarget();
         public abstract void UpgradeTower();

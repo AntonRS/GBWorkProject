@@ -24,17 +24,13 @@ namespace Game.Towers
         /// Компонент LineRenderer, отвечающий за визуальное отображене лазера
         /// </summary>
         private LineRenderer _lazer;
+        /// <summary>
+        /// Максимальное количесвто целей "цепного" лазера.
+        /// </summary>
         private int _maxTargetsCount;
 
 
-        #region Unity Functions
-        protected override void Update()
-        {
-            base.Update();
-        }
-
-
-        #endregion
+      
         #region LazerTower Functions
 
         /// <summary>
@@ -71,9 +67,7 @@ namespace Game.Towers
             BaseEnemy nearestEnemy = null;
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
-                if (((_isAbleToAttackGround && !enemy.IsFlying) ||
-                    (_isAbleToAttackAir && enemy.IsFlying)) &&
-                    !targets.Contains(enemy))
+                if (enemy != null && _canAttack.Contains(enemy.EnemyType) && !targets.Contains(enemy))
                 {
                     float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
                     if (distanceToEnemy < shortestDistance)
@@ -92,6 +86,10 @@ namespace Game.Towers
                 return null;
             }
         }
+        /// <summary>
+        /// Реализация интерфейса нанесения урона.
+        /// </summary>
+        /// <param name="damageInfo"></param>
         private void SetDamage(DamageInfo damageInfo)
         {
             damageInfo.Damage *= Time.deltaTime;
@@ -103,6 +101,9 @@ namespace Game.Towers
         }
         #endregion
         #region BaseTower Overrides
+        /// <summary>
+        /// Логика стреьлбы лазерной башни
+        /// </summary>
         protected override void Fire()
         {
             if (targets.Count > 0)
@@ -122,6 +123,9 @@ namespace Game.Towers
                 return;
             }
         }
+        /// <summary>
+        /// Логика улучшения лазерной башни. 
+        /// </summary>
         public override void UpgradeTower()
         {
             if (_lvl < _maxLvl)
@@ -132,7 +136,9 @@ namespace Game.Towers
                 newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
             }
         }
-
+        /// <summary>
+        /// Логика слежения за целью поворотной части лазерной башни.
+        /// </summary>
         protected override void LookAtTarget()
         {
             if (_rotateHead != null && targets.Count > 0)
@@ -144,7 +150,9 @@ namespace Game.Towers
                 _rotateHead.rotation = lookRotation;
             }
         }
-
+        /// <summary>
+        /// Настройка стартовых параметров лазерной башни
+        /// </summary>
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();

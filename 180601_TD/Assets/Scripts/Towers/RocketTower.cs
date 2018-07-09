@@ -14,6 +14,7 @@ namespace Game.Towers
         [SerializeField] private float _missleSpeed;
         /// <summary>
         /// Колличество выстрелов в секунду.
+        /// Выстрел содержит в себе некоторое количество ракет, зависящих от уровня прокачки.
         /// </summary>
         [SerializeField] private float _attackPerSecond;
         /// <summary>
@@ -28,15 +29,11 @@ namespace Game.Towers
         /// Колличество ракет в залпе. Определяется уровнем прокачки башни.
         /// </summary>
         private int _misslesCountInOneAttack;
-
-        private int _misslesInSecInMultipleAttack = 5;
-        
-
-
-
-
-
-
+        /// <summary>
+        /// Количество ракет в секунду
+        /// </summary>
+        private const int _misslesPerSec = 5;
+        ///БАГИ
         protected override void Fire()
         {
             if (_fireCountDown <= 0f && _target)
@@ -48,7 +45,7 @@ namespace Game.Towers
                     _tempMissle.Speed = _missleSpeed;
                     _tempMissle.DamageInfo = _damageInfo;
                     _tempMissle.attackPosition = _attackPosition;
-                    _fireCountDown = 1f / _misslesInSecInMultipleAttack;
+                    _fireCountDown = 1f / _misslesPerSec;
                     _misslesCountInOneAttack--;
                 }
                 else
@@ -76,11 +73,7 @@ namespace Game.Towers
             
             if (_target != null && _rotateHead != null)
             {
-                //_rotateHead.LookAt(_target.transform.position);
-                //_rotateHead.eulerAngles = new Vector3(0, _rotateHead.eulerAngles.y, 0);
-
-                var direction = _target.EnemyTransform.position - _rotateHead.position;
-
+                var direction = _target.transform.position - _rotateHead.position;
                 Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                           Quaternion.LookRotation(direction),
                                                           Time.deltaTime * _turnSpeed);

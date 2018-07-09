@@ -24,7 +24,7 @@ namespace Game.Towers
         {
             if (_target != null && _rotateHead != null)
             {
-                var direction = _target.EnemyTransform.position - _rotateHead.position;
+                var direction = _target.transform.position - _rotateHead.position;
                 Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                           Quaternion.LookRotation(direction),
                                                           Time.deltaTime * _turnSpeed);

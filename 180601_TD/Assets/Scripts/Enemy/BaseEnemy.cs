@@ -3,24 +3,54 @@ using UnityEngine;
 using Game.Towers;
 namespace Game.Enemy
 {
+
+    /// <summary>
+    /// Содержит логику и параметры абстрактного врага.
+    /// Требует наличия NavMeshAgent на обьекте.
+    /// При появлении на сцене враг вносит себя в общий список врагов, содержащийся в объекте EnemiesController.
+    /// При смерти удаляет себя из общего списка врагов.
+    /// </summary>
+    [RequireComponent(typeof(NavMeshAgent))]
     public abstract class BaseEnemy : MonoBehaviour, ISetDamage
     {
-        public Transform Destination;
+        
+        /// <summary>
+        /// Здоровье врага.
+        /// </summary>
         public float Hp;
-        [Range(1, 90)]
+        /// <summary>
+        /// Сопротивление урону от лазера. Рассчитывается в процентах.
+        /// </summary>
+        [Range(1, 99)]
         public float LazerArmor;
-        [Range(1, 90)]
+        /// <summary>
+        /// Сопротивление физическому урону. рассчитывается в процентах.
+        /// </summary>
+        [Range(1, 99)]
         public float PhysicalArmor;
-        public float Speed;
-        public bool IsFlying;
-        [HideInInspector] public Transform EnemyTransform;
-        public Transform explosionTransform;
+        /// <summary>
+        /// Скорость врага.
+        /// </summary>
+        [HideInInspector] public float Speed;
+        /// <summary>
+        /// Тип врага
+        /// </summary>
+        public EnemyType EnemyType;
+        /// <summary>
+        /// Transform на сцене, к которому движется враг.
+        /// </summary>
+        [HideInInspector] public Transform Destination;
+
+
 
         protected NavMeshAgent _agent;
         protected Animator _animator;
-        protected Rigidbody rb;
 
         #region BaseEnemy Functions
+        /// <summary>
+        /// Реализация интерфейса, отвечающего за получение урона.
+        /// </summary>
+        /// <param name="damageInfo">Параметры урона</param>
         public void ApplyDamage(DamageInfo damageInfo)
         {
             
@@ -48,7 +78,6 @@ namespace Game.Enemy
         protected virtual void Dead()
         {
             _agent.speed = 0;
-            rb.isKinematic = true;
             Hp = 0;
             if (_animator != null)
             {
@@ -61,15 +90,12 @@ namespace Game.Enemy
         #region Unity Functions
         protected virtual void Start()
         {
-            rb = GetComponent<Rigidbody>();
-            EnemyTransform = GetComponent<Transform>();
             _agent = GetComponent<NavMeshAgent>();
             _animator = GetComponentInChildren<Animator>();
             _agent.speed = Speed;
             GameManager.Instance.GetEnemiesController.AddEnemy(this);
             if (Destination == null)
             {
-                
                 return;
             }
             _agent.SetDestination(Destination.position);
