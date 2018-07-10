@@ -4,10 +4,19 @@ namespace Game.Towers
 {
     public class GunTower : BaseTower
     {
-        
+        [SerializeField] private int _speedreduction;
+
+        private void SetDamage(DamageInfo damageInfo)
+        {
+            damageInfo.Damage *= Time.deltaTime;
+            _target.ApplyDamage(damageInfo);
+        }
         protected override void Fire()
         {
-            
+            if (_target)
+            {
+                SetDamage(_damageInfo);
+            }
         }
         public override void UpgradeTower()
         {
@@ -30,6 +39,12 @@ namespace Game.Towers
                                                           Time.deltaTime * _turnSpeed);
                 _rotateHead.rotation = lookRotation;
             }
+        }
+
+        protected override void SetAwakeParams()
+        {
+            base.SetAwakeParams();
+            _damageInfo.SpeedReduction = _speedreduction;
         }
     }
 }

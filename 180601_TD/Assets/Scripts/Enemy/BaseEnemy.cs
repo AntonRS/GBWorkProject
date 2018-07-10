@@ -1,6 +1,7 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
 using Game.Towers;
+using System.Collections.Generic;
 namespace Game.Enemy
 {
 
@@ -22,7 +23,7 @@ namespace Game.Enemy
         /// Сопротивление урону от лазера. Рассчитывается в процентах.
         /// </summary>
         [Range(1, 99)]
-        public float LazerArmor;
+        public float PowerShield;
         /// <summary>
         /// Сопротивление физическому урону. рассчитывается в процентах.
         /// </summary>
@@ -42,23 +43,24 @@ namespace Game.Enemy
         [HideInInspector] public Transform Destination;
 
 
+        [HideInInspector] public List<BaseTower> _attackingTowers;
 
         protected NavMeshAgent _agent;
         protected Animator _animator;
-
+        protected float _currentSpeed;
+        protected bool _isAttacked;
         #region BaseEnemy Functions
         /// <summary>
         /// Реализация интерфейса, отвечающего за получение урона.
         /// </summary>
         /// <param name="damageInfo">Параметры урона</param>
         public void ApplyDamage(DamageInfo damageInfo)
-        {
-            
+        {            
             if (Hp > 0)
             {
                 if (damageInfo.AttackType == AttackType.lazer)
                 {
-                    Hp -= (damageInfo.Damage - ((damageInfo.Damage / 100) * LazerArmor));
+                    Hp -= (damageInfo.Damage - ((damageInfo.Damage / 100) * PowerShield));
                 }
                 if (damageInfo.AttackType == AttackType.rocket)
                 {
@@ -66,7 +68,8 @@ namespace Game.Enemy
                 }
                 if (damageInfo.AttackType == AttackType.bullets)
                 {
-                    //
+                    Hp-= (damageInfo.Damage - ((damageInfo.Damage / 100) * PhysicalArmor));
+                    //_currentSpeed =  
                 }
             }
             else
@@ -90,9 +93,11 @@ namespace Game.Enemy
         #region Unity Functions
         protected virtual void Start()
         {
+            _currentSpeed = Speed;
+            _agent.speed = _currentSpeed;
             _agent = GetComponent<NavMeshAgent>();
             _animator = GetComponentInChildren<Animator>();
-            _agent.speed = Speed;
+            
             GameManager.Instance.GetEnemiesController.AddEnemy(this);
             if (Destination == null)
             {

@@ -496,7 +496,7 @@ MonoBehaviour:
   _firePoint: {fileID: 4331352084195542}
   _missle: {fileID: 114920493167587026, guid: 0ef70664f63f5ff41b4963b9038d5325, type: 2}
   _missleSpeed: 40
-  _attackPerSecond: 0.25
+  _timeBetweenAttack: 5
   _attackPosition: {fileID: 4995323675839870}
 --- !u!114 &114608944192589550
 MonoBehaviour:

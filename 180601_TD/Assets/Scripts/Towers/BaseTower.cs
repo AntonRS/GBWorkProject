@@ -28,8 +28,11 @@ namespace Game.Towers
         /// Радиус атаки.
         /// </summary>
         [SerializeField] protected float _attackRange;
+        /// <summary>
+        /// Какой тип врагов может атаковать башня.
+        /// </summary>
         [SerializeField] protected List <EnemyType> _canAttack;
-        [SerializeField] protected bool _isAbleToAttackAir;
+        
         /// <summary>
         /// Тип урона.
         /// </summary>
@@ -133,6 +136,7 @@ namespace Game.Towers
         {
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
+            _damageInfo.AttackingTower = this;
             //_maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
         }
         #endregion

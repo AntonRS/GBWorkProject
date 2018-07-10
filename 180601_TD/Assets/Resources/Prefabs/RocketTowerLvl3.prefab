@@ -210,7 +210,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1667720234162180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -61.2, y: -2.0311744e-16, z: -12.2}
+  m_LocalPosition: {x: -77.23, y: -2.0311744e-16, z: -12.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4963497863746128}
@@ -496,7 +496,7 @@ MonoBehaviour:
   _firePoint: {fileID: 4955219937183658}
   _missle: {fileID: 114920493167587026, guid: 0ef70664f63f5ff41b4963b9038d5325, type: 2}
   _missleSpeed: 40
-  _attackPerSecond: 0.25
+  _timeBetweenAttack: 5
   _attackPosition: {fileID: 4933450924217050}
 --- !u!114 &114758614633041352
 MonoBehaviour:
