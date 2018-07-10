@@ -6,7 +6,7 @@ using UnityEngine.AI;
 namespace Game.TerrainGeneration
 {
 
-    public class TerrainGenerator
+    public class TerrainGenerator : IMapGenerator
     {
 
         private GameObject _terrainParent;

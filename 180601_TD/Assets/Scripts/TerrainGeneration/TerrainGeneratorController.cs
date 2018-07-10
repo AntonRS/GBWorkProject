@@ -69,6 +69,7 @@ public class TerrainGeneratorController : MonoBehaviour
         Invoke(TempGenNavMesh, NavMeshBuildDelay);
     }
 
+    //System.Action не берётся из других классов, через точку - Unity так не умеет. Поэтому делаем такой дополнительный метод-"прокладку"
     private void TempGenNavMesh()
     {
         _navMesh.BuildNavMesh();

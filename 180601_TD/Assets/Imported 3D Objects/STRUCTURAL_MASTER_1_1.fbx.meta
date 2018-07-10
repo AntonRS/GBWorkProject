@@ -76,7 +76,12 @@ ModelImporter:
     4300022: In Corner
     4300024: Out Corner
     4300026: Wall A
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: structural_material
+    second: {fileID: 2100000, guid: b86f37ed80bd3d54ab97d16fec13d115, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
