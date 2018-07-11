@@ -65,7 +65,7 @@ namespace Game.Towers
         /// Переодичность обновления списка целей.
         /// </summary>
         private const float searchingTime = 0.5f;
-
+        protected List<BaseEnemy> _targets;
 
 
         #region Unity Functions
@@ -84,35 +84,54 @@ namespace Game.Towers
         }
         #endregion
         #region BaseTower Functions
-
-        protected virtual void UpdateTarget()
+         
+        protected void FindEnemiesInRange(Vector3 startpoint, float range)
         {
-            float shortestDistance = Mathf.Infinity;
-            BaseEnemy nearestEnemy = null;
-
+            
+            _targets.Clear();
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
                 if (enemy != null && _canAttack.Contains(enemy.EnemyType))
                 {
+                    float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
+                    if (distanceToEnemy < range)
                     {
-                        float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-                        if (distanceToEnemy < shortestDistance)
+                        _targets.Add(enemy);
+                        
+                    }
+                }
+            }
+            
+        }
+        protected void FindClosestToDestinationEnemy()
+        {
+            
+            if (_targets.Count > 0)
+            {
+                float shortestDistance = Mathf.Infinity;
+                BaseEnemy nearestEnemy = null;
+
+                foreach (BaseEnemy enemy in _targets)
+                {
+                    {
+                        
+                        float distanceToDestination = enemy.Agent.remainingDistance;
+                        
+                        if (distanceToDestination < shortestDistance)
                         {
-                            shortestDistance = distanceToEnemy;
+                            shortestDistance = distanceToDestination;
                             nearestEnemy = enemy;
+                            _target = nearestEnemy;
                         }
                     }
-                }                
+                }
             }
-
-            if (nearestEnemy != null && shortestDistance <= _attackRange)
-            {
-                _target = nearestEnemy;
-            }
-            else
-            {
-                _target = null;
-            }
+            
+        }
+        protected virtual void UpdateTarget()
+        {
+            FindEnemiesInRange(transform.position, _attackRange);
+            FindClosestToDestinationEnemy();
         }
 
         /// <summary>
@@ -134,6 +153,7 @@ namespace Game.Towers
         /// </summary>
         protected virtual void SetAwakeParams()
         {
+            _targets = new List<BaseEnemy>();
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
             _damageInfo.AttackingTower = this;

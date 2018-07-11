@@ -2209,6 +2209,7 @@ MonoBehaviour:
   _rotateHead: {fileID: 272506009}
   _turnSpeed: 20
   _firePoint: {fileID: 245170545}
+  _speedreduction: 50
 --- !u!1001 &2120911993
 Prefab:
   m_ObjectHideFlags: 0

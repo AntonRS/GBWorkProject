@@ -28,13 +28,21 @@ namespace Game.Towers
         /// Максимальное количесвто целей "цепного" лазера.
         /// </summary>
         private int _maxTargetsCount;
+        /// <summary>
+        /// Снижение урона для следующей цели в процентах.
+        /// </summary>
+        private int _nextTargetDamageReductionInPercent = 10;
+        /// <summary>
+        /// Максимальное расстояние до следующей цели цепного лазера.
+        /// </summary>
+        private int _nexTargetRadius = 5;
 
 
       
         #region LazerTower Functions
 
         /// <summary>
-        /// Заполняет список целей targets. Длинна списка зависит от параметра _maxTargetsCount
+        /// Заполняет список целей targets. Длинна списка зависит от параметра _maxTargetsCount.
         /// </summary>
         protected override void UpdateTarget()
         {
@@ -46,7 +54,7 @@ namespace Game.Towers
 
                 for (int i = 0; i < _maxTargetsCount; i++)
                 {
-                    BaseEnemy nextEnemy = FindNearestEnemyinRange(targets[i].transform.position, 10);
+                    BaseEnemy nextEnemy = FindNearestEnemyinRange(targets[i].transform.position, _nexTargetRadius);
                     if (nextEnemy != null)
                     {
                         targets.Add(nextEnemy);
@@ -88,6 +96,7 @@ namespace Game.Towers
         }
         /// <summary>
         /// Реализация интерфейса нанесения урона.
+        /// Урон уменьшается от цели к цели на величину _nextTargetDamageReductionInPercent в процентах.
         /// </summary>
         /// <param name="damageInfo"></param>
         private void SetDamage(DamageInfo damageInfo)
@@ -96,7 +105,7 @@ namespace Game.Towers
             foreach (BaseEnemy enemy in targets)
             {
                 enemy.ApplyDamage(damageInfo);
-                damageInfo.Damage -= (damageInfo.Damage * 10) / 100;
+                damageInfo.Damage -= (damageInfo.Damage * _nextTargetDamageReductionInPercent) / 100;
             }
         }
         #endregion

@@ -32,7 +32,7 @@ namespace Game.Enemy
         /// <summary>
         /// Скорость врага.
         /// </summary>
-        [HideInInspector] public float Speed;
+        public float Speed;
         /// <summary>
         /// Тип врага
         /// </summary>
@@ -45,10 +45,14 @@ namespace Game.Enemy
 
         [HideInInspector] public List<BaseTower> _attackingTowers;
 
-        protected NavMeshAgent _agent;
+        [HideInInspector] public NavMeshAgent Agent;
         protected Animator _animator;
-        protected float _currentSpeed;
+        
         protected bool _isAttacked;
+        /// <summary>
+        /// Время, через которое обьект уничтожается.
+        /// </summary>
+        protected float _dyingTime = 6;
         #region BaseEnemy Functions
         /// <summary>
         /// Реализация интерфейса, отвечающего за получение урона.
@@ -68,8 +72,10 @@ namespace Game.Enemy
                 }
                 if (damageInfo.AttackType == AttackType.bullets)
                 {
-                    Hp-= (damageInfo.Damage - ((damageInfo.Damage / 100) * PhysicalArmor));
-                    //_currentSpeed =  
+                    CancelInvoke(RestoreSpeed);
+                    Hp -= (damageInfo.Damage - ((damageInfo.Damage / 100) * PhysicalArmor));
+                    Agent.speed = (Speed - ((Speed / 100) * damageInfo.SpeedReduction));
+                    Invoke(RestoreSpeed, 0.1f); 
                 }
             }
             else
@@ -80,31 +86,44 @@ namespace Game.Enemy
         }
         protected virtual void Dead()
         {
-            _agent.speed = 0;
+            Agent.speed = 0;
             Hp = 0;
             if (_animator != null)
             {
                 _animator.SetTrigger("Dead");
             }
             GameManager.Instance.GetEnemiesController.DeleteEnemy(this);
-            Destroy(gameObject, 6);
+            Destroy(gameObject, _dyingTime);
         }
         #endregion
         #region Unity Functions
         protected virtual void Start()
         {
-            _currentSpeed = Speed;
-            _agent.speed = _currentSpeed;
-            _agent = GetComponent<NavMeshAgent>();
+            Agent = GetComponent<NavMeshAgent>();            
             _animator = GetComponentInChildren<Animator>();
-            
+            Agent.speed = Speed;
+
             GameManager.Instance.GetEnemiesController.AddEnemy(this);
             if (Destination == null)
             {
                 return;
             }
-            _agent.SetDestination(Destination.position);
+            Agent.SetDestination(Destination.position);
         }
+        protected virtual void RestoreSpeed()
+        {
+            Agent.speed = Speed;
+        }
+        protected virtual void CancelInvoke(Action action)
+        {
+            
+            CancelInvoke(action.Method.Name);
+        }
+        protected virtual void Invoke(Action action, float startTime)
+        {
+            Invoke(action.Method.Name, startTime);
+        }
+        protected delegate void Action();
         
         #endregion
     }
