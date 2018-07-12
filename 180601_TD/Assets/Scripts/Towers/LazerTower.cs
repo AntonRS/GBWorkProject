@@ -19,7 +19,7 @@ namespace Game.Towers
         /// Каждый следующий элемент находится на заданном радиусе от предыдущего.
         /// Элементы не повторяются.
         /// </summary>
-        private List<BaseEnemy> targets;
+        
         /// <summary>
         /// Компонент LineRenderer, отвечающий за визуальное отображене лазера
         /// </summary>
@@ -37,6 +37,7 @@ namespace Game.Towers
         /// </summary>
         private int _nexTargetRadius = 5;
 
+        private List<BaseEnemy> _chainTargets;
 
       
         #region LazerTower Functions
@@ -46,22 +47,28 @@ namespace Game.Towers
         /// </summary>
         protected override void UpdateTarget()
         {
-            targets.Clear();
-            BaseEnemy nearestEnemy = FindNearestEnemyinRange(transform.position, _attackRange);
+            base.UpdateTarget();
+            FillTargetsList();
+        }
+        private void FillTargetsList()
+        {
+            _chainTargets.Clear();
+            BaseEnemy nearestEnemy = _target;
             if (nearestEnemy != null)
             {
-                targets.Add(nearestEnemy);
+                _chainTargets.Add(nearestEnemy);
 
                 for (int i = 0; i < _maxTargetsCount; i++)
                 {
-                    BaseEnemy nextEnemy = FindNearestEnemyinRange(targets[i].transform.position, _nexTargetRadius);
+                    BaseEnemy nextEnemy = FindNearestEnemyinRange(_chainTargets[i].transform.position, _nexTargetRadius);
                     if (nextEnemy != null)
                     {
-                        targets.Add(nextEnemy);
+                        _chainTargets.Add(nextEnemy);
                     }
                     else return;
                 }
             }
+
         }
         /// <summary>
         /// Возвращает ближайший обьект типа BaseEnemy в заданном радиусе, не содердайщийся в списке targets.
@@ -75,7 +82,7 @@ namespace Game.Towers
             BaseEnemy nearestEnemy = null;
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
-                if (enemy != null && _canAttack.Contains(enemy.EnemyType) && !targets.Contains(enemy))
+                if (enemy != null && _canAttack.Contains(enemy.EnemyType) && !_chainTargets.Contains(enemy))
                 {
                     float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
                     if (distanceToEnemy < shortestDistance)
@@ -102,7 +109,7 @@ namespace Game.Towers
         private void SetDamage(DamageInfo damageInfo)
         {
             damageInfo.Damage *= Time.deltaTime;
-            foreach (BaseEnemy enemy in targets)
+            foreach (BaseEnemy enemy in _targets)
             {
                 enemy.ApplyDamage(damageInfo);
                 damageInfo.Damage -= (damageInfo.Damage * _nextTargetDamageReductionInPercent) / 100;
@@ -115,15 +122,15 @@ namespace Game.Towers
         /// </summary>
         protected override void Fire()
         {
-            if (targets.Count > 0)
+            if (_chainTargets.Count > 0)
             {
                 SetDamage(_damageInfo);
                 _lazer.enabled = true;
-                _lazer.positionCount = targets.Count + 1;
+                _lazer.positionCount = _chainTargets.Count + 1;
                 _lazer.SetPosition(0, _firePoint.position);
-                for (int i = 0; i < targets.Count; i++)
+                for (int i = 0; i < _chainTargets.Count; i++)
                 {
-                    _lazer.SetPosition(i + 1, targets[i].transform.position);
+                    _lazer.SetPosition(i + 1, _chainTargets[i].transform.position);
                 }
             }
             else
@@ -150,9 +157,9 @@ namespace Game.Towers
         /// </summary>
         protected override void LookAtTarget()
         {
-            if (_rotateHead != null && targets.Count > 0)
+            if (_rotateHead != null && _targets.Count > 0)
             {
-                var direction = targets[0].transform.position - _rotateHead.position;
+                var direction = _targets[0].transform.position - _rotateHead.position;
                 Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                           Quaternion.LookRotation(direction),
                                                           Time.deltaTime * _turnSpeed);
@@ -168,8 +175,10 @@ namespace Game.Towers
             _maxTargetsCount = _lvl;
             _lazer = GetComponent<LineRenderer>();
             _lazer.enabled = false;
-            targets = new List<BaseEnemy>();
-            
+            _chainTargets = new List<BaseEnemy>();
+
+
+
         }
         #endregion
 
