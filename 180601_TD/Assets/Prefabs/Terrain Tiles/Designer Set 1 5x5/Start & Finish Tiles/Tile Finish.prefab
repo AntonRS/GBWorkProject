@@ -313,6 +313,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1626820343540826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4934918375514006}
+  m_Layer: 0
+  m_Name: Enemies Destination Point
+  m_TagString: Enemies_DestinationPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1648397853914548
 GameObject:
   m_ObjectHideFlags: 1
@@ -715,6 +730,7 @@ Transform:
   m_LocalPosition: {x: 17, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4934918375514006}
   - {fileID: 4678165297526414}
   - {fileID: 4992699221242324}
   m_Father: {fileID: 0}
@@ -809,7 +825,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4488766697552892}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4691855702285602
 Transform:
@@ -915,6 +931,19 @@ Transform:
   m_Father: {fileID: 4992699221242324}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -89.98, y: 90, z: 0}
+--- !u!4 &4934918375514006
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1626820343540826}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4488766697552892}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4937492941465872
 Transform:
   m_ObjectHideFlags: 1
@@ -994,7 +1023,7 @@ Transform:
   - {fileID: 4449086050835200}
   - {fileID: 4639612565359936}
   m_Father: {fileID: 4488766697552892}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23067084287342250
 MeshRenderer:

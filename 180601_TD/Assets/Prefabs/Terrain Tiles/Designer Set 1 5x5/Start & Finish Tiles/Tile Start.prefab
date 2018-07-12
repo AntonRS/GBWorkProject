@@ -198,6 +198,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1434642204522830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4785478127332154}
+  m_Layer: 0
+  m_Name: Enemies Spawn Point
+  m_TagString: Enemies_SpawnPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1435721989519856
 GameObject:
   m_ObjectHideFlags: 1
@@ -864,6 +879,19 @@ Transform:
   m_Father: {fileID: 4197503785638852}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
+--- !u!4 &4785478127332154
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1434642204522830}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4791550357099812}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4791550357099812
 Transform:
   m_ObjectHideFlags: 1
@@ -876,6 +904,7 @@ Transform:
   m_Children:
   - {fileID: 4463186214734444}
   - {fileID: 4197503785638852}
+  - {fileID: 4785478127332154}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

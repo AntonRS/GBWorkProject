@@ -31,6 +31,18 @@ public class TerrainGeneratorController : MonoBehaviour
     public GameObject Generator { get { return _generatorTerrainParent; } }
     public List<GameObject> RoadTiles { get { return _roadTiles; } }
 
+    private Transform _enemiesSpawnPoint;
+    private Transform _enemiesDestinationPoint;
+
+    /// <summary>
+    /// Точка спавна противников
+    /// </summary>
+    public Transform EnemiesSpawnPoint { get { return _enemiesSpawnPoint; } }
+
+    /// <summary>
+    /// Точка, до которой противники стараются добраться
+    /// </summary>
+    public Transform EnemiesDestinationPoint { get { return _enemiesDestinationPoint; } }
 
     private const float NavMeshBuildDelay = 0.1f;//пауза перед генерацией навмеша, чтобы тайлы успели удалиться перед собственно генерацией
 
@@ -49,6 +61,9 @@ public class TerrainGeneratorController : MonoBehaviour
             _roadTiles = _generator.GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);
 
         GenerateNavMesh();
+
+        _enemiesSpawnPoint = _generator.GetEnemiesSpawnPoint();
+        _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();        
     }
 
     public void DestroyTerrain()
@@ -58,6 +73,9 @@ public class TerrainGeneratorController : MonoBehaviour
         GenerateNavMesh();
 
         _roadTiles.Clear();
+
+        _enemiesSpawnPoint = null;
+        _enemiesDestinationPoint = null;        
     }
 
     private void GenerateNavMesh()

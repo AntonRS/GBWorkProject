@@ -15,19 +15,29 @@ namespace Game
         [Tooltip("Ширина расположенных по краям экрана секторов, при попадании в которых курсора мыши камера двигается в соответствующем направлении")]
         [SerializeField]
         [Range(0.01f, 0.3f)]
-        private float _mouseMoveSideTriggerWidth;
+        private float _mouseMoveSideTriggerWidthPC;
 
         [SerializeField]
-        private float _cameraMoveSpeed;
+        private float _cameraMoveSpeedAndroid;
 
         [SerializeField]
-        private float _zoomSpeed;
+        private float _zoomSpeedAndroid;
+
+        [SerializeField]
+        private float _cameraMoveSpeedPC;
+
+        [SerializeField]
+        private float _zoomSpeedPC;
 
         [SerializeField]
         private float _zoomMinCamHeight;
 
         [SerializeField]
         private float _zoomMaxCamHeight;
+
+
+        private float _cameraMoveSpeed;
+        private float _zoomSpeed;
 
         private CameraMovementModule _cameraMovementModule;
         private ICameraMovementInput _cameraInputModule;
@@ -43,14 +53,18 @@ namespace Game
 
             //выбираем модуль ввода в зависимости от платформы
 #if UNITY_ANDROID
-            _cameraInputModule = null;
+                        _cameraInputModule = new CameraMovementInputAndroid(0f);
+                         _cameraMoveSpeed = _cameraMoveSpeedAndroid;
+                        _zoomSpeed = _zoomSpeedAndroid;
 #else
-            _cameraInputModule = new CameraMovementInputWindowsPC(_mouseMoveSideTriggerWidth);
+            _cameraInputModule = new CameraMovementInputWindowsPC(_mouseMoveSideTriggerWidthPC);
+            _cameraMoveSpeed = _cameraMoveSpeedPC;
+            _zoomSpeed = _zoomSpeedPC;
 #endif
-                       
+            
         }
-        
-        
+
+
         //не забыть выключить, когда мы в главном меню, а не в основной игре
         //проще всего это сделать, задизейблив скрипт при выходе в меню
         void Update()

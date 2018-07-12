@@ -364,6 +364,41 @@ namespace Game.TerrainGeneration
             }
 
         }
+
+        /// <summary>
+        /// Возвращает точку спавна противников
+        /// </summary>
+        /// <returns></returns>
+        public Transform GetEnemiesSpawnPoint()
+        {
+
+            foreach (Transform child in _roadTiles[0].transform)
+            {
+                if (child.tag == "Enemies_SpawnPoint")
+                    return child;
+            }
+
+            return null;
+
+        }
+
+        /// <summary>
+        /// Возвращает точку, до которой противники стараются добраться
+        /// </summary>
+        /// <returns></returns>
+        public Transform GetEnemiesDestinationPoint()
+        {
+
+            foreach (Transform child in _roadTiles[_roadTiles.Count - 1].transform)
+            {
+                if (child.tag == "Enemies_DestinationPoint")
+                    return child;
+            }
+
+            return null;
+
+        }
+
     }
 
 }
