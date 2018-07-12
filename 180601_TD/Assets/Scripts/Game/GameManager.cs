@@ -27,7 +27,7 @@ namespace Game
 
         private float _countdown;
         private int _waveIndex = 0;
-        private bool _isCountingDown = true;/// ДЛЯ ТЕСТА
+        private bool _isCountingDown = false;
         private int _currentLives;
         private int _currentMoney;
 
