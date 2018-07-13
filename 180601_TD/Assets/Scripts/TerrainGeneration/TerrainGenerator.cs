@@ -2,27 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Game.Enemy;
 
 namespace Game.TerrainGeneration
 {
 
-    public class TerrainGenerator : Singleton<TerrainGenerator>
+    public class TerrainGenerator : IMapGenerator
     {
-        
-        [Header("Префабы для тайлов")]
-        
 
-        [SerializeField]
+        private GameObject _terrainParent;
+
+        public GameObject TerrainParent
+        {
+            get
+            {
+                return _terrainParent;
+            }
+        }
+
         private GameObject _towerPlatform;
-
-        [SerializeField]
         private GameObject _roadStartPrefab;
-
-        [SerializeField]
         private GameObject _roadFinishPrefab;
-
-        [SerializeField]
+                
         private GameObject[] _roadTilesPrefabs;
 
         private List<GameObject> _roadTiles = new List<GameObject>();
@@ -33,61 +33,82 @@ namespace Game.TerrainGeneration
         private Vector3 _currentTileCenter;
 
         private const float DistanceSqrMagnitude = 1f;//число для сравнения местоположения. Если (точкаА - точкаБ).sqrMagnitude < _distanceSqrMagnitude, считаем, что эти точки находятся в одном и том же месте.
-        private const int MaxAttemptsToBuildMap = 10;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл.
+        private const int MaxAttemptsToBuildMap = 25;//предел для количества попыток построить карту. Просто на всякий случай, чтобы не попасть в бесконечный цикл. Если оказывается так, что и на последний раз карту построить не удаётся, просто финальный тайл ставится на месте того, который вызывал проблемы в последний раз. Таким образом в крайне редких случаях карта может не соответствовать параметрам (быть значительно короче).
         private const float TileFlipDegrees = 90f;//на сколько градусов поворачиваем тайл
         private const int TileMaxFlipTimes = 3;//сколько раз максимум поворачиваем тайл
-        private const float NavMeshBuildDelay = 0.1f;//пауза перед генерацией навмеша, чтобы тайлы успели удалиться перед собственно генерацией
+        
 
         private const string TileConnectionPointObjTag = "Tile_ConnectionPoint";
         private const string TileTowerPlatformSpawnPointObjTag = "Tile_TowerPlatformSpawnPoint";
 
+        
+        private float _bordersOffset; // отступ от границ. может, и не пригодится
+        
 
-
-        private NavMeshSurface _navMeshSurface;
-
-        public void Init()
+        /// <summary>
+        /// Создаёт объект класса TerrainGenerator для генерации дороги. Принимает находящийся на сцене GameObject, в детях которого будет строится дорога.
+        /// </summary>
+        /// <param name="terrainParent"></param>
+        public TerrainGenerator(GameObject terrainParent)
         {
-            _navMeshSurface = GetComponent<NavMeshSurface>();
+            _terrainParent = terrainParent;         
         }
 
         /// <summary>
-        /// Генерирует карту рандомной длины в заданных рамках.
+        /// Загружает тайлсет с элементами, из которых будет генерироваться дорога.
+        /// </summary>
+        /// <param name="tileset"></param>
+        public void LoadTilePrefabs (TerrainTilesetData tileset)
+        {
+            _towerPlatform = tileset.TowerPlatform;
+            _roadStartPrefab = tileset.RoadStartPrefab;
+            _roadFinishPrefab = tileset.RoadFinishPrefab;
+            _roadTilesPrefabs = tileset.RoadTilesPrefabs;
+        }
+
+        /// <summary>
+        /// Загружает префабы, из которых будет генерироваться дорога.
+        /// </summary>
+        /// <param name="tileset"></param>
+        public void LoadTilePrefabs (GameObject towerPlatform, GameObject roadStartPrefab, GameObject roadFinishPrefab, GameObject[] roadTilesPrefabs)
+        {
+            _towerPlatform = towerPlatform;
+            _roadStartPrefab = roadStartPrefab;
+            _roadFinishPrefab = roadFinishPrefab;
+            _roadTilesPrefabs = roadTilesPrefabs;
+        }
+
+        /// <summary>
+        /// Генерирует карту рандомной длины в заданных рамках. Возвращает List<GameObject>, содержащий все тайлы дороги. Из них первый (с индексом 0) - стартовая зона, а последний (с индексом length - 1) - финишная зона.
         /// </summary>
         /// <param name="minRoadTiles">Минимальное количество тайлов дороги, не считая стартового и конечного.</param>
         /// <param name="maxRoadTiles">Максимальное количество тайлов дороги, не считая стартового и конечного.</param>
         /// <param name="towerPlatformsCount">Количество платформ под башни.</param>
-        public void GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount)
+        public List<GameObject> GenerateTerrain(int minRoadTiles, int maxRoadTiles, int towerPlatformsCount)
         {
 
             for (int i = 0; i < MaxAttemptsToBuildMap; i++)
             {
-                if (!TryGenerateRoad(minRoadTiles, maxRoadTiles))
-                {
-                    Debug.Log("Не получилось построить карту. Осталось " + (MaxAttemptsToBuildMap - i - 1) + " попыток.");
+                if (!TryGenerateRoad(minRoadTiles, maxRoadTiles, i))
+                {                    
                     DestroyRoad();
                 }
                 else
-                {
-                    Debug.Log("Дорога успешно построена.");
-                    PlaceTowerPlatforms(towerPlatformsCount);
-                    GenerateNavMesh();
-                    
-                    return;
-                }
+                    break;
             }
 
-            Debug.Log("Не получилось построить карту. Попробуйте уменьшить её максимальную длину.");
+            PlaceTowerPlatforms(towerPlatformsCount);
+            return _roadTiles;
 
         }
 
+        //возможно, в данной реализации метод избыточен, ибо только вызывает DestroyRoad() и больше ничего не делает
         /// <summary>
-        /// Уничтожает созданную карту и прилагающиеся к ней объекты и компоненты (например, навмеш)
+        /// Уничтожает созданную карту и прилагающиеся к ней объекты и компоненты.
         /// </summary>
         public void DestroyTerrain()
         {
             DestroyRoad();
-            GenerateNavMesh();
-            
         }
 
         /// <summary>
@@ -97,17 +118,17 @@ namespace Game.TerrainGeneration
         {
             _roadTiles.Clear();
 
-            foreach (Transform child in transform)
-                Destroy(child.gameObject);                        
+            foreach (Transform child in _terrainParent.transform)
+                Object.Destroy(child.gameObject);                        
         }
 
         /// <summary>
         /// Пробует сгенерировать дорогу. Возвращает истину, если построить дорогу удалось, ложь - если нет.
         /// </summary>
         /// <returns></returns>
-        private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles)
+        private bool TryGenerateRoad(int minRoadTiles, int maxRoadTiles, int attemptIndex)
         {
-            _currentTileCenter = transform.position;
+            _currentTileCenter = _terrainParent.transform.position;
 
             //устанавливаем начальный тайл и начальные точки
             _roadTiles.Add(InstantiateTileAtCurrentCenter(_roadStartPrefab).gameObject);
@@ -117,16 +138,18 @@ namespace Game.TerrainGeneration
             _currentTileCenter = FindNextCenterPoint(_currentConnectionPointPos);
 
             //дорога
-            if (!TryPlaceRoadTiles(Random.Range(minRoadTiles, maxRoadTiles + 1)))
+            if (
+                    !TryPlaceRoadTiles(Random.Range(minRoadTiles, maxRoadTiles + 1))
+                    && (attemptIndex < MaxAttemptsToBuildMap - 1) //если так и не получается построить дорогу, то на последней попытке просто ставим конечный тайл на место последнего, который не смогли установить
+               )
                 return false;
 
+
             //конечный тайл
-            var finish = Instantiate(_roadFinishPrefab, transform);
-            _roadTiles.Add(finish);
-            //_roadTiles.Add(Instantiate(_roadFinishPrefab, transform));
+            _roadTiles.Add(Object.Instantiate(_roadFinishPrefab, _terrainParent.transform));
             _roadTiles[_roadTiles.Count - 1].transform.position = _currentTileCenter;
             FlipUntilConnected(_roadTiles[_roadTiles.Count - 1].transform, FindConnectionPoint(_roadTiles[_roadTiles.Count - 1].transform));
-            GameManager.Instance.GetEnemiesController.destination = finish.transform;
+
             return true;
 
         }
@@ -194,7 +217,7 @@ namespace Game.TerrainGeneration
             //проверили обе точки. Если пересечение осталось, уничтожаем тайл и выходим из метода возвратом нулл.
             if (willBeBlocked)
             {
-                Destroy(tile.gameObject);
+                Object.Destroy(tile.gameObject);
                 return null;
             }
 
@@ -233,7 +256,7 @@ namespace Game.TerrainGeneration
         /// <returns></returns>
         private Transform InstantiateTileAtCurrentCenter(GameObject prefab)
         {
-            Transform tile = Instantiate(prefab, transform).transform;
+            Transform tile = Object.Instantiate(prefab, _terrainParent.transform).transform;
             tile.position = _currentTileCenter;
             tile.eulerAngles = new Vector3(0, Random.Range(0, TileMaxFlipTimes + 1) * TileFlipDegrees, 0);
             return tile;
@@ -335,33 +358,47 @@ namespace Game.TerrainGeneration
 
             for (int i = 0; i < towerPlatformsCount; i++)
             {
-                towerPlatforms[i] = Instantiate(_towerPlatform, spawnPoints[i].transform);
+                towerPlatforms[i] = Object.Instantiate(_towerPlatform, spawnPoints[i].transform);
                 towerPlatforms[i].transform.position = spawnPoints[i].transform.position;
                 towerPlatforms[i].transform.rotation = Quaternion.identity;
             }
 
         }
-        
-        private void GenerateNavMesh()
-        {
-            //если ранее по ходу выполнения скрипта применялся метод DestroyRoad()
-            //, тайлы не успеют удалится до того как навмеш построится
-            //, поэтому делаю отложенный вызов
 
-            Invoke(TempGenNavMesh, NavMeshBuildDelay);
+        /// <summary>
+        /// Возвращает точку спавна противников
+        /// </summary>
+        /// <returns></returns>
+        public Transform GetEnemiesSpawnPoint()
+        {
+
+            foreach (Transform child in _roadTiles[0].transform)
+            {
+                if (child.tag == "Enemies_SpawnPoint")
+                    return child;
+            }
+
+            return null;
+
         }
 
-        private void TempGenNavMesh()
+        /// <summary>
+        /// Возвращает точку, до которой противники стараются добраться
+        /// </summary>
+        /// <returns></returns>
+        public Transform GetEnemiesDestinationPoint()
         {
-            _navMeshSurface.BuildNavMesh();
+
+            foreach (Transform child in _roadTiles[_roadTiles.Count - 1].transform)
+            {
+                if (child.tag == "Enemies_DestinationPoint")
+                    return child;
+            }
+
+            return null;
+
         }
 
-        private void Invoke(Action method, float time)
-        {
-            Invoke(method.Method.Name, time);
-        }
-        delegate void Action();
-        
     }
 
 }

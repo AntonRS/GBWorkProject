@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 031e2f4e66af9824ca0c78969d677f53, type: 3}
+  m_Name: Designer1_8x8_tileset
+  m_EditorClassIdentifier: 
+  TowerPlatform: {fileID: 1689141493110342, guid: 77147deb1da63354db9c95f81054352b,
+    type: 2}
+  RoadStartPrefab: {fileID: 1339802236793526, guid: a62e719f1e98e0c4a84550ea570a7ccc,
+    type: 2}
+  RoadFinishPrefab: {fileID: 1715366674319822, guid: 32cf7f57d5fb90946a99e99c06ad778b,
+    type: 2}
+  RoadTilesPrefabs:
+  - {fileID: 1441676478120758, guid: 7d16411e4f6828b4baf33b814ff74faf, type: 2}
+  - {fileID: 1599508685789952, guid: 77b8a8039e7ff2340836ba4b19fab69d, type: 2}
+  - {fileID: 1621738499722160, guid: 4d54dea2688ed4342b89223911ffa7b8, type: 2}
+  - {fileID: 1837753654072646, guid: f4abdc0cbdb7d9b4ba5a5bfbff2358e1, type: 2}
+  - {fileID: 1996758112448888, guid: d3de8589f13677e48b2c94f72780e792, type: 2}

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Game.Enemy
 {
-    public class EnemiesController :MonoBehaviour
+    public class EnemiesController:MonoBehaviour
     {
+        
         [HideInInspector] public List<BaseEnemy> enemies;
         [HideInInspector]
         public Transform destination;
@@ -47,10 +48,15 @@ namespace Game.Enemy
         }
         public void ClearSpawnerList()
         {
-            
-            
                 spawners.Clear();
-            
+        }
+        public void SetDestination(Transform destination)
+        {
+            this.destination = destination;
+        }
+        public void SetSpawner(Transform spawnerPosition)
+        {
+            spawnerPosition.gameObject.AddComponent<EnemySpawner>();
         }
 
     }

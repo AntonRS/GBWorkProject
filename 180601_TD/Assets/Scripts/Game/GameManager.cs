@@ -33,13 +33,13 @@ namespace Game
 
         public TowersManager GetTowersManager { get; private set; }
         public EnemiesController GetEnemiesController { get; private set; }
-        public TerrainGenerator GetTerrainGenerator { get; private set; }
+        public TerrainGeneratorController GetTerrainGenerator { get; private set; }
 
         private void Awake()
         {
             GetTowersManager = FindObjectOfType<TowersManager>();
             GetEnemiesController = FindObjectOfType<EnemiesController>();
-            GetTerrainGenerator = FindObjectOfType<TerrainGenerator>();
+            GetTerrainGenerator = FindObjectOfType<TerrainGeneratorController>();
         }
         
 
@@ -73,7 +73,7 @@ namespace Game
         }
         public void FinishGame()
         {
-            TerrainGeneratorController.Instance.DestroyTerrain();
+            GetTerrainGenerator.DestroyTerrain();
             _waveIndex = 0;
             GetEnemiesController.ClearEnemyList();
             GetEnemiesController.ClearSpawnerList();
@@ -85,7 +85,9 @@ namespace Game
         }
         public void StartGame()
         {
-            TerrainGeneratorController.Instance.GenerateTerrain();
+            GetTerrainGenerator.GenerateTerrain();
+            GetEnemiesController.SetDestination(GetTerrainGenerator.EnemiesDestinationPoint);
+            GetEnemiesController.SetSpawner(GetTerrainGenerator.EnemiesSpawnPoint);
             _currentMoney = startMoney;
             _currentLives = startLives;
             _countdown = timeBetweenWaves;
