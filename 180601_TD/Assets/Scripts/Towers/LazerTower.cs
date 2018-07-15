@@ -4,7 +4,7 @@ using Game.Enemy;
 namespace Game.Towers
 {
     /// <summary>
-    /// Класс, отвечающий за работу башни, стреляющей лазером.
+    /// Содержит логику и параметры работы лазерной башни.
     /// Требует наличие компонента LineRenderer.
     /// Наследуется от BaseTower.
     /// </summary>
@@ -176,9 +176,6 @@ namespace Game.Towers
             _lazer = GetComponent<LineRenderer>();
             _lazer.enabled = false;
             _chainTargets = new List<BaseEnemy>();
-
-
-
         }
         #endregion
 

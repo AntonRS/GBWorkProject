@@ -12,7 +12,8 @@ namespace Game
     public class CameraMovementController : MonoBehaviour
     {
 
-        [Tooltip("Ширина расположенных по краям экрана секторов, при попадании в которых курсора мыши камера двигается в соответствующем направлении")]
+        [Tooltip("Ширина расположенных по краям экрана секторов," +
+                " при попадании в которых курсора мыши камера двигается в соответствующем направлении")]
         [SerializeField]
         [Range(0.01f, 0.3f)]
         private float _mouseMoveSideTriggerWidthPC;
@@ -69,7 +70,6 @@ namespace Game
         //проще всего это сделать, задизейблив скрипт при выходе в меню
         void Update()
         {
-
             _cameraInputModule.GetInput(ref _cameraMovementVector, ref _cameraZoomValue);
 
             if (_cameraMovementVector != Vector3.zero)
