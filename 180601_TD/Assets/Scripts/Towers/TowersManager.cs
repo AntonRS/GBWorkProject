@@ -14,7 +14,7 @@ namespace Game.Towers
             if (rocketTowers.Length!=0)
             {
                 var newRocketTower = Instantiate(rocketTowers[0], buildBase.position, buildBase.rotation);
-                //newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
                 Destroy(buildBase.gameObject);
             }
             else
@@ -28,7 +28,7 @@ namespace Game.Towers
             if (rocketTowers.Length != 0)
             {
                 var newRocketTower = Instantiate(lazerTowers[0], buildBase.position, buildBase.rotation);
-                //newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
                 Destroy(buildBase.gameObject);
             }
             
@@ -42,7 +42,7 @@ namespace Game.Towers
             if (rocketTowers.Length != 0)
             {
                 var newRocketTower = Instantiate(gunTowers[0], buildBase.position, buildBase.rotation);
-                //newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
                 Destroy(buildBase.gameObject);
             }
             else

@@ -8,21 +8,22 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1206276342374496}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1206276342374496
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4783281118429970}
   - component: {fileID: 114102910901899718}
   - component: {fileID: 114327617489180332}
   - component: {fileID: 114989773696972730}
   - component: {fileID: 114191366621514202}
+  - component: {fileID: 114632118651905236}
   m_Layer: 0
   m_Name: CommandUI
   m_TagString: Untagged
@@ -33,7 +34,7 @@ GameObject:
 --- !u!4 &4783281118429970
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206276342374496}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -46,7 +47,7 @@ Transform:
 --- !u!114 &114102910901899718
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206276342374496}
   m_Enabled: 1
@@ -57,7 +58,7 @@ MonoBehaviour:
 --- !u!114 &114191366621514202
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206276342374496}
   m_Enabled: 1
@@ -65,13 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a2f32cc6d2047b18348395068ae662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovedObject: {fileID: 0}
-  MaxMoveSphereRadius: 50
+  MaxDragSphereRadius: 50
   HoverHeight: 3
 --- !u!114 &114327617489180332
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206276342374496}
   m_Enabled: 1
@@ -80,10 +80,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _marker: {fileID: 0}
+--- !u!114 &114632118651905236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1206276342374496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63de5d10d70644a348bb77ef8aca9386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Color: {r: 0.3, g: 1, b: 0.3, a: 0.34117648}
 --- !u!114 &114989773696972730
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206276342374496}
   m_Enabled: 1
@@ -91,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3b3772a3f0c422480d76bec659d68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 2
+  Height: 6
   GlobalActuatorObject: {fileID: 0}
   MenuDefinitionItems:
   - ObjectType: 0

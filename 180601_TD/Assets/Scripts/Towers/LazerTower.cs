@@ -149,7 +149,7 @@ namespace Game.Towers
                 _lvl += 1;
                 var tower = GameManager.Instance.GetTowersManager.lazerTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
-                //newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
             }
         }
         /// <summary>
