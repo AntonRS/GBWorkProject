@@ -24,6 +24,7 @@
 		NPCUnit,
 		BuildableTerrain,
 		SelectableTerrain,
+        NotUpgradeble,
 
 		// должен быть последним типом в перечислении
 		None

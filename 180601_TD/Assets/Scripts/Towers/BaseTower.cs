@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 using Game.Enemy;
+using Game.CommandUI;
 namespace Game.Towers
 {
     /// <summary>
     /// Содержит логику и параметры абстрактной башни.
     /// </summary>
-    public abstract class BaseTower : MonoBehaviour
+    public abstract class BaseTower : MonoBehaviour, IRangeMarkerAssignee, ICommandButtonActuator
     {
         /// <summary>
         /// Текущий уровень башни.
@@ -21,13 +23,17 @@ namespace Game.Towers
         /// </summary>
         [SerializeField] protected int _cost;
         /// <summary>
+        /// Цена продажи башни.
+        /// </summary>
+        [SerializeField] protected int _sellCost;
+        /// <summary>
         /// Урон. Зависит от типа _attackType.
         /// </summary>
         [SerializeField] protected int _damage;
         /// <summary>
         /// Радиус атаки.
         /// </summary>
-        [SerializeField] protected float _attackRange;
+        public float AttackRange;
         /// <summary>
         /// Какой тип врагов может атаковать башня.
         /// </summary>
@@ -66,6 +72,41 @@ namespace Game.Towers
         /// </summary>
         private const float searchingTime = 0.5f;
         protected List<BaseEnemy> _targets;
+
+
+
+        protected Nullable<float> _fakeRange = null;
+        public bool TestCommandButtonShouldShow(CommandType ofType, CommandButton viaButton)
+        {
+            return _lvl <= _maxLvl;
+            
+        }
+        public abstract void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton);
+        
+        public void PreviewCommandEnd(CommandType ofType, GameObject forObject, CommandButton viaButton)
+        {
+            
+            this._fakeRange = null;
+            //viaButton.Meta = null;
+        }
+        public void ExecuteCommand(CommandType ofType, GameObject forObject, CommandButton viaButton)
+        {
+            if (ofType == CommandType.Upgrade)
+            {
+                _fakeRange = null;
+                UpgradeTower();
+                Destroy(gameObject);
+            }
+            if (ofType == CommandType.Sell)
+            {
+                GameManager.Instance.GetTowersManager.SellTower(transform, _sellCost);
+                Destroy(gameObject);
+            }
+        }
+        public float OnRangeRequested()
+        {
+            return this._fakeRange ?? this.AttackRange;
+        }
 
 
         #region Unity Functions
@@ -108,6 +149,7 @@ namespace Game.Towers
             
             if (_targets.Count > 0)
             {
+                Debug.Log(_targets.Count);
                 float shortestDistance = Mathf.Infinity;
                 BaseEnemy nearestEnemy = null;
 
@@ -116,12 +158,13 @@ namespace Game.Towers
                     {
                         
                         float distanceToDestination = enemy.Agent.remainingDistance;
-                        
+                        Debug.Log(distanceToDestination);
                         if (distanceToDestination < shortestDistance)
                         {
                             shortestDistance = distanceToDestination;
                             nearestEnemy = enemy;
                             _target = nearestEnemy;
+                            Debug.Log(_target);
                         }
                     }
                 }
@@ -130,8 +173,9 @@ namespace Game.Towers
         }
         protected virtual void UpdateTarget()
         {
-            FindEnemiesInRange(transform.position, _attackRange);
+            FindEnemiesInRange(transform.position, AttackRange);
             FindClosestToDestinationEnemy();
+            
         }
 
         /// <summary>
@@ -157,7 +201,7 @@ namespace Game.Towers
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
             _damageInfo.AttackingTower = this;
-            //_maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
+            _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
         }
         #endregion
         #region Editor Functions
@@ -167,7 +211,7 @@ namespace Game.Towers
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, _attackRange);
+            Gizmos.DrawWireSphere(transform.position, AttackRange);
         }
         #endregion
         
