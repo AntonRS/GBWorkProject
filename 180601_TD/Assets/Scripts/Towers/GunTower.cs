@@ -1,10 +1,23 @@
 ﻿using UnityEngine;
 using Game.Enemy;
+using Game.CommandUI;
 namespace Game.Towers
 {
     public class GunTower : BaseTower
     {
         [SerializeField] private int _speedreduction;
+
+
+        public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
+        {
+            if (ofType == CommandType.Upgrade)
+            {
+
+                viaButton.gameObject.SetActive(true);
+                _fakeRange = GameManager.Instance.GetTowersManager.gunTowers[_lvl + 1].AttackRange;
+               
+            }
+        }
 
         private void SetDamage(DamageInfo damageInfo)
         {

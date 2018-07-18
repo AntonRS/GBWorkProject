@@ -458,6 +458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lvl: 3
   _cost: 0
+  _sellCost: 0
   _damage: 30
   AttackRange: 20
   _canAttack: 01000000
@@ -476,7 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0003befc4e7448b96c6d5ffeb2d917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectType: 2
+  ObjectType: 8
 --- !u!120 &120627758794875342
 LineRenderer:
   m_ObjectHideFlags: 1

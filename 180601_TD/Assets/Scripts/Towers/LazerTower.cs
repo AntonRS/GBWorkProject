@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Game.Enemy;
+using Game.CommandUI;
 namespace Game.Towers
 {
     /// <summary>
@@ -39,7 +40,18 @@ namespace Game.Towers
 
         private List<BaseEnemy> _chainTargets;
 
-      
+
+        public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
+        {
+            if (ofType == CommandType.Upgrade)
+            {
+
+                viaButton.gameObject.SetActive(true);
+                _fakeRange = GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].AttackRange;
+                
+            }
+        }
+
         #region LazerTower Functions
 
         /// <summary>
@@ -48,7 +60,9 @@ namespace Game.Towers
         protected override void UpdateTarget()
         {
             base.UpdateTarget();
+            
             FillTargetsList();
+            
         }
         private void FillTargetsList()
         {
@@ -122,8 +136,10 @@ namespace Game.Towers
         /// </summary>
         protected override void Fire()
         {
+            
             if (_chainTargets.Count > 0)
             {
+                Debug.Log("Fire");
                 SetDamage(_damageInfo);
                 _lazer.enabled = true;
                 _lazer.positionCount = _chainTargets.Count + 1;

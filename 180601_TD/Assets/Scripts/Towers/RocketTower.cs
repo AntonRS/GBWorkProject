@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Game.Enemy;
+using Game.CommandUI;
 namespace Game.Towers
 {
     /// <summary>
@@ -35,6 +36,19 @@ namespace Game.Towers
         /// Время до создания следующей ракеты.
         /// </summary>
         private const float _timeBetweenMisslesSpawn = 0.2f;
+
+        public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
+        {
+            if (ofType == CommandType.Upgrade)
+            {
+
+                viaButton.gameObject.SetActive(true);
+                _fakeRange = GameManager.Instance.GetTowersManager.rocketTowers[_lvl + 1].AttackRange;
+                
+            }
+        }
+
+
         /// <summary>
         /// Логика стрельбы башни с ракетами. 
         /// Башня выпускает несколько ракет в зависимости от уровня прокачки.
@@ -82,7 +96,7 @@ namespace Game.Towers
                 var tower = GameManager.Instance.GetTowersManager.rocketTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
                 newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
-                
+
             }
         }
         /// <summary>
