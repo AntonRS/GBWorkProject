@@ -19,49 +19,44 @@ namespace Game.Towers
 
         public void BuildRocketTower(Transform buildBase)
         {
-            if (rocketTowers.Length!=0)
+            if (GameManager.Instance.CurrentMoney>= rocketTowers[0].Cost)
             {
                 var newRocketTower = Instantiate(rocketTowers[0], buildBase.position, buildBase.rotation);
                 newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                GameManager.Instance.UpdateMoney(-rocketTowers[0].Cost);
                 Destroy(buildBase.gameObject);
             }
-            else
-            {
-                throw new System.NullReferenceException("Нет префаба для строительства RocktTower");
-            }
+            
             
         }
         public void BuildLazerTower(Transform buildBase)
         {
-            if (rocketTowers.Length != 0)
+            if (GameManager.Instance.CurrentMoney >= lazerTowers[0].Cost)
             {
                 var newRocketTower = Instantiate(lazerTowers[0], buildBase.position, buildBase.rotation);
                 newRocketTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                GameManager.Instance.UpdateMoney(-lazerTowers[0].Cost);
                 Destroy(buildBase.gameObject);
             }
             
-            else
-            {
-                throw new System.NullReferenceException("Нет префаба для строительства LazerTower");
-            }
         }
         public void BuildGunTower(Transform buildBase)
         {
-            if (rocketTowers.Length != 0)
+            if (GameManager.Instance.CurrentMoney >= gunTowers[0].Cost)
             {
                 var newRocketTower = Instantiate(gunTowers[0], buildBase.position, buildBase.rotation);
                 newRocketTower.transform.SetParent(_buildTransform);
+                GameManager.Instance.UpdateMoney(-gunTowers[0].Cost);
                 Destroy(buildBase.gameObject);
+                
             }
-            else
-            {
-                throw new System.NullReferenceException("Нет префаба для строительства GunTower");
-            }
+            
         }
         public void SellTower(Transform buildPosition, int sellValue)
         {
             var newBuildBase = Instantiate(_towerBuildBase, buildPosition.position, buildPosition.rotation);
             newBuildBase.transform.SetParent(_buildTransform);
+            GameManager.Instance.UpdateMoney(sellValue);
         }
 
 

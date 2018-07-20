@@ -84,6 +84,7 @@ namespace Game.Towers
                 if (dir.magnitude <= distanceThisFrame)
                 {
                     HitTarget();
+                    
                     return;
                 }
                 transform.Translate(dir.normalized * distanceThisFrame, Space.World);
@@ -97,17 +98,11 @@ namespace Game.Towers
             Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
             foreach (Collider nearbyObject in colliders)
             {
-                Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
                 BaseEnemy enemy = nearbyObject.GetComponent<BaseEnemy>();
-                if (rb!=null)
-                {
-                    ///rb.AddExplosionForce(_explosionFore, transform.position, _explosionRadius,1);
-                    SetDamage(enemy);
-                    
-                }
+                SetDamage(enemy);
             }
             Destroy(gameObject);
-            if (_hitImpact == null)
+            if (_hitImpact != null)
             {
                 var tempImpact = Instantiate(_hitImpact, transform.position, transform.rotation);
                 Destroy(tempImpact, 2f);

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using Game.Towers;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -169,6 +169,8 @@ namespace Game.CommandUI
                 {
                     button.Actuator = selectedObject.GetComponent<ICommandButtonActuator>();
                     button.TargetObject = selectedObject;
+                    button.SetValues();
+
                 });
 
             this._menu.SetActive(true);

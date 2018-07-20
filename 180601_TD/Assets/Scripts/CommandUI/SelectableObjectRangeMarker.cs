@@ -122,7 +122,7 @@ namespace Game.CommandUI
                 this._target.transform.localScale.x,
                 SelectableObjectRangeMarker._squeezeY,
                 this._target.transform.localScale.z);
-            this._range.transform.localScale *= this._component.OnRangeRequested();
+            this._range.transform.localScale *= this._component.OnRangeRequested()*2;
             this._range.SetActive(true);
         }
 

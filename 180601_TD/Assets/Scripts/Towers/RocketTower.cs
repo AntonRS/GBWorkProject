@@ -37,6 +37,19 @@ namespace Game.Towers
         /// </summary>
         private const float _timeBetweenMisslesSpawn = 0.2f;
 
+
+
+        public override int? GetUpgradeCost()
+        {
+            if (_lvl < GameManager.Instance.GetTowersManager.rocketTowers.Length)
+            {
+                return GameManager.Instance.GetTowersManager.rocketTowers[_lvl + 1].Cost;
+            }
+            else return null;
+        }
+
+
+
         public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (ofType == CommandType.Upgrade)
@@ -90,12 +103,14 @@ namespace Game.Towers
         /// </summary>
         public override void UpgradeTower()
         {
-            if (_lvl < _maxLvl)
+            if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= GetUpgradeCost())
             {
                 _lvl += 1;
                 var tower = GameManager.Instance.GetTowersManager.rocketTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
                 newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                GameManager.Instance.UpdateMoney(-Cost);
+                Destroy(gameObject);
 
             }
         }
@@ -120,6 +135,7 @@ namespace Game.Towers
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();
+            _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
             _misslesCountInOneAttack = _lvl + 1;
         }
         #endregion

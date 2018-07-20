@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Collections;
+using Game.Towers;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +21,47 @@ namespace Game.CommandUI
     /// </summary>
     public class CommandButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        public TextMesh _costText;
+
+        public void SetValues()
+        {
+            
+            if (_commandType == CommandType.Upgrade)
+            {
+                var cost = TargetObject.GetComponent<BaseTower>().GetUpgradeCost().ToString();
+                if (cost != null)
+                {
+                    _costText.text = cost.ToString();
+                }
+                else
+                {
+                    _costText.text = string.Empty;
+                }
+            }
+            if (_commandType == CommandType.Build)
+            {
+                if (Meta == "BuildRocketTower")
+                {
+                    _costText.text = GameManager.Instance.GetTowersManager.rocketTowers[0].Cost.ToString();
+                }
+                if (Meta == "BuildLazerTower")
+                {
+                    _costText.text = GameManager.Instance.GetTowersManager.lazerTowers[0].Cost.ToString();
+                }
+                if (Meta == "BuildGunTower")
+                {
+                    _costText.text = GameManager.Instance.GetTowersManager.gunTowers[0].Cost.ToString();
+                }
+            }
+            if (_commandType == CommandType.Sell)
+            {
+                _costText.text = TargetObject.GetComponent<BaseTower>().SellCost.ToString();
+            }
+        }
+        
+
+
+
         /// <summary>
         /// Ссылка на объект, реализующий интерфейс ICommandButtonActuator для этой кнопки
         /// на игровой сцене

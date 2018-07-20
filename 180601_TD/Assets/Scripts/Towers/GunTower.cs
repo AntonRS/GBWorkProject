@@ -8,6 +8,17 @@ namespace Game.Towers
         [SerializeField] private int _speedreduction;
 
 
+        public override int? GetUpgradeCost()
+        {
+            if (_lvl < GameManager.Instance.GetTowersManager.gunTowers.Length)
+            {
+                return GameManager.Instance.GetTowersManager.gunTowers[_lvl + 1].Cost;
+            }
+            else return null;
+        }
+
+
+
         public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (ofType == CommandType.Upgrade)
@@ -33,12 +44,17 @@ namespace Game.Towers
         }
         public override void UpgradeTower()
         {
-            if (_lvl < _maxLvl)
+            
+            if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= GetUpgradeCost()) 
             {
+                
                 _lvl += 1;
+                
                 var tower = GameManager.Instance.GetTowersManager.gunTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
                 newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                GameManager.Instance.UpdateMoney(-Cost);
+                Destroy(gameObject);
             }
         }
         
@@ -57,6 +73,7 @@ namespace Game.Towers
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();
+            _maxLvl = GameManager.Instance.GetTowersManager.gunTowers.Length - 1;
             _damageInfo.SpeedReduction = _speedreduction;
         }
     }

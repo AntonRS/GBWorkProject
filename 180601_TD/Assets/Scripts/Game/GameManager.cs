@@ -19,7 +19,7 @@ namespace Game
         [Header("Game params")]
         public int minEnemiesCountInWave;
         public int maxEnemiesCountInWave;
-        public int hpModPercent;
+        public int ModPercent;
         public float timeBetweenWaves;
         [Header("Players parars")]
         public int startLives;
@@ -29,7 +29,7 @@ namespace Game
         private int _waveIndex = 0;
         private bool _isCountingDown = false;
         private int _currentLives;
-        private int _currentMoney;
+        [HideInInspector] public int CurrentMoney;
 
         public TowersManager GetTowersManager { get; private set; }
         public EnemiesController GetEnemiesController { get; private set; }
@@ -53,7 +53,7 @@ namespace Game
                 {
                     foreach (var spawner in GetEnemiesController.spawners)
                     {
-                        spawner.SpawnRandomWave(_waveIndex, minEnemiesCountInWave, maxEnemiesCountInWave, hpModPercent);
+                        spawner.SpawnRandomWave(_waveIndex, minEnemiesCountInWave, maxEnemiesCountInWave, ModPercent);
                         _waveIndex += 1;
                         _countdown = timeBetweenWaves;
 
@@ -77,7 +77,7 @@ namespace Game
             _waveIndex = 0;
             GetEnemiesController.ClearEnemyList();
             GetEnemiesController.ClearSpawnerList();
-            _currentMoney = startMoney;
+            CurrentMoney = startMoney;
             _currentLives = startLives;
             _isCountingDown = false;
             gameBar.SetActive(false);
@@ -88,17 +88,28 @@ namespace Game
             GetTerrainGenerator.GenerateTerrain();
             GetEnemiesController.SetDestination(GetTerrainGenerator.EnemiesDestinationPoint);
             GetEnemiesController.SetSpawner(GetTerrainGenerator.EnemiesSpawnPoint);
-            _currentMoney = startMoney;
+            CurrentMoney = startMoney;
             _currentLives = startLives;
             _countdown = timeBetweenWaves;
             countdownText.text += ((int)_countdown).ToString();
             livesText.text = _currentLives.ToString();
-            moneytext.text = _currentMoney.ToString();
+            moneytext.text = CurrentMoney.ToString();
             _isCountingDown = true;
             mainMenuPannel.SetActive(false);
             gameBar.SetActive(true);
 
         }
+        public void UpdateMoney(int value)
+        {
+            CurrentMoney += value;
+            moneytext.text = CurrentMoney.ToString();
+        }
+        public void UpdateLive(int value)
+        {
+            _currentLives += value;
+            livesText.text = _currentLives.ToString();
+        }
+
     }
 }
 

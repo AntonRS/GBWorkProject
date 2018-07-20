@@ -76,12 +76,16 @@ public class BuildBase : MonoBehaviour, IRangeMarkerAssignee, ICommandButtonActu
                 case "BuildRocketTower":
                     GameManager.Instance.GetTowersManager.BuildRocketTower(transform);
                     
+
+
                     break;
                 case "BuildLazerTower":
                     GameManager.Instance.GetTowersManager.BuildLazerTower(transform);
+                    
                     break;
                 case "BuildGunTower":
                     GameManager.Instance.GetTowersManager.BuildGunTower(transform);
+                    
                     break;
             }
         }

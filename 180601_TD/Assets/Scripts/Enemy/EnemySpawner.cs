@@ -45,6 +45,8 @@ namespace Game.Enemy
             {
                 var newEnemy = Instantiate(GetRandomEnemy(), GetRandomPosition(), Quaternion.identity);
                 newEnemy.Hp += (newEnemy.Hp/100)*(modPercent*waveIndex);
+                newEnemy.Cost += (newEnemy.Cost / 100) * (modPercent * waveIndex);
+
                 newEnemy.Destination = destination;
             }
         }

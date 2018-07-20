@@ -21,11 +21,11 @@ namespace Game.Towers
         /// <summary>
         /// Стоимость строительства/апдейта башни.
         /// </summary>
-        [SerializeField] protected int _cost;
+        public int Cost;
         /// <summary>
         /// Цена продажи башни.
         /// </summary>
-        [SerializeField] protected int _sellCost;
+        public int SellCost;
         /// <summary>
         /// Урон. Зависит от типа _attackType.
         /// </summary>
@@ -76,6 +76,10 @@ namespace Game.Towers
 
 
         protected Nullable<float> _fakeRange = null;
+
+        public abstract int? GetUpgradeCost();
+        
+
         public bool TestCommandButtonShouldShow(CommandType ofType, CommandButton viaButton)
         {
             return _lvl <= _maxLvl;
@@ -95,11 +99,11 @@ namespace Game.Towers
             {
                 _fakeRange = null;
                 UpgradeTower();
-                Destroy(gameObject);
+                
             }
             if (ofType == CommandType.Sell)
             {
-                GameManager.Instance.GetTowersManager.SellTower(transform, _sellCost);
+                GameManager.Instance.GetTowersManager.SellTower(transform, SellCost);
                 Destroy(gameObject);
             }
         }
@@ -130,6 +134,7 @@ namespace Game.Towers
         {
             
             _targets.Clear();
+            
             foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
             {
                 if (enemy != null && _canAttack.Contains(enemy.EnemyType))
@@ -149,25 +154,29 @@ namespace Game.Towers
             
             if (_targets.Count > 0)
             {
-                Debug.Log(_targets.Count);
+                
                 float shortestDistance = Mathf.Infinity;
                 BaseEnemy nearestEnemy = null;
 
                 foreach (BaseEnemy enemy in _targets)
                 {
                     {
+
+                        float distanceToDestination = enemy.GetDistance();
                         
-                        float distanceToDestination = enemy.Agent.remainingDistance;
-                        Debug.Log(distanceToDestination);
                         if (distanceToDestination < shortestDistance)
                         {
                             shortestDistance = distanceToDestination;
                             nearestEnemy = enemy;
                             _target = nearestEnemy;
-                            Debug.Log(_target);
+                            
                         }
                     }
                 }
+            }
+            else
+            {
+                _target = null;
             }
             
         }
@@ -201,7 +210,7 @@ namespace Game.Towers
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
             _damageInfo.AttackingTower = this;
-            _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
+            
         }
         #endregion
         #region Editor Functions

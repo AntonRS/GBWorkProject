@@ -41,6 +41,17 @@ namespace Game.Towers
         private List<BaseEnemy> _chainTargets;
 
 
+
+        public override  int? GetUpgradeCost()
+        {
+            if (_lvl < GameManager.Instance.GetTowersManager.lazerTowers.Length)
+            {
+                return GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].Cost;
+            }
+            else return null;
+        }
+
+
         public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (ofType == CommandType.Upgrade)
@@ -55,16 +66,16 @@ namespace Game.Towers
         #region LazerTower Functions
 
         /// <summary>
-        /// Заполняет список целей targets. Длинна списка зависит от параметра _maxTargetsCount.
+        /// Заполняет список целей _chainTargets. Длинна списка зависит от параметра _maxTargetsCount.
         /// </summary>
         protected override void UpdateTarget()
         {
             base.UpdateTarget();
             
-            FillTargetsList();
+            FillChainTargetsList();
             
         }
-        private void FillTargetsList()
+        private void FillChainTargetsList()
         {
             _chainTargets.Clear();
             BaseEnemy nearestEnemy = _target;
@@ -85,7 +96,7 @@ namespace Game.Towers
 
         }
         /// <summary>
-        /// Возвращает ближайший обьект типа BaseEnemy в заданном радиусе, не содердайщийся в списке targets.
+        /// Возвращает ближайший обьект типа BaseEnemy в заданном радиусе, не содердайщийся в списке chainTargets.
         /// </summary>
         /// <param name="startpoint">начальная точка отсчета</param>
         /// <param name="range">радиус</param>
@@ -123,7 +134,7 @@ namespace Game.Towers
         private void SetDamage(DamageInfo damageInfo)
         {
             damageInfo.Damage *= Time.deltaTime;
-            foreach (BaseEnemy enemy in _targets)
+            foreach (BaseEnemy enemy in _chainTargets)
             {
                 enemy.ApplyDamage(damageInfo);
                 damageInfo.Damage -= (damageInfo.Damage * _nextTargetDamageReductionInPercent) / 100;
@@ -139,7 +150,7 @@ namespace Game.Towers
             
             if (_chainTargets.Count > 0)
             {
-                Debug.Log("Fire");
+                
                 SetDamage(_damageInfo);
                 _lazer.enabled = true;
                 _lazer.positionCount = _chainTargets.Count + 1;
@@ -151,6 +162,7 @@ namespace Game.Towers
             }
             else
             {
+                
                 _lazer.enabled = false;
                 return;
             }
@@ -160,12 +172,14 @@ namespace Game.Towers
         /// </summary>
         public override void UpgradeTower()
         {
-            if (_lvl < _maxLvl)
+            if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].Cost)
             {
                 _lvl += 1;
                 var tower = GameManager.Instance.GetTowersManager.lazerTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
                 newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                GameManager.Instance.UpdateMoney(-Cost);
+                Destroy(gameObject);
             }
         }
         /// <summary>
@@ -173,9 +187,9 @@ namespace Game.Towers
         /// </summary>
         protected override void LookAtTarget()
         {
-            if (_rotateHead != null && _targets.Count > 0)
+            if (_rotateHead != null && _target != null)
             {
-                var direction = _targets[0].transform.position - _rotateHead.position;
+                var direction = _target.transform.position - _rotateHead.position;
                 Quaternion lookRotation = Quaternion.Lerp(_rotateHead.rotation,
                                                           Quaternion.LookRotation(direction),
                                                           Time.deltaTime * _turnSpeed);
@@ -188,6 +202,7 @@ namespace Game.Towers
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();
+            _maxLvl = GameManager.Instance.GetTowersManager.lazerTowers.Length - 1;
             _maxTargetsCount = _lvl;
             _lazer = GetComponent<LineRenderer>();
             _lazer.enabled = false;

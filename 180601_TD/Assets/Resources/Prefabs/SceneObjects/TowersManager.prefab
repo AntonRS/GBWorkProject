@@ -8,15 +8,15 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 0}
+  m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1475261564601274}
-  m_IsPrefabAsset: 1
+  m_IsPrefabParent: 0
 --- !u!1 &1475261564601274
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
+  serializedVersion: 5
   m_Component:
   - component: {fileID: 4056028490468440}
   - component: {fileID: 114391759915026640}
@@ -30,7 +30,7 @@ GameObject:
 --- !u!4 &4056028490468440
 Transform:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1475261564601274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -43,7 +43,7 @@ Transform:
 --- !u!114 &114391759915026640
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1475261564601274}
   m_Enabled: 1
@@ -69,3 +69,4 @@ MonoBehaviour:
   - {fileID: 114982682245074684, guid: 515794c5fb43bf648bcc7d7a2e84c7f5, type: 2}
   - {fileID: 114982682245074684, guid: daf9cdfdf9f82684490440ffafdb6067, type: 2}
   - {fileID: 114982682245074684, guid: b8e258a1c94247247aff2bc0f8c22555, type: 2}
+  _towerBuildBase: {fileID: 0}

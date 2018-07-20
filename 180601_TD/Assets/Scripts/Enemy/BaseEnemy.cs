@@ -41,14 +41,18 @@ namespace Game.Enemy
         /// Transform на сцене, к которому движется враг.
         /// </summary>
         [HideInInspector] public Transform Destination;
+        
+        public int Cost;
+        [SerializeField] protected int _damage;
+        protected bool _damaged = false;
 
 
         [HideInInspector] public List<BaseTower> _attackingTowers;
 
         [HideInInspector] public NavMeshAgent Agent;
         protected Animator _animator;
-        
-        protected bool _isAttacked;
+        NavMeshPath path;
+        protected bool _dead = false;
         /// <summary>
         /// Время, через которое обьект уничтожается.
         /// </summary>
@@ -86,20 +90,27 @@ namespace Game.Enemy
         }
         protected virtual void Dead()
         {
-            Agent.speed = 0;
-            Hp = 0;
-            if (_animator != null)
+            if (!_dead)
             {
-                _animator.SetTrigger("Dead");
+                CancelInvoke(RestoreSpeed);
+                Agent.speed = 0;
+                Hp = 0;
+                if (_animator != null)
+                {
+                    _animator.SetTrigger("Dead");
+                }
+                GameManager.Instance.GetEnemiesController.DeleteEnemy(this);
+                GameManager.Instance.UpdateMoney(Cost);
+                Destroy(gameObject, _dyingTime);
+                _dead = true;
             }
-            GameManager.Instance.GetEnemiesController.DeleteEnemy(this);
-            Destroy(gameObject, _dyingTime);
         }
         #endregion
         #region Unity Functions
         protected virtual void Start()
         {
-            Agent = GetComponent<NavMeshAgent>();            
+            Agent = GetComponent<NavMeshAgent>();
+            
             _animator = GetComponentInChildren<Animator>();
             Agent.speed = Speed;
 
@@ -124,8 +135,34 @@ namespace Game.Enemy
             Invoke(action.Method.Name, startTime);
         }
         protected delegate void Action();
-        
+
         #endregion
+        
+        public float GetDistance()
+        {
+            path = Agent.path;
+            float distance = .0f;
+            for (var i = 0; i < path.corners.Length - 1; i++)
+            {
+                distance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+            }
+            return distance;
+        }
+        void OnTriggerExit(Collider  other) 
+        {
+            if (other.gameObject.tag == "Finish"&&!_damaged)
+            {
+                Debug.Log("f");
+                GameManager.Instance.UpdateLive(-_damage);
+                Destroy(gameObject, 1f);
+                _damaged = true;
+            }
+        }
+        //void Update()
+        //{
+        //    Debug.Log("GetDistance()" + GetDistance());
+        //    Debug.Log(Gd());
+        //}
     }
 }
 

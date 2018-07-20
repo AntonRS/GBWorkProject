@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 65576492074404818}
   m_Layer: 0
   m_Name: Tile HomeBase
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -584,8 +584,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.61, z: 4.63}
-  m_Center: {x: 4.49, y: 3.96, z: 0}
+  m_Size: {x: 1.252964, y: 3.6099997, z: 4.63}
+  m_Center: {x: 2.0559006, y: 3.96, z: 0}
 --- !u!114 &114038114138892774
 MonoBehaviour:
   m_ObjectHideFlags: 1
