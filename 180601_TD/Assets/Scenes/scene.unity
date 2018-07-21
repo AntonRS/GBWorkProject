@@ -210,9 +210,9 @@ MonoBehaviour:
   _cameraMoveSpeedAndroid: 4
   _zoomSpeedAndroid: 0.01
   _cameraMoveSpeedPC: 8
-  _zoomSpeedPC: 400
-  _zoomMinCamHeight: 20
-  _zoomMaxCamHeight: 60
+  _zoomSpeedPC: 500
+  _zoomMinCamHeight: 15
+  _zoomMaxCamHeight: 80
 --- !u!1 &693048180
 GameObject:
   m_ObjectHideFlags: 0
