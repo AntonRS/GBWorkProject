@@ -8,6 +8,8 @@ namespace Game.TestUI
     [RequireComponent(typeof(Collider))]
     public class SelectebleObj : MonoBehaviour, IPointerClickHandler
     {
+        public SelectedObjType SelectedObjType;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             FindObjectOfType<SelectedObjManager>().SelectedObj = gameObject;
