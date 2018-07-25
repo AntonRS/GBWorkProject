@@ -1,63 +1,118 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 namespace Game.Enemy
 {
+    /// <summary>
+    /// Содержит логику управления врагами.
+    /// </summary>
     public class EnemiesController:MonoBehaviour
     {
-        
-        [HideInInspector] public List<BaseEnemy> enemies;
+        /// <summary>
+        /// Список всех врагов на сцене.
+        /// </summary>
         [HideInInspector]
-        public Transform destination;
-        [HideInInspector] public List<EnemySpawner> spawners;
+        public List<BaseEnemy> Enemies;
+        /// <summary>
+        /// Точка финиша.
+        /// </summary>
+        [HideInInspector] public Transform Destination;
+        /// <summary>
+        /// Список всех спаунеров на сцене.
+        /// </summary>
+        [HideInInspector] public List<EnemySpawner> Spawners;
+        /// <summary>
+        /// Список всех типов врагов.
+        /// </summary>
+        [Tooltip("Список всех типов врагов.")]
         public BaseEnemy[] enemiesTypes;
-        [HideInInspector]
-        public Wave[] waves;
+        /// <summary>
+        /// Минимальное значение сдвига позиции спавна врага.
+        /// </summary>
+        [Tooltip("Минимальное значение сдвига позиции спавна врага.")]
+        [Range(-10, 0)]
+        public int MinRandomSpawnPosOffset = -3;
+        /// <summary>
+        /// Минимальное значение сдвига позиции спавна врага.
+        /// </summary>
+        [Tooltip("Максимальное значение сдвига позиции спавна врага.")]
+        [Range(0, 10)]
+        public int MaxRandomSpawnPosOffset = 3;
 
-        public void SpawnSimultaneously(int waveIndex)
+
+        #region EnemiesController Functions
+        /// <summary>
+        /// Вызывает SpawnRandomWave одновременно у всех спавнеров а сцене.
+        /// </summary>
+        /// <param name="waveIndex">Номер волны</param>
+        /// <param name="minEnemiesCount">минимальное количество врнагов</param>
+        /// <param name="maxEnemiesCount">Максимальное количество врагов</param>
+        /// <param name="modPercent">Параметр увеличения в %</param>
+        public void SpawnSimultaneously(int waveIndex, int minEnemiesCount, int maxEnemiesCount, int modPercent)
         {
-            foreach (EnemySpawner spawner in spawners)
+            foreach (EnemySpawner spawner in Spawners)
             {
-                spawner.SpawnWave(waveIndex);
+                spawner.SpawnRandomWave(waveIndex, minEnemiesCount, maxEnemiesCount, modPercent);
             }
         }
-        
+        /// <summary>
+        /// Добавляет врага в список Enemies.
+        /// </summary>
+        /// <param name="enemy">Враг</param>
         public void AddEnemy(BaseEnemy enemy)
         {
-            if (!enemies.Contains(enemy) && enemy != null)
+            if (!Enemies.Contains(enemy) && enemy != null)
             {
-                enemies.Add(enemy);
+                Enemies.Add(enemy);
             }
         }
+        /// <summary>
+        /// Добавляет врага из списка Enemies.
+        /// </summary>
+        /// <param name="enemy">Враг</param>
         public void DeleteEnemy(BaseEnemy enemy)
         {
-            if (enemies.Contains(enemy) && enemy != null)
+            if (Enemies.Contains(enemy) && enemy != null)
             {
-                enemies.Remove(enemy);
+                Enemies.Remove(enemy);
             }
         }
+        /// <summary>
+        /// Очищает список Enemies и вызвает Destroy у всех содержащихся в нем врагов.
+        /// </summary>
         public void ClearEnemyList()
         {
-            
-            foreach (BaseEnemy enemy in enemies)
+            foreach (BaseEnemy enemy in Enemies)
             {
-                
                 Destroy(enemy.gameObject);
             }
-            enemies.Clear();
+            Enemies.Clear();
         }
+        /// <summary>
+        /// Очищает список Spawners.
+        /// </summary>
         public void ClearSpawnerList()
         {
-                spawners.Clear();
+            Spawners.Clear();
         }
-        public void SetDestination(Transform destination)
+        /// <summary>
+        /// Добаляет скрипт спавнер на обьект на сцене.
+        /// </summary>
+        /// <param name="spawner">Transform обьекта, на который нужно добавить скрипт</param>
+        public void SetSpawner(Transform spawner)
         {
-            this.destination = destination;
+            spawner.gameObject.AddComponent<EnemySpawner>();
         }
-        public void SetSpawner(Transform spawnerPosition)
+        /// <summary>
+        /// Возвращает рандомного врага из списка enemiesTypes
+        /// </summary>
+        /// <returns></returns>
+        public BaseEnemy GetRandomEnemy()
         {
-            spawnerPosition.gameObject.AddComponent<EnemySpawner>();
+            int rnd = Random.Range(0, enemiesTypes.Length - 1);
+            return enemiesTypes[rnd];
         }
+        #endregion
+
 
     }
 }

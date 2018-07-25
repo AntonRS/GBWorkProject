@@ -22,24 +22,26 @@ namespace Game.Towers
         /// <summary>
         /// Префаб эффекта взрыва.
         /// </summary>
-        [SerializeField] private GameObject _hitImpact;
-
-        
+        [SerializeField] private GameObject _hitImpact;        
         /// <summary>
         /// Transform, на который выходит ракета для выхода на цель.
         /// </summary>
         [HideInInspector] public Transform attackPosition;
-        
+        /// <summary>
+        /// Вышла ли ракета на позицию для атаки.
+        /// </summary>
         private bool _onAttackPosition = false;
         /// <summary>
         /// скорость движения до _AttackPosition;
         /// </summary>
         private float _moveToAttackPosSpeed = 3;
+        /// <summary>
+        /// Радиус взрыва.
+        /// </summary>
         private float _explosionRadius = 5;
-        private float _explosionFore = 1000;
-        [SerializeField] private Transform _explosionTransform;
 
-        protected virtual void Update()
+        #region Unity Functions
+        private void Update()
         {
             if (Target)
             {
@@ -50,9 +52,10 @@ namespace Game.Towers
             {
                 Destroy(gameObject);
                 return;
-            }            
+            }
         }
-
+        #endregion
+        #region Missle Functions
         /// <summary>
         /// Перемещает ракету на позицию для атаки со скоростью _moveToAttackPosSpeed;
         /// Придостижении позиции изменяет _onAttackPosition на true;
@@ -69,7 +72,7 @@ namespace Game.Towers
                     return;
                 }
                 transform.Translate(dir.normalized * distanceThisFrame, Space.World);
-            }    
+            }
         }
         /// <summary>
         /// Перемещает ракету к цели.
@@ -84,7 +87,7 @@ namespace Game.Towers
                 if (dir.magnitude <= distanceThisFrame)
                 {
                     HitTarget();
-                    
+
                     return;
                 }
                 transform.Translate(dir.normalized * distanceThisFrame, Space.World);
@@ -112,13 +115,15 @@ namespace Game.Towers
         /// Передает параметры урона обьекту, реалезующему интерфейс ISetDamage
         /// </summary>
         /// <param name="obj"></param>
-        private  void SetDamage(ISetDamage obj)
+        private void SetDamage(ISetDamage obj)
         {
             if (obj != null)
             {
                 obj.ApplyDamage(DamageInfo);
             }
         }
+        #endregion
+
     }
 }
 

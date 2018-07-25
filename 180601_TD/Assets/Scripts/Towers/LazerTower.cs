@@ -9,8 +9,7 @@ namespace Game.Towers
     /// Требует наличие компонента LineRenderer.
     /// Наследуется от BaseTower.
     /// </summary>
-    [RequireComponent(typeof(LineRenderer))]
-    
+    [RequireComponent(typeof(LineRenderer))]    
     public class LazerTower : BaseTower
     {
         /// <summary>
@@ -20,7 +19,7 @@ namespace Game.Towers
         /// Каждый следующий элемент находится на заданном радиусе от предыдущего.
         /// Элементы не повторяются.
         /// </summary>
-        
+        private List<BaseEnemy> _chainTargets;
         /// <summary>
         /// Компонент LineRenderer, отвечающий за визуальное отображене лазера
         /// </summary>
@@ -36,33 +35,20 @@ namespace Game.Towers
         /// <summary>
         /// Максимальное расстояние до следующей цели цепного лазера.
         /// </summary>
+        [Tooltip("Радиус отскока церного лазера")]
         private int _nexTargetRadius = 5;
-
-        private List<BaseEnemy> _chainTargets;
-
-
-
-        public override  int? GetUpgradeCost()
-        {
-            if (_lvl < GameManager.Instance.GetTowersManager.lazerTowers.Length)
-            {
-                return GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].Cost;
-            }
-            else return null;
-        }
-
-
+        #region UI
         public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (ofType == CommandType.Upgrade)
             {
 
                 viaButton.gameObject.SetActive(true);
-                _fakeRange = GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].AttackRange;
-                
+                _fakeRange = GameManager.Instance.GetTowersManager.LazerTowers[_lvl + 1].AttackRange;
+
             }
         }
-
+        #endregion
         #region LazerTower Functions
 
         /// <summary>
@@ -105,7 +91,7 @@ namespace Game.Towers
         {
             float shortestDistance = Mathf.Infinity;
             BaseEnemy nearestEnemy = null;
-            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
+            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.Enemies)
             {
                 if (enemy != null && _canAttack.Contains(enemy.EnemyType) && !_chainTargets.Contains(enemy))
                 {
@@ -143,6 +129,18 @@ namespace Game.Towers
         #endregion
         #region BaseTower Overrides
         /// <summary>
+        /// Возвращает стоимость апгрейда.
+        /// </summary>
+        /// <returns></returns>
+        public override int? GetUpgradeCost()
+        {
+            if (_lvl < _towersManager.LazerTowers.Length)
+            {
+                return _towersManager.LazerTowers[_lvl + 1].Cost;
+            }
+            else return null;
+        }
+        /// <summary>
         /// Логика стреьлбы лазерной башни
         /// </summary>
         protected override void Fire()
@@ -172,12 +170,12 @@ namespace Game.Towers
         /// </summary>
         public override void UpgradeTower()
         {
-            if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= GameManager.Instance.GetTowersManager.lazerTowers[_lvl + 1].Cost)
+            if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= _towersManager.LazerTowers[_lvl + 1].Cost)
             {
                 _lvl += 1;
-                var tower = GameManager.Instance.GetTowersManager.lazerTowers[_lvl];
+                var tower = _towersManager.LazerTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
-                newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newTower.transform.SetParent(_terrainGenerator.transform);
                 GameManager.Instance.UpdateMoney(-Cost);
                 Destroy(gameObject);
             }
@@ -202,7 +200,7 @@ namespace Game.Towers
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();
-            _maxLvl = GameManager.Instance.GetTowersManager.lazerTowers.Length - 1;
+            _maxLvl = _towersManager.LazerTowers.Length - 1;
             _maxTargetsCount = _lvl;
             _lazer = GetComponent<LineRenderer>();
             _lazer.enabled = false;

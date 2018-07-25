@@ -27,9 +27,9 @@ public class BuildBase : MonoBehaviour, IRangeMarkerAssignee, ICommandButtonActu
 
     void Start()
     {
-        _rocketTowerBuildRange = GameManager.Instance.GetTowersManager.rocketTowers[0].AttackRange;
-        _lazerTowerBuildRange = GameManager.Instance.GetTowersManager.lazerTowers[0].AttackRange;
-        _gunTowerBuildRange = GameManager.Instance.GetTowersManager.gunTowers[0].AttackRange;
+        _rocketTowerBuildRange = GameManager.Instance.GetTowersManager.RocketTowers[0].AttackRange;
+        _lazerTowerBuildRange = GameManager.Instance.GetTowersManager.LazerTowers[0].AttackRange;
+        _gunTowerBuildRange = GameManager.Instance.GetTowersManager.GunTowers[0].AttackRange;
 
     }
     ///???????????????????????????????

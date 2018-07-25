@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Game.Enemy;
 using Game.CommandUI;
 namespace Game.Towers
 {
@@ -37,37 +36,34 @@ namespace Game.Towers
         /// </summary>
         private const float _timeBetweenMisslesSpawn = 0.2f;
 
-
-
-        public override int? GetUpgradeCost()
-        {
-            if (_lvl < GameManager.Instance.GetTowersManager.rocketTowers.Length)
-            {
-                return GameManager.Instance.GetTowersManager.rocketTowers[_lvl + 1].Cost;
-            }
-            else return null;
-        }
-
-
-
+        #region UI
         public override void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
             if (ofType == CommandType.Upgrade)
             {
 
                 viaButton.gameObject.SetActive(true);
-                _fakeRange = GameManager.Instance.GetTowersManager.rocketTowers[_lvl + 1].AttackRange;
-                
+                _fakeRange = GameManager.Instance.GetTowersManager.RocketTowers[_lvl + 1].AttackRange;
+
             }
         }
-
-
-        /// <summary>
-        /// Логика стрельбы башни с ракетами. 
-        /// Башня выпускает несколько ракет в зависимости от уровня прокачки.
-        /// </summary>
-
+        #endregion
         #region BaseTower overrides
+        /// <summary>
+        /// Возвращает стоимость апгрейда башни.
+        /// </summary>
+        /// <returns></returns>
+        public override int? GetUpgradeCost()
+        {
+            if (_lvl < _towersManager.RocketTowers.Length)
+            {
+                return _towersManager.RocketTowers[_lvl + 1].Cost;
+            }
+            else return null;
+        }
+        /// <summary>
+        /// Логика ведения стрельбы
+        /// </summary>
         protected override void Fire()
         {
             if (_fireCountDown <= 0 && _target)
@@ -106,9 +102,9 @@ namespace Game.Towers
             if (_lvl < _maxLvl && GameManager.Instance.CurrentMoney >= GetUpgradeCost())
             {
                 _lvl += 1;
-                var tower = GameManager.Instance.GetTowersManager.rocketTowers[_lvl];
+                var tower = _towersManager.RocketTowers[_lvl];
                 var newTower = Instantiate(tower, transform.position, Quaternion.identity);
-                newTower.transform.SetParent(GameManager.Instance.GetTerrainGenerator.transform);
+                newTower.transform.SetParent(_terrainGenerator.transform);
                 GameManager.Instance.UpdateMoney(-Cost);
                 Destroy(gameObject);
 
@@ -135,7 +131,7 @@ namespace Game.Towers
         protected override void SetAwakeParams()
         {
             base.SetAwakeParams();
-            _maxLvl = GameManager.Instance.GetTowersManager.rocketTowers.Length - 1;
+            _maxLvl = _towersManager.RocketTowers.Length - 1;
             _misslesCountInOneAttack = _lvl + 1;
         }
         #endregion

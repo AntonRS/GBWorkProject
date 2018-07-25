@@ -42,15 +42,15 @@ namespace Game.CommandUI
             {
                 if (Meta == "BuildRocketTower")
                 {
-                    _costText.text = GameManager.Instance.GetTowersManager.rocketTowers[0].Cost.ToString();
+                    _costText.text = GameManager.Instance.GetTowersManager.RocketTowers[0].Cost.ToString();
                 }
                 if (Meta == "BuildLazerTower")
                 {
-                    _costText.text = GameManager.Instance.GetTowersManager.lazerTowers[0].Cost.ToString();
+                    _costText.text = GameManager.Instance.GetTowersManager.LazerTowers[0].Cost.ToString();
                 }
                 if (Meta == "BuildGunTower")
                 {
-                    _costText.text = GameManager.Instance.GetTowersManager.gunTowers[0].Cost.ToString();
+                    _costText.text = GameManager.Instance.GetTowersManager.GunTowers[0].Cost.ToString();
                 }
             }
             if (_commandType == CommandType.Sell)

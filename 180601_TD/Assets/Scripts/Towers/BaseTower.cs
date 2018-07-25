@@ -37,8 +37,7 @@ namespace Game.Towers
         /// <summary>
         /// Какой тип врагов может атаковать башня.
         /// </summary>
-        [SerializeField] protected List <EnemyType> _canAttack;
-        
+        [SerializeField] protected List <EnemyType> _canAttack;      
         /// <summary>
         /// Тип урона.
         /// </summary>
@@ -55,43 +54,73 @@ namespace Game.Towers
         /// Transform, где появляется снаряд во время стрельбы.
         /// </summary>
         [SerializeField] protected Transform _firePoint;
-
         /// <summary>
         /// Цель типа BaseEnemy.
         /// </summary>
         [HideInInspector] protected BaseEnemy _target;
-
-
         /// <summary>
         /// Информация об уроне.
         /// </summary>
         protected DamageInfo _damageInfo;
-
         /// <summary>
         /// Переодичность обновления списка целей.
         /// </summary>
         private const float searchingTime = 0.5f;
-        protected List<BaseEnemy> _targets;
-
-
-
+        /// <summary>
+        /// Список врагов в радиусе поражения/
+        /// </summary>
+        protected List<BaseEnemy> _targetsInRange;
+        /// <summary>
+        /// Фейковый радиус. используется для отображения радиуса после апгрейда/строительства/
+        /// </summary>
         protected Nullable<float> _fakeRange = null;
-
+        /// <summary>
+        /// Возвращает стоимость апгрейда.
+        /// </summary>
+        /// <returns></returns>
         public abstract int? GetUpgradeCost();
-        
+        /// <summary>
+        /// Делегат Action.
+        /// </summary>
+        protected delegate void Action();
+        /// <summary>
+        /// Абстракция ведения огня.
+        /// </summary>
+        protected abstract void Fire();
+        /// <summary>
+        /// Абстракция наблюдения за целью.
+        /// </summary>
+        protected abstract void LookAtTarget();
+        /// <summary>
+        /// Абстракция апгрейда башни.
+        /// </summary>
+        public abstract void UpgradeTower();
+        /// <summary>
+        /// Ссылка на TowersManager
+        /// </summary>
+        protected TowersManager _towersManager;
+        /// <summary>
+        /// Ссылка на TerrainGeneratorController
+        /// </summary>
+        protected TerrainGeneratorController _terrainGenerator;
+        /// <summary>
+        /// Ссылка на EnemiesController
+        /// </summary>
+        protected EnemiesController _enemiesController;
 
+        #region UI Interface
         public bool TestCommandButtonShouldShow(CommandType ofType, CommandButton viaButton)
         {
             return _lvl <= _maxLvl;
-            
+
         }
         public abstract void PreviewCommandBegan(CommandType ofType, GameObject forObject, CommandButton viaButton);
-        
+
         public void PreviewCommandEnd(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
-            
+
             this._fakeRange = null;
-            //viaButton.Meta = null;
+
         }
         public void ExecuteCommand(CommandType ofType, GameObject forObject, CommandButton viaButton)
         {
@@ -99,11 +128,11 @@ namespace Game.Towers
             {
                 _fakeRange = null;
                 UpgradeTower();
-                
+
             }
             if (ofType == CommandType.Sell)
             {
-                GameManager.Instance.GetTowersManager.SellTower(transform, SellCost);
+                _towersManager.SellTower(transform, SellCost);
                 Destroy(gameObject);
             }
         }
@@ -111,8 +140,7 @@ namespace Game.Towers
         {
             return this._fakeRange ?? this.AttackRange;
         }
-
-
+        #endregion
         #region Unity Functions
         protected virtual void Awake()
         { 
@@ -129,47 +157,49 @@ namespace Game.Towers
         }
         #endregion
         #region BaseTower Functions
-         
+
+        /// <summary>
+        /// Находит врагов в радиусе поражения и заполняет ими список _targetsInRange.
+        /// </summary>
+        /// <param name="startpoint">Список врагов в радиусе поражения</param>
+        /// <param name="range">радиус поражения</param>
         protected void FindEnemiesInRange(Vector3 startpoint, float range)
         {
             
-            _targets.Clear();
+            _targetsInRange.Clear();
             
-            foreach (BaseEnemy enemy in GameManager.Instance.GetEnemiesController.enemies)
+            foreach (BaseEnemy enemy in _enemiesController.Enemies)
             {
                 if (enemy != null && _canAttack.Contains(enemy.EnemyType))
                 {
                     float distanceToEnemy = Vector3.Distance(startpoint, enemy.transform.position);
                     if (distanceToEnemy < range)
                     {
-                        _targets.Add(enemy);
+                        _targetsInRange.Add(enemy);
                         
                     }
                 }
             }
             
         }
+        /// <summary>
+        /// Присваивает полю _target ближайшего к финишу врага.
+        /// </summary>
         protected void FindClosestToDestinationEnemy()
-        {
-            
-            if (_targets.Count > 0)
-            {
-                
+        {            
+            if (_targetsInRange.Count > 0)
+            {                
                 float shortestDistance = Mathf.Infinity;
                 BaseEnemy nearestEnemy = null;
-
-                foreach (BaseEnemy enemy in _targets)
+                foreach (BaseEnemy enemy in _targetsInRange)
                 {
                     {
-
-                        float distanceToDestination = enemy.GetDistance();
-                        
+                        float distanceToDestination = enemy.GetDistance();                        
                         if (distanceToDestination < shortestDistance)
                         {
                             shortestDistance = distanceToDestination;
                             nearestEnemy = enemy;
-                            _target = nearestEnemy;
-                            
+                            _target = nearestEnemy;                        
                         }
                     }
                 }
@@ -177,16 +207,17 @@ namespace Game.Towers
             else
             {
                 _target = null;
-            }
-            
+            }            
         }
+        /// <summary>
+        /// Обновляет значение _target.
+        /// </summary>
         protected virtual void UpdateTarget()
         {
             FindEnemiesInRange(transform.position, AttackRange);
             FindClosestToDestinationEnemy();
             
         }
-
         /// <summary>
         /// Обертка для метода InvokeRepeating.
         /// </summary>
@@ -196,20 +227,19 @@ namespace Game.Towers
         protected virtual void InvokeRepeating(Action action, float startTime, float repeatTime)
         {
             InvokeRepeating(action.Method.Name, startTime, repeatTime);
-        }
-        protected delegate void Action();
-        protected abstract void Fire();
-        protected abstract void LookAtTarget();
-        public abstract void UpgradeTower();
+        }        
         /// <summary>
         /// Инициализация начальных параметров башни.
         /// </summary>
         protected virtual void SetAwakeParams()
         {
-            _targets = new List<BaseEnemy>();
+            _targetsInRange = new List<BaseEnemy>();
             _damageInfo.Damage = _damage;
             _damageInfo.AttackType = _attackType;
             _damageInfo.AttackingTower = this;
+            _enemiesController = GameManager.Instance.GetEnemiesController;
+            _terrainGenerator = GameManager.Instance.GetTerrainGenerator;
+            _towersManager = GameManager.Instance.GetTowersManager;
             
         }
         #endregion
@@ -223,11 +253,6 @@ namespace Game.Towers
             Gizmos.DrawWireSphere(transform.position, AttackRange);
         }
         #endregion
-        
-
-        
-
-
     }
 }
 

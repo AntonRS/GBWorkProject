@@ -1,20 +1,16 @@
 ﻿using UnityEngine.AI;
 using UnityEngine;
 using Game.Towers;
-using System.Collections.Generic;
 namespace Game.Enemy
 {
-
     /// <summary>
     /// Содержит логику и параметры абстрактного врага.
-    /// Требует наличия NavMeshAgent на обьекте.
-    /// При появлении на сцене враг вносит себя в общий список врагов, содержащийся в объекте EnemiesController.
-    /// При смерти удаляет себя из общего списка врагов.
+    /// Требует наличия NavMeshAgent и Rigidbody на обьекте.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class BaseEnemy : MonoBehaviour, ISetDamage
-    {
-        
+    {        
         /// <summary>
         /// Здоровье врага.
         /// </summary>
@@ -22,11 +18,13 @@ namespace Game.Enemy
         /// <summary>
         /// Сопротивление урону от лазера. Рассчитывается в процентах.
         /// </summary>
+        [Tooltip("На сколько % снижается входящий урон от ракет и пулемета")]
         [Range(1, 99)]
         public float PowerShield;
         /// <summary>
         /// Сопротивление физическому урону. рассчитывается в процентах.
         /// </summary>
+        [Tooltip("На сколько % снижается входящий урон от лазера")]
         [Range(1, 99)]
         public float PhysicalArmor;
         /// <summary>
@@ -41,22 +39,45 @@ namespace Game.Enemy
         /// Transform на сцене, к которому движется враг.
         /// </summary>
         [HideInInspector] public Transform Destination;
-        
+        /// <summary>
+        /// Вознаграждение за убийство врага.
+        /// </summary>
+        [Tooltip("Вознаграждение за убийство врага.")]
         public int Cost;
+        /// <summary>
+        /// Урон, который враг отнимает, доходя до финиша.
+        /// </summary>
+        [Tooltip("Урон, который враг отнимает, доходя до финиша.")]
         [SerializeField] protected int _damage;
+        /// <summary>
+        /// Наносил ли уже враг здоровье?
+        /// </summary>
         protected bool _damaged = false;
-
-
-        [HideInInspector] public List<BaseTower> _attackingTowers;
-
+        /// <summary>
+        /// Ссылка на компонент NavMeshAgent.
+        /// </summary>
         [HideInInspector] public NavMeshAgent Agent;
+        /// <summary>
+        /// Ссылка на компонент Animator.
+        /// </summary>
         protected Animator _animator;
-        NavMeshPath path;
+        /// <summary>
+        /// Путь до финиша.
+        /// </summary>
+        protected NavMeshPath path;
+        /// <summary>
+        /// Мертв ли враг?
+        /// </summary>
         protected bool _dead = false;
         /// <summary>
         /// Время, через которое обьект уничтожается.
         /// </summary>
         protected float _dyingTime = 6;
+        /// <summary>
+        /// Делегат Action.
+        /// </summary>
+        protected delegate void Action();
+
         #region BaseEnemy Functions
         /// <summary>
         /// Реализация интерфейса, отвечающего за получение урона.
@@ -85,9 +106,11 @@ namespace Game.Enemy
             else
             {
                 Dead();
-            }
-            
+            }            
         }
+        /// <summary>
+        /// Логика смерти врага.
+        /// </summary>
         protected virtual void Dead()
         {
             if (!_dead)
@@ -105,39 +128,34 @@ namespace Game.Enemy
                 _dead = true;
             }
         }
-        #endregion
-        #region Unity Functions
-        protected virtual void Start()
-        {
-            Agent = GetComponent<NavMeshAgent>();
-            
-            _animator = GetComponentInChildren<Animator>();
-            Agent.speed = Speed;
-
-            GameManager.Instance.GetEnemiesController.AddEnemy(this);
-            if (Destination == null)
-            {
-                return;
-            }
-            Agent.SetDestination(Destination.position);
-        }
+        /// <summary>
+        /// Восстанавливает начальную скорость 
+        /// </summary>
         protected virtual void RestoreSpeed()
         {
             Agent.speed = Speed;
         }
+        /// <summary>
+        /// Отменяет Invoke
+        /// </summary>
+        /// <param name="action">Метод</param>
         protected virtual void CancelInvoke(Action action)
         {
-            
             CancelInvoke(action.Method.Name);
         }
+        /// <summary>
+        /// Обертка для Invoke
+        /// </summary>
+        /// <param name="action">Метод</param>
+        /// <param name="startTime">Время до срабатывания</param>
         protected virtual void Invoke(Action action, float startTime)
         {
             Invoke(action.Method.Name, startTime);
         }
-        protected delegate void Action();
-
-        #endregion
-        
+        /// <summary>
+        /// Возвращает расстояние до финиша.
+        /// </summary>
+        /// <returns></returns>
         public float GetDistance()
         {
             path = Agent.path;
@@ -148,21 +166,30 @@ namespace Game.Enemy
             }
             return distance;
         }
-        void OnTriggerExit(Collider  other) 
+        #endregion
+        #region Unity Functions
+        protected virtual void Start()
         {
-            if (other.gameObject.tag == "Finish"&&!_damaged)
+            Agent = GetComponent<NavMeshAgent>();           
+            _animator = GetComponentInChildren<Animator>();
+            Agent.speed = Speed;
+            GameManager.Instance.GetEnemiesController.AddEnemy(this);
+            if (Destination == null)
             {
-                Debug.Log("f");
+                return;
+            }
+            Agent.SetDestination(Destination.position);
+        }
+        void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.tag == "Finish" && !_damaged)
+            {
                 GameManager.Instance.UpdateLive(-_damage);
                 Destroy(gameObject, 1f);
                 _damaged = true;
             }
         }
-        //void Update()
-        //{
-        //    Debug.Log("GetDistance()" + GetDistance());
-        //    Debug.Log(Gd());
-        //}
+        #endregion  
     }
 }
 
