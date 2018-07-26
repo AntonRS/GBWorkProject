@@ -51,8 +51,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ed016bdb94294478feaafda3979131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RocketTowers: []
-  LazerTowers: []
-  GunTowers: []
+  RocketTowers:
+  - {fileID: 114879449951868246, guid: 463a879cdc7f3b748814ad513ae9820f, type: 2}
+  - {fileID: 114319813721570878, guid: c11824423a9df2a4f98ffa51273c0758, type: 2}
+  - {fileID: 114473334269783254, guid: 82475cdea4631f846820a27d6f0d862b, type: 2}
+  - {fileID: 114341784945166636, guid: dbce54a221972e845877316907c60467, type: 2}
+  - {fileID: 114145645426503346, guid: a20bd2ac98b31e449906c85f22d2366c, type: 2}
+  LazerTowers:
+  - {fileID: 114191092833222958, guid: d52a2661c1e19264a8d5f02ac868599f, type: 2}
+  - {fileID: 114874960463967952, guid: bd2b4d1ed0a963742beae07b3fbb533e, type: 2}
+  - {fileID: 114244495188117118, guid: 9c5ef209cd8062c43bd54d309cf50163, type: 2}
+  - {fileID: 114292465238190728, guid: 557bdbcc34ff5bb44874236f77b7086d, type: 2}
+  - {fileID: 114074544662056852, guid: 7c84a011cdde0344cbcc72b8edaac9e5, type: 2}
+  GunTowers:
+  - {fileID: 114982682245074684, guid: 258c05f17f379fb42ba70c9242a7e160, type: 2}
+  - {fileID: 114982682245074684, guid: 6a20ce5675e36d94a8706f531e6ad47f, type: 2}
+  - {fileID: 114982682245074684, guid: 515794c5fb43bf648bcc7d7a2e84c7f5, type: 2}
+  - {fileID: 114982682245074684, guid: daf9cdfdf9f82684490440ffafdb6067, type: 2}
+  - {fileID: 114982682245074684, guid: b8e258a1c94247247aff2bc0f8c22555, type: 2}
   _towerBuildBase: {fileID: 114671703605243676, guid: a171b0e910dd9cb40b0f24a0cec9dd3a,
     type: 2}

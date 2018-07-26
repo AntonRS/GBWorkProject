@@ -56,9 +56,9 @@ MonoBehaviour:
   countdownText: {fileID: 0}
   livesText: {fileID: 0}
   moneytext: {fileID: 0}
-  minEnemiesCountInWave: 5
-  maxEnemiesCountInWave: 15
-  hpModPercent: 10
-  timeBetweenWaves: 15
-  startLives: 0
-  startMoney: 0
+  maxEnemiesCountInWave: 6
+  minEnemiesCountInWave: 3
+  ModPercent: 10
+  _timeBetweenWaves: 15
+  _startLives: 100
+  _startMoney: 100000

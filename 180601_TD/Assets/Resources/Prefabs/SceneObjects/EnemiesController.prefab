@@ -51,30 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a047fe9effaa34d82c38edcc4a8b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies: []
-  destination: {fileID: 0}
-  spawners: []
+  Enemies: []
+  Destination: {fileID: 0}
+  Spawners: []
   enemiesTypes:
   - {fileID: 114934562520521342, guid: 47b07c6f8fbf2534c92c46eb49c8bc1f, type: 2}
   - {fileID: 114918450017006208, guid: df4da53add5d4d341bef05d1590ccf21, type: 2}
   - {fileID: 114199604694783310, guid: 2999cec52e944c64a99ee2c851c65a75, type: 2}
   - {fileID: 114500873949207154, guid: b4b5afe06a232044a9976cb83aa7fa21, type: 2}
-  waves:
-  - enemiesTypeAndCount:
-    - enemy: {fileID: 0}
-      count: 3
-      speed: 3
-      hp: 500
-    countdownToSpawn: 10
-  - enemiesTypeAndCount:
-    - enemy: {fileID: 0}
-      count: 4
-      speed: 4
-      hp: 500
-    countdownToSpawn: 5
-  - enemiesTypeAndCount:
-    - enemy: {fileID: 0}
-      count: 1
-      speed: 4
-      hp: 500
-    countdownToSpawn: 6
+  MinRandomSpawnPosOffset: -3
+  MaxRandomSpawnPosOffset: 3
