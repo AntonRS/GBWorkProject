@@ -52,11 +52,6 @@ public class TerrainGeneratorController : MonoBehaviour
     public float MapNorthernEdgeZ { get; private set; }
     public float MapEasternEdgeX { get; private set; }
 
-    //ВРЕМЕННО, потом надо сшить через менеджер
-    public delegate void TerrainGeneratorEvent();
-    public TerrainGeneratorEvent TerrainGenerated;
-    public TerrainGeneratorEvent TerrainDestroyed;
-
     // Use this for initialization
     void Start()
     {
@@ -77,9 +72,7 @@ public class TerrainGeneratorController : MonoBehaviour
         _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();
 
         SetMapEdges();
-
-        //временно, после связывания через менеджер убрать
-        TerrainGenerated.Invoke();
+        
     }
 
     public void DestroyTerrain()
@@ -94,9 +87,7 @@ public class TerrainGeneratorController : MonoBehaviour
         _enemiesDestinationPoint = null;
 
         SetMapEdges();
-
-        //временно, после связывания через менеджер убрать
-        TerrainDestroyed.Invoke();
+        
     }
 
     private void GenerateNavMesh()

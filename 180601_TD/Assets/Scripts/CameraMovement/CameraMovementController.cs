@@ -79,11 +79,7 @@ namespace Game
             _zoomSpeed = _zoomSpeedPC;
 #endif
 
-            _mapData = FindObjectOfType<TerrainGeneratorController>();
-
-            //ВРЕМЕННО. Потом связать через менеджер или типа того
-            _mapData.TerrainGenerated += SetMapCenterAndBounds;
-            _mapData.TerrainDestroyed += SetMapCenterAndBounds;
+            _mapData = FindObjectOfType<TerrainGeneratorController>();            
         }
 
 

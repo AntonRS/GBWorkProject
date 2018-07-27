@@ -93,6 +93,10 @@ namespace Game
         /// </summary>
         public TerrainGeneratorController GetTerrainGenerator { get; private set; }
         /// <summary>
+        /// Ссылка на TerraiGenerator.
+        /// </summary>
+        public CameraMovementController GetCameraMovementController { get; private set; }
+        /// <summary>
         /// Делегат Action.
         /// </summary>
         private delegate void Action();
@@ -103,6 +107,7 @@ namespace Game
             GetTowersManager = FindObjectOfType<TowersManager>();
             GetEnemiesController = FindObjectOfType<EnemiesController>();
             GetTerrainGenerator = FindObjectOfType<TerrainGeneratorController>();
+            GetCameraMovementController = FindObjectOfType<CameraMovementController>();
         }
         #endregion
         #region GameManager Functions
@@ -126,6 +131,7 @@ namespace Game
         public void FinishGame()
         {
             GetTerrainGenerator.DestroyTerrain();
+            GetCameraMovementController.SetCameraToDefaultPosition();
             _waveIndex = 0;
             GetEnemiesController.ClearEnemyList();
             GetEnemiesController.ClearSpawnerList();
@@ -141,6 +147,7 @@ namespace Game
         public void StartGame()
         {
             GetTerrainGenerator.GenerateTerrain();
+            GetCameraMovementController.SetCameraToDefaultPosition();
             GetEnemiesController.Destination = GetTerrainGenerator.EnemiesDestinationPoint;
             GetEnemiesController.SetSpawner(GetTerrainGenerator.EnemiesSpawnPoint);
             CurrentMoney = _startMoney;
