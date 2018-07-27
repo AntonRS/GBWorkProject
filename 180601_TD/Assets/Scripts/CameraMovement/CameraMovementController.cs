@@ -36,6 +36,19 @@ namespace Game
         [SerializeField]
         private float _zoomMaxCamHeight;
 
+        [Header("Отступы для камеры: от краёв карты и от центра")]
+        [SerializeField]
+        private float _mapBordersSouthPadding;
+
+        [SerializeField]
+        private float _mapBordersNorthPadding;
+
+        [SerializeField]
+        private float _mapBordersSidePadding;
+        
+        [Tooltip("Отступ от центра по оси Z для установки начального положения камеры")]
+        [SerializeField]
+        private float _cameraDefaultPositionOffsetZ;
 
         private float _cameraMoveSpeed;
         private float _zoomSpeed;
@@ -45,7 +58,10 @@ namespace Game
                 
         private Vector3 _cameraMovementVector;
         private float _cameraZoomValue;
-        
+
+        private TerrainGeneratorController _mapData;
+
+        bool _moveCameraToDefaultPosition;
 
         // Use this for initialization
         void Awake()
@@ -62,9 +78,20 @@ namespace Game
             _cameraMoveSpeed = _cameraMoveSpeedPC;
             _zoomSpeed = _zoomSpeedPC;
 #endif
-            
+
+            _mapData = FindObjectOfType<TerrainGeneratorController>();
+
+            //ВРЕМЕННО. Потом связать через менеджер или типа того
+            _mapData.TerrainGenerated += SetMapCenterAndBounds;
+            _mapData.TerrainDestroyed += SetMapCenterAndBounds;
         }
 
+
+        private void SetMapCenterAndBounds()
+        {
+            _cameraMovementModule.SetCamDefaultPositionAndBounds(_mapData.MapSouthernEdgeZ - _mapBordersSouthPadding, _mapData.MapWesternEdgeX - _mapBordersSidePadding, _mapData.MapNorthernEdgeZ + _mapBordersNorthPadding, _mapData.MapEasternEdgeX + _mapBordersSidePadding, _cameraDefaultPositionOffsetZ);
+            _moveCameraToDefaultPosition = true;
+        }
 
         //не забыть выключить, когда мы в главном меню, а не в основной игре
         //проще всего это сделать, задизейблив скрипт при выходе в меню
@@ -72,14 +99,38 @@ namespace Game
         {
             _cameraInputModule.GetInput(ref _cameraMovementVector, ref _cameraZoomValue);
 
-            if (_cameraMovementVector != Vector3.zero)
-                _cameraMovementModule.MoveCamera(_cameraMovementVector * _cameraMoveSpeed);
-
             if (_cameraZoomValue != 0)
                 _cameraMovementModule.ZoomCamera(_cameraZoomValue * _zoomSpeed);
 
+            //ДОБАВИТЬ КНОПКУ НА ЭКРАН - андроид без неё этой функции иметь не будет
+#if UNITY_EDITOR
+            if (Input.GetButtonDown("Center Camera"))
+                _moveCameraToDefaultPosition = true;
+#elif UNITY_STANDALONE
+            if (Input.GetButtonDown("Center Camera"))
+                _moveCameraToCenter = true;
+#endif
+
+            if (_moveCameraToDefaultPosition == true)
+            {
+                _cameraMovementModule.SetCameraToDefaultPosition();
+                _moveCameraToDefaultPosition = false;
+            }
+
+            else
+            {
+                if (_cameraMovementVector != Vector3.zero)
+                    _cameraMovementModule.MoveCamera(_cameraMovementVector * _cameraMoveSpeed);
+            }
         }
-        
+
+        /// <summary>
+        /// Устанавливает камеру в стартовую позицию. Вызывать после того как карта была сгенерирована.
+        /// </summary>
+        public void SetCameraToDefaultPosition()
+        {
+            SetMapCenterAndBounds();
+        }
 
     }
 }

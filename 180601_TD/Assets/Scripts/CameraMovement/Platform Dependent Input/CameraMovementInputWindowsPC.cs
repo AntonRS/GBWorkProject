@@ -47,7 +47,7 @@ namespace Game.CameraMovement
                 cameraMovementVector += new Vector3(0, 0, 1);
 
             //зум
-            cameraZoomValue = Input.GetAxis("Mouse ScrollWheel");
+            cameraZoomValue = Input.GetAxis("Mouse ScrollWheel");            
         }
     }
 }

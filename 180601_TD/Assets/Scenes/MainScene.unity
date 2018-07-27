@@ -225,6 +225,10 @@ MonoBehaviour:
   _zoomSpeedPC: 400
   _zoomMinCamHeight: 20
   _zoomMaxCamHeight: 60
+  _mapBordersSouthPadding: 20
+  _mapBordersNorthPadding: -25
+  _mapBordersSidePadding: -5
+  _cameraDefaultPositionOffsetZ: -5
 --- !u!114 &164448385
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -45,6 +45,17 @@ public class TerrainGeneratorController : MonoBehaviour
     public Transform EnemiesDestinationPoint { get { return _enemiesDestinationPoint; } }
 
     private const float NavMeshBuildDelay = 0.1f;//пауза перед генерацией навмеша, чтобы тайлы успели удалиться перед собственно генерацией
+    
+
+    public float MapSouthernEdgeZ { get; private set; }
+    public float MapWesternEdgeX { get; private set; }
+    public float MapNorthernEdgeZ { get; private set; }
+    public float MapEasternEdgeX { get; private set; }
+
+    //ВРЕМЕННО, потом надо сшить через менеджер
+    public delegate void TerrainGeneratorEvent();
+    public TerrainGeneratorEvent TerrainGenerated;
+    public TerrainGeneratorEvent TerrainDestroyed;
 
     // Use this for initialization
     void Start()
@@ -63,7 +74,12 @@ public class TerrainGeneratorController : MonoBehaviour
         GenerateNavMesh();
 
         _enemiesSpawnPoint = _generator.GetEnemiesSpawnPoint();
-        _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();        
+        _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();
+
+        SetMapEdges();
+
+        //временно, после связывания через менеджер убрать
+        TerrainGenerated.Invoke();
     }
 
     public void DestroyTerrain()
@@ -75,7 +91,12 @@ public class TerrainGeneratorController : MonoBehaviour
         _roadTiles.Clear();
 
         _enemiesSpawnPoint = null;
-        _enemiesDestinationPoint = null;        
+        _enemiesDestinationPoint = null;
+
+        SetMapEdges();
+
+        //временно, после связывания через менеджер убрать
+        TerrainDestroyed.Invoke();
     }
 
     private void GenerateNavMesh()
@@ -98,6 +119,39 @@ public class TerrainGeneratorController : MonoBehaviour
         Invoke(method.Method.Name, time);
     }
 
+    /// <summary>
+    /// Устанавливает координаты крайних угловых точек карты и её центра.
+    /// </summary>
+    private void SetMapEdges()
+    {
+        float westEdgeX = 0;
+        float eastEdgeX = 0;        
+        float southEdgeZ = 0;
+        float northEdgeZ = 0;
 
+        if (_roadTiles.Count > 0)
+        {
+            foreach (var tile in _roadTiles)
+            {
+                Vector3 tilePosition = tile.transform.position;
 
+                if (tilePosition.x < westEdgeX)
+                    westEdgeX = tilePosition.x;
+
+                if (tilePosition.x > eastEdgeX)
+                    eastEdgeX = tilePosition.x;
+
+                if (tilePosition.z < southEdgeZ)
+                    southEdgeZ = tilePosition.z;
+
+                if (tilePosition.z > northEdgeZ)
+                    northEdgeZ = tilePosition.z;
+            }
+        }
+
+        MapSouthernEdgeZ = southEdgeZ;
+        MapWesternEdgeX = westEdgeX;
+        MapNorthernEdgeZ = northEdgeZ;
+        MapEasternEdgeX = eastEdgeX;
+    }
 }
