@@ -93,7 +93,7 @@ namespace Game
         /// </summary>
         public TerrainGeneratorController GetTerrainGenerator { get; private set; }
         /// <summary>
-        /// Ссылка на TerraiGenerator.
+        /// Ссылка на CameraMovementController.
         /// </summary>
         public CameraMovementController GetCameraMovementController { get; private set; }
         /// <summary>
