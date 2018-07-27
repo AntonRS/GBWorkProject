@@ -80,8 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b361856105b0075488ee249474589702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TowerPlatformsCount: 5
-  MinRoadLength: 20
-  MaxRoadLength: 40
+  TowerPlatformsCount: 16
+  MinRoadLength: 14
+  MaxRoadLength: 20
   _generatorTerrainParent: {fileID: 1498715875036540}
   _tileset: {fileID: 11400000, guid: 426c74a9ba4380846bb484a3815e794d, type: 2}

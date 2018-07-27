@@ -249,11 +249,6 @@ Prefab:
     m_Modifications:
     - target: {fileID: 224223012935581860, guid: d835f8a7656e1ac42bb0d221e5eec267,
         type: 2}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 224223012935581860, guid: d835f8a7656e1ac42bb0d221e5eec267,
-        type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -347,25 +342,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1387429439}
-    - target: {fileID: 114048481188123622, guid: d835f8a7656e1ac42bb0d221e5eec267,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartGame
-      objectReference: {fileID: 0}
     - target: {fileID: 114061501630629148, guid: d835f8a7656e1ac42bb0d221e5eec267,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1387429439}
-    - target: {fileID: 114061501630629148, guid: d835f8a7656e1ac42bb0d221e5eec267,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: FinishGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 1975775133964944, guid: d835f8a7656e1ac42bb0d221e5eec267, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d835f8a7656e1ac42bb0d221e5eec267, type: 2}
   m_IsPrefabParent: 0
@@ -439,36 +420,6 @@ Prefab:
       propertyPath: moneytext
       value: 
       objectReference: {fileID: 406167959}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: minEnemiesCountInWave
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: maxEnemiesCountInWave
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: startLives
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: startMoney
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: ModPercent
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114589342262690332, guid: 2e47bd8ac759c734ba0e6539f95f7cd5,
-        type: 2}
-      propertyPath: timeBetweenWaves
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2e47bd8ac759c734ba0e6539f95f7cd5, type: 2}
   m_IsPrefabParent: 0
@@ -738,10 +689,6 @@ Prefab:
     - target: {fileID: 4031011467125128, guid: 2b4a3653ae589dc4581d9635fda917eb, type: 2}
       propertyPath: m_RootOrder
       value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1650044821299218, guid: 2b4a3653ae589dc4581d9635fda917eb, type: 2}
-      propertyPath: m_Name
-      value: TowersManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2b4a3653ae589dc4581d9635fda917eb, type: 2}
