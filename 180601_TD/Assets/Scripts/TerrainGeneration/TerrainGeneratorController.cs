@@ -7,6 +7,12 @@ using UnityEngine;
 /// </summary>
 public class TerrainGeneratorController : MonoBehaviour
 {
+    //ДЛЯ ТЕСТА! УБРАТЬ!!!
+    public GameObject cube;
+    public GameObject sphere;
+
+
+
 
     [Tooltip("Количество платформ под башни")]
     public int TowerPlatformsCount;
@@ -55,15 +61,35 @@ public class TerrainGeneratorController : MonoBehaviour
         _navMesh = new TerrainNavMeshBuilder(_generatorTerrainParent);
     }
 
+    //ВРЕМЕННО ДЛЯ ТЕСТА! ВЕРНУТЬ!!!
+    //public void GenerateTerrain()
+    //{
+    //    if (_generatorTerrainParent.transform.childCount == 0)
+    //        _roadTiles = _generator.GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);
+
+    //    GenerateNavMesh();
+
+    //    _enemiesSpawnPoint = _generator.GetEnemiesSpawnPoint();
+    //    _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();        
+    //}
+
+    //ВРЕМЕННО ДЛЯ ТЕСТА! УБРАТЬ!!!!!!
     public void GenerateTerrain()
     {
-        if (_generatorTerrainParent.transform.childCount == 0)
-            _roadTiles = _generator.GenerateTerrain(MinRoadLength, MaxRoadLength, TowerPlatformsCount);
+        LabyrinthGenerator labyrinth = new LabyrinthGenerator();
+        LabyrinthPathBuilder pathBuilder = new LabyrinthPathBuilder();
+        TilePlacer tilePlacer = new TilePlacer();
+        LabyrinthPotentialStartFinishFinder endSquaresFinder = new LabyrinthPotentialStartFinishFinder();
 
-        GenerateNavMesh();
+        int[][] a;
+        int[][] b;
 
-        _enemiesSpawnPoint = _generator.GetEnemiesSpawnPoint();
-        _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();        
+        a = labyrinth.GenerateLabyrinth(20, 3, 15, 5, 4, new int[] { 0, 0 });
+        tilePlacer.PlaceTiles(a, cube, _generatorTerrainParent.transform);
+
+        b = endSquaresFinder.GetPotentialStartAndFinissSquares(a);
+
+        tilePlacer.PlaceTiles(pathBuilder.BuildPathInLabyrinth(20, a, b), sphere, _generatorTerrainParent.transform);
     }
 
     public void DestroyTerrain()

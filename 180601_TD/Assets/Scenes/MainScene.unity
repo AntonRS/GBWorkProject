@@ -586,6 +586,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114464306433527212, guid: b0acc38a63d8a1d4e81f118f54223d37,
+        type: 2}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 1577949168289024, guid: 7cf490164d3ca894081fc0316a39b651,
+        type: 2}
+    - target: {fileID: 114464306433527212, guid: b0acc38a63d8a1d4e81f118f54223d37,
+        type: 2}
+      propertyPath: sphere
+      value: 
+      objectReference: {fileID: 1643385598955172, guid: bff0fe05fab1a9641bc13f4b53ba6245,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0acc38a63d8a1d4e81f118f54223d37, type: 2}
   m_IsPrefabParent: 0
