@@ -10,8 +10,18 @@ namespace Game.Extensions
         public static void SetHeight(this Transform transform, float value)
         {
             transform.position = new Vector3(transform.position.x, value, transform.position.z);
-        }       
-        
+        }
+
+        public static void SetX(this Transform transform, float value)
+        {
+            transform.position = new Vector3(value, transform.position.y, transform.position.z);
+        }
+
+        public static void SetZ(this Transform transform, float value)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, value);
+        }
+
         public static T[] RandomizeArray<T>(this T[] array)
         {
             for (int i = 0; i < array.Length; i++)

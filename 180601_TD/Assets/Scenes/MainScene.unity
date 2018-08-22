@@ -598,6 +598,12 @@ Prefab:
       value: 
       objectReference: {fileID: 1643385598955172, guid: bff0fe05fab1a9641bc13f4b53ba6245,
         type: 2}
+    - target: {fileID: 114464306433527212, guid: b0acc38a63d8a1d4e81f118f54223d37,
+        type: 2}
+      propertyPath: _tileset
+      value: 
+      objectReference: {fileID: 11400000, guid: 30b458db84faf814b979f60280951eda,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0acc38a63d8a1d4e81f118f54223d37, type: 2}
   m_IsPrefabParent: 0

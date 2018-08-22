@@ -18,8 +18,17 @@ namespace Game.TerrainGeneration
         [Tooltip("Тайл, куда мобы пытаются добежать")]
         public GameObject RoadFinishPrefab;
 
-        [Tooltip("Остальные, промежуточные тайлы дороги")]
-        public GameObject[] RoadTilesPrefabs;
+        [Tooltip("Прямые тайлы дороги - т.е. если одна точка соединения слева, то другая будет справа")]
+        public GameObject[] RoadStraightTilesPrefabs;
+
+        [Tooltip("Поворотные тайлы дороги - т.е. если одна точка соединения слева, то другая будет сверху или снизу")]
+        public GameObject[] RoadTurnTilesPrefabs;
+
+        [Tooltip("Перекрёстки - три точки соединения")]
+        public GameObject[] RoadCrossroadsWith3ExitsTilesPrefabs;
+
+        [Tooltip("Перекрёстки - четыре точки соединения")]
+        public GameObject[] RoadCrossroadsWith4ExitsTilesPrefabs;
 
     }
 

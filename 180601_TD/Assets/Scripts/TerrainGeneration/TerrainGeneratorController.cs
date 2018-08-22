@@ -73,23 +73,37 @@ public class TerrainGeneratorController : MonoBehaviour
     //    _enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();        
     //}
 
-    //ВРЕМЕННО ДЛЯ ТЕСТА! УБРАТЬ!!!!!!
+    //ВРЕМЕННО ДЛЯ ТЕСТА! ВСЁ ПЕРЕНЕСТИ В МОДУЛЬ TERRAINGENERATOR
     public void GenerateTerrain()
     {
         LabyrinthGenerator labyrinth = new LabyrinthGenerator();
-        LabyrinthPathBuilder pathBuilder = new LabyrinthPathBuilder();
-        TilePlacer tilePlacer = new TilePlacer();
+        LabyrinthPathBuilder pathBuilder = new LabyrinthPathBuilder();        
         LabyrinthPotentialStartFinishFinder endSquaresFinder = new LabyrinthPotentialStartFinishFinder();
+        TilePlacer tilePlacer = new TilePlacer();
+        TowerPlatformsPlacer towerPlatformsPlacer = new TowerPlatformsPlacer();
+
 
         int[][] a;
         int[][] b;
+        int[][] c;
 
         a = labyrinth.GenerateLabyrinth(20, 3, 15, 5, 4, new int[] { 0, 0 });
-        tilePlacer.PlaceTiles(a, cube, _generatorTerrainParent.transform);
+        tilePlacer.PlaceGameObjectsAtCoordinates(a, cube, _generatorTerrainParent.transform);
 
         b = endSquaresFinder.GetPotentialStartAndFinissSquares(a);
 
-        tilePlacer.PlaceTiles(pathBuilder.BuildPathInLabyrinth(20, a, b), sphere, _generatorTerrainParent.transform);
+        c = pathBuilder.BuildPathInLabyrinth(20, a, b);
+
+        tilePlacer.PlaceGameObjectsAtCoordinates(c, sphere, _generatorTerrainParent.transform);
+
+        _roadTiles = tilePlacer.PlaceTiles(c, _tileset, _generatorTerrainParent.transform);
+
+        towerPlatformsPlacer.BuildTowerPlatforms(_tileset.TowerPlatform, _roadTiles, _generatorTerrainParent.transform, TowerPlatformsCount);
+
+        GenerateNavMesh();
+
+        //_enemiesSpawnPoint = _generator.GetEnemiesSpawnPoint();
+        //_enemiesDestinationPoint = _generator.GetEnemiesDestinationPoint();
     }
 
     public void DestroyTerrain()

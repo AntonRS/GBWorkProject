@@ -63,7 +63,9 @@ namespace Game.TerrainGeneration
             _towerPlatform = tileset.TowerPlatform;
             _roadStartPrefab = tileset.RoadStartPrefab;
             _roadFinishPrefab = tileset.RoadFinishPrefab;
-            _roadTilesPrefabs = tileset.RoadTilesPrefabs;
+            _roadTilesPrefabs = new GameObject[tileset.RoadStraightTilesPrefabs.Length + tileset.RoadTurnTilesPrefabs.Length];
+            System.Array.Copy(tileset.RoadStraightTilesPrefabs, _roadTilesPrefabs, tileset.RoadStraightTilesPrefabs.Length);
+            System.Array.Copy(tileset.RoadTurnTilesPrefabs, _roadTilesPrefabs, tileset.RoadTurnTilesPrefabs.Length);
         }
 
         /// <summary>
